@@ -1,3 +1,5 @@
+import { SimpleIcon } from '../components/IconPlaceholder';
+
 /**
  * Me Page - User profile, settings, and purchases
  * 功能对齐：web/src/app/(main)/settings/settings-content.tsx + profile-edit-section.tsx
@@ -136,10 +138,7 @@ struct Me {
               .width(100)
               .height(100)
               .fill('#f5f5f5')
-            Image($r('app.media.person'))
-              .width(50)
-              .height(50)
-              .fillColor('#cccccc')
+            SimpleIcon({ name: 'person', size: 50, color: '#cccccc' })
           }
 
           Text('未登录')
@@ -233,19 +232,13 @@ struct Me {
                   .width(80)
                   .height(80)
                   .fill('#ffffff')
-                Image($r('app.media.person'))
-                  .width(40)
-                  .height(40)
-                  .fillColor('#cccccc')
+                SimpleIcon({ name: 'person', size: 40, color: '#cccccc' })
               }
             }
 
             // Edit button
             Button() {
-              Image($r('app.media.edit'))
-                .width(16)
-                .height(16)
-                .fillColor(Color.White)
+              SimpleIcon({ name: 'edit', size: 16, color: Color.White })
             }
             .width(28)
             .height(28)
@@ -262,10 +255,7 @@ struct Me {
               .borderRadius(8)
               .padding({ left: 8, right: 8, top: 4, bottom: 4 })
               .contentRow() {
-                Image($r('app.media.crown'))
-                  .width(14)
-                  .height(14)
-                  .fillColor('#000000')
+                SimpleIcon({ name: 'crown', size: 14, color: '#000000' })
                 Text('Pro')
                   .fontSize(12)
                   .fontWeight(FontWeight.Bold)
@@ -298,7 +288,7 @@ struct Me {
     Column({ space: 12 }) {
       // Header
       Row() {
-        Image($r('app.media.bar_chart'))
+        Image(SimpleIcon({ name: 'bar_chart', size: 20, color: '#4CAF50' }))
           .width(20)
           .height(20)
           .fillColor('#4CAF50')
@@ -312,9 +302,9 @@ struct Me {
 
       // Stats grid
       Grid() {
-        GridItem() { this.StatItem('阅读时长', `${this.totalReadingTime} 分钟`, $r('app.media.timer')) }
-        GridItem() { this.StatItem('已读完', `${this.booksFinished} 本`, $r('app.media.book')) }
-        GridItem() { this.StatItem('连续打卡', `${this.currentStreak} 天`, $r('app.media.fire')) }
+        GridItem() { this.StatItem('阅读时长', `${this.totalReadingTime} 分钟`, SimpleIcon({ name: 'timer', size: 24, color: '#4CAF50' })) }
+        GridItem() { this.StatItem('已读完', `${this.booksFinished} 本`, SimpleIcon({ name: 'book', size: 24, color: '#4CAF50' })) }
+        GridItem() { this.StatItem('连续打卡', `${this.currentStreak} 天`, SimpleIcon({ name: 'fire', size: 24, color: '#4CAF50' })) }
       }
       .columnsTemplate('1fr 1fr 1fr')
       .width('100%')
@@ -345,7 +335,7 @@ struct Me {
     Column({ space: 12 }) {
       // Header
       Row() {
-        Image($r('app.media.crown'))
+        Image(SimpleIcon({ name: 'crown', size: 20, color: '#8b5cf6' }))
           .width(20)
           .height(20)
           .fillColor('#8b5cf6')
@@ -412,7 +402,7 @@ struct Me {
     Column({ space: 0 }) {
       // Header
       Row() {
-        Image($r('app.media.person'))
+        Image(SimpleIcon({ name: 'person', size: 20, color: '#4CAF50' }))
           .width(20)
           .height(20)
           .fillColor('#4CAF50')
@@ -426,7 +416,7 @@ struct Me {
 
       // Settings items
       SettingsItem({
-        icon: $r('app.media.language'),
+        icon: SimpleIcon({ name: 'language', size: 20, color: '#4CAF50' }),
         title: '语言',
         value: this.getLanguageName(this.currentLanguage),
         onClick: () => { this.showLanguagePicker = true; }
@@ -435,7 +425,7 @@ struct Me {
       Divider().height(1).backgroundColor('#f5f5f5')
 
       SettingsItem({
-        icon: $r('app.media.email'),
+        icon: SimpleIcon({ name: 'email', size: 20, color: '#4CAF50' }),
         title: '邮箱',
         value: this.email,
         showChevron: false
@@ -444,7 +434,7 @@ struct Me {
       Divider().height(1).backgroundColor('#f5f5f5')
 
       SettingsItem({
-        icon: $r('app.media.logout'),
+        icon: SimpleIcon({ name: 'logout', size: 20, color: '#666666' }),
         title: '退出登录',
         titleColor: '#666666',
         onClick: () => { this.handleSignOut(); }
@@ -453,7 +443,7 @@ struct Me {
       Divider().height(1).backgroundColor('#f5f5f5')
 
       SettingsItem({
-        icon: $r('app.media.delete'),
+        icon: SimpleIcon({ name: 'delete', size: 20, color: '#f44336' }),
         title: '注销账户',
         titleColor: '#f44336',
         onClick: () => { this.showDeleteAccountConfirm = true; }
@@ -469,7 +459,7 @@ struct Me {
     Column({ space: 0 }) {
       // Header
       Row() {
-        Image($r('app.media.settings'))
+        Image(SimpleIcon({ name: 'settings', size: 20, color: '#4CAF50' }))
           .width(20)
           .height(20)
           .fillColor('#4CAF50')
@@ -517,7 +507,7 @@ struct Me {
     Column({ space: 0 }) {
       // Header
       Row() {
-        Image($r('app.media.help'))
+        Image(SimpleIcon({ name: 'help', size: 20, color: '#4CAF50' }))
           .width(20)
           .height(20)
           .fillColor('#4CAF50')
@@ -671,7 +661,7 @@ struct Badge {
 // Settings Item Component
 @Component
 struct SettingsItem {
-  @Prop icon: Resource = $r('app.media.settings');
+  @Prop icon: Resource = SimpleIcon({ name: 'settings', size: 20, color: '#4CAF50' });
   @Prop title: string = '';
   @Prop titleColor: string = '#1a1a1a';
   @Prop value: string = '';
@@ -699,7 +689,7 @@ struct SettingsItem {
       }
 
       if (this.showChevron) {
-        Image($r('app.media.chevron_right'))
+        Image(SimpleIcon({ name: 'chevron_right', size: 16, color: '#cccccc' }))
           .width(16)
           .height(16)
           .fillColor('#cccccc')
@@ -714,7 +704,7 @@ struct SettingsItem {
 // Toggle Setting Item Component
 @Component
 struct ToggleSettingItem {
-  @Prop icon: Resource = $r('app.media.settings');
+  @Prop icon: Resource = SimpleIcon({ name: 'settings', size: 20, color: '#4CAF50' });
   @Prop title: string = '';
   @Prop checked: boolean = false;
   @Prop onChange: (checked: boolean) => void = () => {};
@@ -748,7 +738,7 @@ struct BenefitItem {
 
   build() {
     Row({ space: 8 }) {
-      Image($r('app.media.check'))
+      Image(SimpleIcon({ name: 'check', size: 16, color: '#8b5cf6' }))
         .width(16)
         .height(16)
         .fillColor('#8b5cf6')

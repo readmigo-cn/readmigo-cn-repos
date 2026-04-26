@@ -256,10 +256,11 @@ struct SectionHeader {
           Text('查看更多')
             .fontSize(14)
             .fontColor('#666666')
-          Image($r('app.media.chevron_right'))
-            .width(16)
-            .height(16)
-            .fillColor('#666666')
+          // 使用系统图标或文字替代
+          Text('›')
+            .fontSize(20)
+            .fontColor('#666666')
+            .fontWeight(FontWeight.Bold)
         }
         .onClick(() => {
           // TODO: Navigate to full list

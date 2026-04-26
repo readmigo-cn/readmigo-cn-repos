@@ -6,6 +6,8 @@
     "pages/Discover",
     "pages/Library",
     "pages/Me",
-    "pages/Reader"
+    "pages/Reader",
+    "pages/AudiobookTab",
+    "pages/AudiobookPlayer"
   ]
 }

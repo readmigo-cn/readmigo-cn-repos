@@ -1,3 +1,4 @@
+import { SimpleIcon } from '../components/IconPlaceholder';
 /**
  * Audiobook Player Page - Full screen audio player with follow-along text
  * 功能对齐：mobile/src/features/audiobook/components/AudioPlayer.tsx
@@ -127,7 +128,7 @@ struct AudiobookPlayer {
     Row() {
       // Close button
       Button() {
-        Image($r('app.media.chevron_down'))
+        Image(SimpleIcon({ name: 'chevron_down', size: 28, color: '#ffffff' }))
           .width(28)
           .height(28)
           .fillColor(Color.White)
@@ -151,7 +152,7 @@ struct AudiobookPlayer {
 
       // More options
       Button() {
-        Image($r('app.media.more_vert'))
+        Image(SimpleIcon({ name: 'more_vert', size: 24, color: '#ffffff' }))
           .width(24)
           .height(24)
           .fillColor(Color.White)
@@ -179,7 +180,7 @@ struct AudiobookPlayer {
             .height(240)
             .backgroundColor('#1a1a2e')
             .borderRadius(12)
-          Image($r('app.media.headset'))
+          Image(SimpleIcon({ name: 'headset', size: 80, color: '#666666' }))
             .width(80)
             .height(80)
             .fillColor('#666666')
@@ -260,7 +261,7 @@ struct AudiobookPlayer {
     Row({ space: 20 }) {
       // Skip back chapter
       Button() {
-        Image($r('app.media.skip_previous'))
+        Image(SimpleIcon({ name: 'skip_previous', size: 32, color: '#ffffff' }))
           .width(32)
           .height(32)
           .fillColor(Color.White)
@@ -272,7 +273,7 @@ struct AudiobookPlayer {
       // Seek backward 15s
       Button() {
         Column({ space: 2 }) {
-          Image($r('app.media.replay_10'))
+          Image(SimpleIcon({ name: 'chevron_left', size: 28, color: '#ffffff' }))
             .width(28)
             .height(28)
             .fillColor(Color.White)
@@ -290,7 +291,7 @@ struct AudiobookPlayer {
         if (this.isLoading) {
           LoadingProgress()
         } else {
-          Image(this.isPlaying ? $r('app.media.pause') : $r('app.media.play_arrow'))
+          Image(this.isPlaying ? SimpleIcon({ name: 'pause', size: 40, color: '#ffffff' }) : SimpleIcon({ name: 'play_arrow', size: 24, color: '#4CAF50' }))
             .width(40)
             .height(40)
             .fillColor(Color.White)
@@ -305,7 +306,7 @@ struct AudiobookPlayer {
       // Seek forward 15s
       Button() {
         Column({ space: 2 }) {
-          Image($r('app.media.forward_10'))
+          Image(SimpleIcon({ name: 'chevron_right', size: 28, color: '#ffffff' }))
             .width(28)
             .height(28)
             .fillColor(Color.White)
@@ -320,7 +321,7 @@ struct AudiobookPlayer {
 
       // Skip forward chapter
       Button() {
-        Image($r('app.media.skip_next'))
+        Image(SimpleIcon({ name: 'skip_next', size: 32, color: '#ffffff' }))
           .width(32)
           .height(32)
           .fillColor(Color.White)
@@ -355,7 +356,7 @@ struct AudiobookPlayer {
       // Sleep timer
       Column({ space: 4 }) {
         Button() {
-          Image($r('app.media.bedtime'))
+          Image(SimpleIcon({ name: 'bedtime', size: 24, color: '#4CAF50' }))
             .width(24)
             .height(24)
             .fillColor(this.sleepTimer ? '#4CAF50' : Color.White)
@@ -374,7 +375,7 @@ struct AudiobookPlayer {
       // Chapter list
       Column({ space: 4 }) {
         Button() {
-          Image($r('app.media.playlist_play'))
+          Image(SimpleIcon({ name: 'list', size: 24, color: '#ffffff' }))
             .width(24)
             .height(24)
             .fillColor(Color.White)
@@ -392,7 +393,7 @@ struct AudiobookPlayer {
       if (this.audiobook?.source === 'TTS_GENERATED') {
         Column({ space: 4 }) {
           Button() {
-            Image($r('app.media.record_voice_over'))
+            Image(SimpleIcon({ name: 'mic', size: 24, color: '#ffffff' }))
               .width(24)
               .height(24)
               .fillColor(Color.White)
@@ -414,7 +415,7 @@ struct AudiobookPlayer {
   @Builder FollowAlongButton() {
     Button() {
       Row({ space: 8 }) {
-        Image($r('app.media.text_fields'))
+        Image(SimpleIcon({ name: 'text_fields', size: 20, color: '#4CAF50' }))
           .width(20)
           .height(20)
           .fillColor('#4CAF50')
@@ -484,7 +485,7 @@ struct AudiobookPlayer {
             .fontSize(16)
             .fontColor('#ffffff')
           Blank()
-          Image($r('app.media.close'))
+          Image(SimpleIcon({ name: 'close', size: 24, color: '#ffffff' }))
             .width(24)
             .height(24)
             .fillColor('#f44336')
@@ -565,7 +566,7 @@ struct AudiobookPlayer {
               .layoutWeight(1)
 
               if (index === this.chapterIndex) {
-                Image($r('app.media.volume_up'))
+                Image(SimpleIcon({ name: 'volume_up', size: 20, color: '#4CAF50' }))
                   .width(20)
                   .height(20)
                   .fillColor('#4CAF50')
@@ -599,7 +600,7 @@ struct AudiobookPlayer {
 
   @Builder EmptyState() {
     Column({ space: 16 }) {
-      Image($r('app.media.headset'))
+      Image(SimpleIcon({ name: 'headset', size: 80, color: '#666666' }))
         .width(80)
         .height(80)
         .fillColor('#666666')

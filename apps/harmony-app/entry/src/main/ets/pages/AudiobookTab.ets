@@ -1,3 +1,4 @@
+import { SimpleIcon } from '../components/IconPlaceholder';
 /**
  * Audiobook Tab Page - Audiobook library and discovery
  * 功能对齐：mobile/src/features/audiobook/components + overseas audiobook list
@@ -94,7 +95,7 @@ struct AudiobookTab {
 
       // Search button
       Button() {
-        Image($r('app.media.search'))
+        Image(SimpleIcon({ name: 'search', size: 24, color: '#1a1a1a' }))
           .width(24)
           .height(24)
           .fillColor('#1a1a1a')
@@ -105,7 +106,7 @@ struct AudiobookTab {
 
       // TTS Generate button
       Button() {
-        Image($r('app.media.mic'))
+        Image(SimpleIcon({ name: 'mic', size: 24, color: '#4CAF50' }))
           .width(24)
           .height(24)
           .fillColor('#4CAF50')
@@ -177,7 +178,7 @@ struct AudiobookTab {
     Column({ space: 16 }) {
       // Search input
       Row() {
-        Image($r('app.media.search'))
+        Image(SimpleIcon({ name: 'search', size: 24, color: '#1a1a1a' }))
           .width(20)
           .height(20)
           .fillColor('#999999')
@@ -217,7 +218,7 @@ struct AudiobookTab {
         }
       } else if (this.searchQuery.length > 2) {
         Column({ space: 8 }) {
-          Image($r('app.media.search_off'))
+          Image(SimpleIcon({ name: 'search', size: 48, color: '#cccccc' }))
             .width(48)
             .height(48)
             .fillColor('#cccccc')
@@ -276,7 +277,7 @@ struct AudiobookTab {
 
   @Builder EmptyState() {
     Column({ space: 16 }) {
-      Image($r('app.media.headset_off'))
+      Image(SimpleIcon({ name: 'headset', size: 80, color: '#cccccc' }))
         .width(80)
         .height(80)
         .fillColor('#cccccc')
@@ -322,7 +323,7 @@ struct AudiobookListItemComponent {
             .height(60)
             .backgroundColor('#f5f5f5')
             .borderRadius(8)
-          Image($r('app.media.headset'))
+          Image(SimpleIcon({ name: 'headset', size: 80, color: '#666666' }))
             .width(30)
             .height(30)
             .fillColor('#cccccc')
@@ -357,7 +358,7 @@ struct AudiobookListItemComponent {
 
       // Play button
       Button() {
-        Image($r('app.media.play_arrow'))
+        Image(SimpleIcon({ name: 'play_arrow', size: 24, color: '#4CAF50' }))
           .width(24)
           .height(24)
           .fillColor('#4CAF50')
@@ -408,7 +409,7 @@ struct AudiobookCardHorizontal {
               .aspectRatio(1)
               .backgroundColor('#f5f5f5')
               .borderRadius(8)
-            Image($r('app.media.headset'))
+            Image(SimpleIcon({ name: 'headset', size: 80, color: '#666666' }))
               .width(40)
               .height(40)
               .fillColor('#cccccc')
@@ -417,7 +418,7 @@ struct AudiobookCardHorizontal {
 
         // Play button overlay
         Button() {
-          Image($r('app.media.play_arrow'))
+          Image(SimpleIcon({ name: 'play_arrow', size: 24, color: '#4CAF50' }))
             .width(32)
             .height(32)
             .fillColor(Color.White)
@@ -469,7 +470,7 @@ struct AudiobookCardVertical {
               .aspectRatio(1)
               .backgroundColor('#f5f5f5')
               .borderRadius(8)
-            Image($r('app.media.headset'))
+            Image(SimpleIcon({ name: 'headset', size: 80, color: '#666666' }))
               .width(40)
               .height(40)
               .fillColor('#cccccc')

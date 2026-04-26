@@ -1,3 +1,4 @@
+import { SimpleIcon } from '../components/IconPlaceholder';
 import { BookApi } from '../service/BookApi';
 import type { Book, UserBook } from '../model/Book';
 
@@ -118,7 +119,7 @@ struct Library {
               .width(80)
               .height(80)
               .fill('#f5f5f5')
-            Image($r('app.media.login'))
+            Image(SimpleIcon({ name: 'person', size: 40, color: '#4CAF50' }))
               .width(40)
               .height(40)
               .fillColor('#4CAF50')
@@ -332,12 +333,12 @@ struct Library {
           if (this.isEditMode) {
             Stack() {
               if (isSelected) {
-                Image($r('app.media.check_circle'))
+                Image(SimpleIcon({ name: 'check', size: 24, color: '#4CAF50' }))
                   .width(24)
                   .height(24)
                   .fillColor('#4CAF50')
               } else {
-                Image($r('app.media.uncheck_circle'))
+                Image(SimpleIcon({ name: 'check', size: 24, color: '#999999' }))
                   .width(24)
                   .height(24)
                   .fillColor('#999999')
@@ -492,7 +493,7 @@ struct Library {
             .width(80)
             .height(80)
             .fill('#f5f5f5')
-          Image($r('app.media.book_open'))
+          Image(SimpleIcon({ name: 'book', size: 40, color: '#cccccc' }))
             .width(40)
             .height(40)
             .fillColor('#cccccc')

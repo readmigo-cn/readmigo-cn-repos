@@ -1,3 +1,4 @@
+import { SimpleIcon } from '../components/IconPlaceholder';
 import type { BookDetail, Chapter } from '../model/Book';
 
 /**
@@ -239,7 +240,7 @@ struct Reader {
       // Left: Back button
       Row({ space: 8 }) {
         Button() {
-          Image($r('app.media.arrow_back'))
+          Image(SimpleIcon({ name: 'arrow_back', size: 24, color: '#1a1a1a' }))
             .width(24)
             .height(24)
             .fillColor(this.getTextColor())
@@ -265,19 +266,19 @@ struct Reader {
       Row({ space: 4 }) {
         // Table of Contents
         IconButton({
-          icon: $r('app.media.list'),
+          icon: SimpleIcon({ name: 'list', size: 24, color: '#1a1a1a' }),
           onClick: () => { this.showTOC = !this.showTOC; }
         })
 
         // Bookmark
         IconButton({
-          icon: $r('app.media.bookmark'),
+          icon: SimpleIcon({ name: 'bookmark', size: 24, color: '#1a1a1a' }),
           onClick: () => { this.addBookmark(); }
         })
 
         // Highlights
         IconButton({
-          icon: $r('app.media.highlight'),
+          icon: SimpleIcon({ name: 'highlight', size: 24, color: '#1a1a1a' }),
           onClick: () => { this.showHighlights = !this.showHighlights; }
         })
 
