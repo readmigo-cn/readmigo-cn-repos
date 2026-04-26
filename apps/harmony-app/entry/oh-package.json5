@@ -1,5 +1,12 @@
 {
   "name": "entry",
   "version": "0.1.0",
-  "dependencies": {}
+  "description": "Readmigo CN HarmonyOS entry module",
+  "main": "",
+  "author": "Readmigo CN Team",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@ohos/appkit.arkui": "^5.0.0",
+    "@ohos/appkit.common": "^5.0.0"
+  }
 }
