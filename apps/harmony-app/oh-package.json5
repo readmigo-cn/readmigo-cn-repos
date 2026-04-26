@@ -3,8 +3,5 @@
   "name": "readmigo-harmony-app",
   "version": "0.1.0",
   "description": "Readmigo CN HarmonyOS NEXT application scaffold",
-  "dependencies": {
-    "@ohos/hvigor": "5.0.0",
-    "@ohos/hvigor-ohos-plugin": "5.0.0"
-  }
+  "dependencies": {}
 }
