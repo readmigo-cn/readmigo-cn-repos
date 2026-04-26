@@ -46,6 +46,8 @@
 - 🤖 [docs/07-ai-coding.md](./docs/07-ai-coding.md) —— AI coding 工具与组织级使用边界
 - 🛠 [docs/08-deveco-setup.md](./docs/08-deveco-setup.md) —— DevEco / AGC / 国内环境搭建基线
 - 🔌 [docs/10-domestic-stack-integration.md](./docs/10-domestic-stack-integration.md) —— 已复核的国内化接入基线
+- 🧭 [docs/11-readmigo-sync-matrix.md](./docs/11-readmigo-sync-matrix.md) —— 与海外版同步的判断规则
+- 🏗 [docs/12-fullstack-technical-spec.md](./docs/12-fullstack-technical-spec.md) —— 全栈技术方案明细
 - 🔗 [docs/03-overseas-reuse.md](./docs/03-overseas-reuse.md) —— 海外版 37 repo 复用清单
 
 ## 启动状态

@@ -1,0 +1,27 @@
+{
+  "source_root": "/Users/HONGBGU/Documents/readmigo-repos",
+  "target_root": "/Users/HONGBGU/Documents/readmigo-cn-repos",
+  "principle": "sync only when compatible with HarmonyOS NEXT and domestic full-stack requirements; otherwise redevelop",
+  "entries": [
+    {
+      "source": "api",
+      "target": "server-cn",
+      "mode": "sync-architecture-rewrite-integrations"
+    },
+    {
+      "source": "mobile/app",
+      "target": "apps/harmony-app",
+      "mode": "sync-information-architecture-redevelop-ui"
+    },
+    {
+      "source": "typesetting",
+      "target": "native/typesetting",
+      "mode": "sync-source-rewrite-bridge"
+    },
+    {
+      "source": "badge-engine",
+      "target": "native/badge-engine",
+      "mode": "sync-source-rewrite-bridge"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "mode": "fullscreen",
+  "ibl": {
+    "enabled": true,
+    "intensity": 30000
+  },
+  "directional": {
+    "enabled": true,
+    "key": {
+      "intensity": 110000,
+      "color": [1.0, 0.93, 0.78],
+      "direction": [-0.5, -1.0, -0.5]
+    },
+    "fill": {
+      "intensity": 50000,
+      "color": [1.0, 0.95, 0.85],
+      "direction": [0.0, -0.25, 1.0]
+    }
+  },
+  "accent": {
+    "enabled": false
+  },
+  "sweep": {
+    "enabled": true,
+    "speed": 1.2,
+    "width": 0.4,
+    "falloff": 0.05,
+    "intensity": 0.6,
+    "clamp": 0.85,
+    "comment": "Vertical band highlight sweep, verified in iOS Demo"
+  }
+}

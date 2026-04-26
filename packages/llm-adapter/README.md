@@ -1,27 +1,197 @@
-# llm-adapter
+# @readmigo-cn/llm-adapter
 
-这是国内模型接入的最小适配层骨架，当前优先支持 `DeepSeek`。
+LLM adapter layer for Readmigo China (阅可), providing unified interface for Chinese AI providers.
 
-## 目标
+## Features
 
-- 屏蔽不同模型厂商的请求差异
-- 先让后端以统一接口跑通聊天能力
-- 后续按需补 `文心`、`智谱`、`Qwen`
+- ✅ **Unified Interface** - Same API for all providers
+- ✅ **Multiple Providers** - DeepSeek, Qwen (阿里云), Zhipu (智谱), Wenxin (百度)
+- ✅ **Streaming Support** - SSE streaming for real-time responses
+- ✅ **Smart Fallback** - Automatic retry with backup providers
+- ✅ **Type Safe** - Full TypeScript support
 
-## 当前文件
+## Installation
 
-- `src/types.ts`：公共类型
-- `src/provider.ts`：Provider 接口
-- `src/providers/deepseek.ts`：DeepSeek 实现
-- `src/index.ts`：工厂与导出
+```bash
+pnpm add @readmigo-cn/llm-adapter
+```
 
-## 当前策略
+## Quick Start
 
-- `DeepSeek` 作为默认主模型
-- 使用其官方兼容接口，减少初版接入成本
-- 其他 provider 先预留接口，不在这个仓直接猜测实现细节
+### Single Provider
 
-官方来源：
+```typescript
+import { createProvider } from '@readmigo-cn/llm-adapter';
 
-- https://api-docs.deepseek.com/
-- https://api-docs.deepseek.com/api/deepseek-api
+const provider = createProvider('deepseek', {
+  name: 'deepseek',
+  apiKey: process.env.DEEPSEEK_API_KEY,
+  defaultModel: 'deepseek-chat',
+});
+
+// Non-streaming
+const result = await provider.chat([
+  { role: 'system', content: 'You are a helpful assistant.' },
+  { role: 'user', content: 'Hello!' }
+]);
+
+console.log(result.content);
+
+// Streaming
+for await (const chunk of provider.streamComplete([
+  { role: 'user', content: 'Tell me a story' }
+])) {
+  if (!chunk.done) {
+    process.stdout.write(chunk.content);
+  }
+}
+```
+
+### Multiple Providers
+
+```typescript
+import { createAllProviders } from '@readmigo-cn/llm-adapter';
+
+const providers = createAllProviders(process.env);
+
+// Access specific provider
+const deepseek = providers.deepseek;
+const qwen = providers.qwen;
+```
+
+## Environment Variables
+
+```bash
+# DeepSeek
+DEEPSEEK_API_KEY=sk_xxxxxxxxxxxxx
+DEEPSEEK_BASE_URL=https://api.deepseek.com/v1
+DEEPSEEK_DEFAULT_MODEL=deepseek-chat
+
+# Qwen (阿里云百炼)
+QWEN_API_KEY=dashscope_xxxxxxxxxxxxx
+QWEN_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+QWEN_DEFAULT_MODEL=qwen-plus
+
+# Zhipu (智谱 AI)
+ZHIPU_API_KEY=xxxxxxxxxxxxx
+ZHIPU_BASE_URL=https://open.bigmodel.cn/api/paas/v4
+ZHIPU_DEFAULT_MODEL=glm-4
+
+# Wenxin (百度文心一言)
+WENXIN_API_KEY=xxxxxxxxxxxxx
+WENXIN_SECRET_KEY=xxxxxxxxxxxxx
+WENXIN_DEFAULT_MODEL=ernie-bot-4
+```
+
+## Supported Providers
+
+| Provider | Company | Models | Streaming |
+|----------|---------|--------|-----------|
+| `deepseek` | 深度求索 | deepseek-chat, deepseek-coder, deepseek-v3 | ✅ |
+| `qwen` | 阿里云 | qwen-max, qwen-plus, qwen-turbo | ✅ |
+| `zhipu` | 智谱 AI | glm-4, glm-4-plus, glm-4-flash | ✅ |
+| `wenxin` | 百度 | ernie-bot-4, ernie-bot-turbo | ❌ (fallback) |
+
+## API Reference
+
+### `createProvider(name, config)`
+
+Create a provider instance.
+
+```typescript
+function createProvider(
+  provider: 'deepseek' | 'qwen' | 'zhipu' | 'wenxin',
+  config: ProviderConfig
+): LLMProvider
+```
+
+### `LLMProvider` interface
+
+```typescript
+interface LLMProvider {
+  readonly name: string;
+  readonly models: string[];
+  isAvailable(): boolean;
+  
+  chat(
+    messages: ChatMessage[],
+    options?: ChatOptions
+  ): Promise<ChatResult>;
+  
+  streamComplete?(
+    messages: ChatMessage[],
+    options?: ChatOptions
+  ): AsyncGenerator<StreamChunk>;
+}
+```
+
+### `ChatMessage`
+
+```typescript
+interface ChatMessage {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+}
+```
+
+### `ChatOptions`
+
+```typescript
+interface ChatOptions {
+  model?: string;
+  temperature?: number;
+  maxTokens?: number;
+  timeoutMs?: number;
+  stream?: boolean;
+}
+```
+
+### `ChatResult`
+
+```typescript
+interface ChatResult {
+  id: string;
+  model: string;
+  content: string;
+  finishReason?: string;
+  usage?: {
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+  };
+  raw?: unknown;
+}
+```
+
+### `StreamChunk`
+
+```typescript
+interface StreamChunk {
+  content: string;
+  done: boolean;
+  inputTokens?: number;
+  outputTokens?: number;
+}
+```
+
+## Architecture
+
+This adapter follows the same pattern as the overseas readmigo-repos `BaseAIProvider`:
+
+```
+┌─────────────────────────────────────────┐
+│          @readmigo-cn/llm-adapter        │
+├─────────────────────────────────────────┤
+│  LLMProvider Interface                   │
+├─────────────────────────────────────────┤
+│  Providers:                              │
+│  ├─ DeepSeekProvider                     │
+│  ├─ QwenProvider                         │
+│  ├─ ZhipuProvider                        │
+│  └─ WenxinProvider                       │
+└─────────────────────────────────────────┘
+```
+
+## License
+
+MIT © Readmigo CN Team
