@@ -473,7 +473,7 @@ struct Me {
 
       // Toggle settings
       ToggleSettingItem({
-        icon: $r('app.media.notifications),
+        icon: SimpleIcon({ name: 'notifications', size: 20, color: '#4CAF50' }),
         title: '消息通知',
         checked: this.notifications,
         onChange: (checked: boolean) => { this.notifications = checked; }
@@ -482,7 +482,7 @@ struct Me {
       Divider().height(1).backgroundColor('#f5f5f5')
 
       ToggleSettingItem({
-        icon: $r('app.media.wifi),
+        icon: SimpleIcon({ name: 'wifi', size: 20, color: '#4CAF50' }),
         title: '仅 Wi-Fi 下载',
         checked: this.wifiOnlyDownload,
         onChange: (checked: boolean) => { this.wifiOnlyDownload = checked; }
@@ -491,7 +491,7 @@ struct Me {
       Divider().height(1).backgroundColor('#f5f5f5')
 
       ToggleSettingItem({
-        icon: $r('app.media.sync),
+        icon: SimpleIcon({ name: 'sync', size: 20, color: '#4CAF50' }),
         title: '自动同步进度',
         checked: this.autoSyncProgress,
         onChange: (checked: boolean) => { this.autoSyncProgress = checked; }
@@ -521,7 +521,7 @@ struct Me {
 
       // Help items
       SettingsItem({
-        icon: $r('app.media.help_center),
+        icon: SimpleIcon({ name: 'help', size: 20, color: '#4CAF50' }),
         title: '帮助中心',
         onClick: () => {
           // TODO: Open help center
@@ -531,7 +531,7 @@ struct Me {
       Divider().height(1).backgroundColor('#f5f5f5')
 
       SettingsItem({
-        icon: $r('app.media.feedback),
+        icon: SimpleIcon({ name: 'edit', size: 20, color: '#4CAF50' }),
         title: '意见反馈',
         onClick: () => {
           // TODO: Open feedback form
@@ -541,7 +541,7 @@ struct Me {
       Divider().height(1).backgroundColor('#f5f5f5')
 
       SettingsItem({
-        icon: $r('app.media.info),
+        icon: SimpleIcon({ name: 'info', size: 20, color: '#4CAF50' }),
         title: '关于 Readmigo',
         onClick: () => {
           // TODO: Show about dialog
@@ -753,9 +753,9 @@ struct BenefitItem {
 @Component
 struct LoadingProgress {
   build() {
-    LoadingProgress()
+    Progress()
       .width(40)
       .height(40)
-      .color('#4CAF50')
+      .strokeWidth(4)
   }
 }

@@ -6,8 +6,7 @@
         "name": "default",
         "signingConfig": "default",
         "compatibleSdkVersion": "5.0.0(12)",
-        "runtimeOS": "HarmonyOS",
-        "targetSdkVersion": "6.1.0(23)"
+        "runtimeOS": "HarmonyOS"
       }
     ],
     "buildModeSet": [
@@ -22,7 +21,15 @@
   "modules": [
     {
       "name": "entry",
-      "srcPath": "./entry"
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
     }
   ]
 }

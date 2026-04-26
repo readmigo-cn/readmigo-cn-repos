@@ -186,7 +186,8 @@ struct Reader {
       if (this.isLoading) {
         // Loading state
         Column({ space: 16 }) {
-          LoadingProgress()
+          Progress()
+      .strokeWidth(4)
           Text('加载中...')
             .fontSize(14)
             .fontColor('#999999')
@@ -519,7 +520,8 @@ struct Reader {
       // Translation result
       if (this.isTranslating) {
         Row({ space: 8 }) {
-          LoadingProgress()
+          Progress()
+      .strokeWidth(4)
           Text('翻译中...')
             .fontSize(14)
             .fontColor('#999999')
@@ -645,7 +647,8 @@ struct ThemeButton {
 @Component
 struct LoadingProgress {
   build() {
-    LoadingProgress()
+    Progress()
+      .strokeWidth(4)
       .width(40)
       .height(40)
       .color('#4CAF50')
