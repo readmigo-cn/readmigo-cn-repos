@@ -1,34 +1,36 @@
+/**
+ * Index Page - Main entry with navigation
+ */
 @Entry
 @Component
 struct Index {
   build() {
     Column({ space: 16 }) {
-      Text($r('app.string.home_title'))
+      Text('阅可')
         .fontSize(28)
         .fontWeight(FontWeight.Bold)
-        .fontColor($r('app.color.text_primary'))
 
-      Text($r('app.string.home_subtitle'))
+      Text('Readmigo 鸿蒙版工程骨架')
         .fontSize(16)
-        .fontColor($r('app.color.text_primary'))
-        .opacity(0.75)
 
-      Text($r('app.string.agc_hint'))
+      Text('将 agconnect-services.json 放到 entry 目录后再接入 AGC')
         .fontSize(14)
-        .fontColor($r('app.color.text_primary'))
         .padding(16)
-        .backgroundColor($r('app.color.surface_muted'))
+        .backgroundColor('#f5f5f5')
         .borderRadius(16)
 
       Column({ space: 10 }) {
-        Text($r('app.string.discover_title'))
-        Text($r('app.string.library_title'))
-        Text($r('app.string.reader_title'))
-        Text($r('app.string.me_title'))
+        Text('Discover')
+          .fontSize(15)
+        Text('Library')
+          .fontSize(15)
+        Text('Reader')
+          .fontSize(15)
+        Text('Me')
+          .fontSize(15)
+        Text('Audiobook')
+          .fontSize(15)
       }
-      .fontSize(15)
-      .fontColor($r('app.color.text_primary'))
-      .opacity(0.8)
     }
     .width('100%')
     .height('100%')
