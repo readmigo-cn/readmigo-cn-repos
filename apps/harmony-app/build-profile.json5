@@ -22,14 +22,7 @@
   "modules": [
     {
       "name": "entry",
-      "srcPath": "./entry",
-      "buildProfile": {
-        "buildOption": {
-          "arkOptions": {
-            "runtimeOnly": true
-          }
-        }
-      }
+      "srcPath": "./entry"
     }
   ]
 }
