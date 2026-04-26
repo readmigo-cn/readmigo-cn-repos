@@ -1,0 +1,44 @@
+{
+  "env": {
+    "BAILIAN_CODING_PLAN_API_KEY": "YOUR_API_KEY"
+  },
+  "modelProviders": {
+    "openai": [
+      {
+        "id": "qwen3.6-plus",
+        "name": "[Bailian Coding Plan] qwen3.6-plus",
+        "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
+        "envKey": "BAILIAN_CODING_PLAN_API_KEY",
+        "generationConfig": {
+          "extra_body": {
+            "enable_thinking": true
+          }
+        }
+      },
+      {
+        "id": "qwen3-coder-next",
+        "name": "[Bailian Coding Plan] qwen3-coder-next",
+        "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
+        "envKey": "BAILIAN_CODING_PLAN_API_KEY"
+      },
+      {
+        "id": "qwen3-coder-plus",
+        "name": "[Bailian Coding Plan] qwen3-coder-plus",
+        "baseUrl": "https://coding.dashscope.aliyuncs.com/v1",
+        "envKey": "BAILIAN_CODING_PLAN_API_KEY"
+      }
+    ]
+  },
+  "security": {
+    "auth": {
+      "selectedType": "openai"
+    }
+  },
+  "codingPlan": {
+    "region": "china"
+  },
+  "model": {
+    "name": "qwen3.6-plus"
+  },
+  "$version": 3
+}

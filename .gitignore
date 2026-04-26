@@ -1,0 +1,80 @@
+# DevEco Studio
+.idea/
+.gradle/
+build/
+oh_modules/
+.preview/
+*.iml
+local.properties
+keystore/
+
+# 依赖
+node_modules/
+.pnpm-store/
+
+# 构建产物
+dist/
+.dist/
+*.hap
+*.app
+*.so
+*.a
+build-output/
+
+# C++ 构建
+cmake-build-*/
+*.o
+*.obj
+
+# 日志
+*.log
+logs/
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+*.swp
+*.swo
+*~
+
+# 环境变量 / 密钥
+.env
+.env.local
+.env.*.local
+agconnect-services.json
+*.mobileprovision
+*.key
+*.pem
+*.p12
+*.jks
+.har/
+secret/
+secrets/
+
+# 临时
+tmp/
+temp/
+*.tmp
+
+# 测试覆盖
+coverage/
+.nyc_output/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 鸿蒙签名 / 证书（务必不入库）
+*.cer
+*.p7b
+HarmonyAppProvision-*
+*.har.签名
+
+# 合规材料里的敏感原件
+compliance/icp/原件/
+compliance/*/扫描件/

@@ -1,0 +1,44 @@
+{
+  "string": [
+    {
+      "name": "app_name",
+      "value": "阅可"
+    },
+    {
+      "name": "module_desc",
+      "value": "Readmigo CN Harmony module"
+    },
+    {
+      "name": "entryability_desc",
+      "value": "Readmigo CN entry ability"
+    },
+    {
+      "name": "home_title",
+      "value": "阅可鸿蒙版"
+    },
+    {
+      "name": "home_subtitle",
+      "value": "Readmigo 国内版 HarmonyOS NEXT 工程骨架已就位。"
+    },
+    {
+      "name": "agc_hint",
+      "value": "将 agconnect-services.json 放到 entry 目录后再接入 AGC。"
+    },
+    {
+      "name": "discover_title",
+      "value": "Discover"
+    },
+    {
+      "name": "library_title",
+      "value": "Library"
+    },
+    {
+      "name": "reader_title",
+      "value": "Reader"
+    },
+    {
+      "name": "me_title",
+      "value": "Me"
+    }
+  ]
+}
