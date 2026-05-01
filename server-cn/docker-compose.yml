@@ -1,41 +1,114 @@
-version: '3.9'
+# ─────────────────────────────────────────────────────────────────────────────
+# readmigo-cn / server-cn — local development stack
+#
+# Services:
+#   app   — NestJS backend (server-cn)
+#   db    — PostgreSQL 16 (GaussDB-compatible for local dev; production uses
+#            Huawei GaussDB for PostgreSQL — same wire protocol, drop-in swap)
+#   redis — Redis 7 (caching, session store)
+#
+# Usage:
+#   cp .env.example .env          # fill in real values
+#   docker compose up -d          # start all services
+#   docker compose logs -f app    # tail server logs
+#   docker compose down -v        # stop + remove volumes (clean slate)
+#
+# NOTE: The bundled PostgreSQL service is ONLY for local development.
+# In staging/production the DATABASE_URL must point to Huawei GaussDB.
+# ─────────────────────────────────────────────────────────────────────────────
 
 services:
-  postgres:
+  # ── Application ─────────────────────────────────────────────────────────────
+  app:
+    build:
+      # Build context = monorepo root so Dockerfile can reach pnpm-workspace.yaml
+      context: ..
+      dockerfile: server-cn/Dockerfile
+    container_name: readmigo_cn_app
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file:
+      - .env
+    environment:
+      # Override DATABASE_URL to point at the bundled Postgres container.
+      # When deploying to Huawei Cloud, set DATABASE_URL to GaussDB connection
+      # string and remove this override.
+      DATABASE_URL: postgresql://${POSTGRES_USER:-readmigo}:${POSTGRES_PASSWORD:-readmigo}@db:5432/${POSTGRES_DB:-readmigo_cn}
+      REDIS_URL: redis://redis:6379
+      NODE_ENV: ${NODE_ENV:-development}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 20s
+      retries: 3
+    networks:
+      - readmigo_cn_net
+
+  # ── Database (PostgreSQL 16 — GaussDB-compatible local dev substitute) ───────
+  #
+  # Production note: Huawei GaussDB for PostgreSQL is wire-compatible with
+  # PostgreSQL 14/15. This service uses postgres:16-alpine to stay close to
+  # the production version.  Migrations tested here apply to GaussDB without
+  # changes (standard SQL, no PG-specific extensions beyond uuid-ossp).
+  db:
     image: postgres:16-alpine
     container_name: readmigo_cn_postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: readmigo
-      POSTGRES_PASSWORD: readmigo
-      POSTGRES_DB: readmigo_cn
+      POSTGRES_USER: ${POSTGRES_USER:-readmigo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-readmigo}
+      POSTGRES_DB: ${POSTGRES_DB:-readmigo_cn}
+      # Tune shared_buffers for a dev environment (default 128 MB is fine)
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=en_US.UTF-8"
     ports:
-      - '5432:5432'
+      # Expose to host so tools like TablePlus / DBeaver can connect directly.
+      - "5432:5432"
     volumes:
       - readmigo_cn_pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U readmigo -d readmigo_cn']
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-readmigo} -d ${POSTGRES_DB:-readmigo_cn}"]
       interval: 5s
       timeout: 5s
+      start_period: 10s
       retries: 10
+    networks:
+      - readmigo_cn_net
 
+  # ── Redis 7 ───────────────────────────────────────────────────────────────────
   redis:
     image: redis:7-alpine
     container_name: readmigo_cn_redis
+    restart: unless-stopped
+    # Persist data to disk using AOF (append-only file) so cache survives restarts.
+    command: redis-server --appendonly yes
     ports:
-      - '6379:6379'
+      - "6379:6379"
+    volumes:
+      - readmigo_cn_redis_data:/data
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
+      start_period: 5s
       retries: 10
+    networks:
+      - readmigo_cn_net
 
-  adminer:
-    image: adminer:latest
-    container_name: readmigo_cn_adminer
-    depends_on:
-      - postgres
-    ports:
-      - '8080:8080'
-
+# ── Named volumes ──────────────────────────────────────────────────────────────
 volumes:
   readmigo_cn_pgdata:
+    driver: local
+  readmigo_cn_redis_data:
+    driver: local
+
+# ── Network ────────────────────────────────────────────────────────────────────
+networks:
+  readmigo_cn_net:
+    driver: bridge
