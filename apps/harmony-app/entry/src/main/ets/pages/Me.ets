@@ -1,3 +1,4 @@
+import router from '@ohos.router';
 import { AppColors } from '../theme/AppColors';
 import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
 import { AppSpacing, AppRadius } from '../theme/AppSpacing';
@@ -109,6 +110,27 @@ export struct Me {
       .borderRadius(AppRadius.md)
       .backgroundColor(AppColors.bgElevated)
       .onClick(() => RouterService.push(RoutePath.NOTES))
+
+      // 开发者：原生组件 Demo（W2-C5；目前始终显示，正式版可加 BuildProfile.DEBUG 门控）
+      Row() {
+        Text('开发者：原生组件 Demo')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textPrimary)
+          .layoutWeight(1)
+        Text('>')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => {
+        router.pushUrl({ url: RoutePath.XCOMPONENT_DEMO_URL })
+          .catch((_e: Error) => {
+            // 若 main_pages.json 未注册，会抛错；此处吞掉避免崩溃
+          });
+      })
 
       Button($r('app.string.me_logout'))
         .width('90%')

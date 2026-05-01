@@ -162,3 +162,98 @@ jobs:
           echo "DevEco Studio CLI (hvigorw/ohpm) is not available in standard CI runners."
           echo "Planned for W2 — see comment in ci.yml for details."
           echo "Affected path: apps/harmony-app/entry/src/main/ets/**/*.ets"
+
+  # ── Native C++ build: libreadmigo_native.so ───────────────────────────────
+  #
+  # BEST-EFFORT JOB — continue-on-error: true
+  #
+  # Rationale: Compiling the HarmonyOS NEXT NDK (arm64-v8a) requires the full
+  # HarmonyOS SDK (ohos.toolchain.cmake + clang cross-compiler).  As of 2024,
+  # Huawei does not publish an official Docker image or Gitee Go runner preset
+  # that includes the SDK.  Until a reliable container image or self-hosted
+  # runner is available, this job acts as a documented TODO and placeholder for
+  # the build artefact, rather than a hard gate.
+  #
+  # Local build path (developer machine):
+  #   1. Install DevEco Studio and let it download the HarmonyOS SDK.
+  #   2. Run:  ./scripts/build-native.sh --release
+  #   3. The .so lands in apps/harmony-app/entry/libs/arm64-v8a/
+  #   4. Open apps/harmony-app in DevEco Studio → Build → Build Hap(s)
+  #
+  # When an OHOS CI runner becomes available, replace the echo steps with:
+  #   - run: ./scripts/build-native.sh --release --verbose
+  # and set continue-on-error: false.
+  build-native-libs:
+    name: Native Build / libreadmigo_native.so (best-effort)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    # Only run on push to main — skip on every PR to keep feedback fast.
+    # PRs rely on the local developer build and the DevEco Studio check.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    # Do not fail the whole pipeline if the SDK is unavailable on the runner.
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ── TODO: SDK bootstrap ──────────────────────────────────────────────
+      # Uncomment and adapt when a HarmonyOS SDK layer becomes available:
+      #
+      # - name: Set up HarmonyOS SDK
+      #   run: |
+      #     curl -fsSL https://<mirror>/harmonyos-sdk-linux.tar.gz | \
+      #       tar -xz -C /opt/harmonyos-sdk
+      #     echo "HARMONYOS_SDK_HOME=/opt/harmonyos-sdk" >> $GITHUB_ENV
+      # ────────────────────────────────────────────────────────────────────
+
+      - name: Check HarmonyOS SDK availability
+        id: sdk-check
+        run: |
+          if [[ -n "${HARMONYOS_SDK_HOME:-}" ]] && [[ -d "${HARMONYOS_SDK_HOME}" ]]; then
+            echo "sdk_available=true" >> "$GITHUB_OUTPUT"
+            echo "SDK found at ${HARMONYOS_SDK_HOME}"
+          else
+            echo "sdk_available=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::HARMONYOS_SDK_HOME is not set or SDK directory does not exist."
+            echo "::warning::Native build skipped — see job comment for local build instructions."
+          fi
+
+      - name: Build libreadmigo_native.so
+        if: steps.sdk-check.outputs.sdk_available == 'true'
+        run: |
+          chmod +x scripts/build-native.sh
+          ./scripts/build-native.sh --release --verbose
+
+      - name: Emit TODO notice (SDK unavailable)
+        if: steps.sdk-check.outputs.sdk_available != 'true'
+        run: |
+          echo "::notice::TODO — Native build requires HarmonyOS SDK in CI runner."
+          echo "::notice::Track progress: docs/05-operations/deployment/harmony-ci-native-build.md"
+          echo ""
+          echo "Manual build command (run on a machine with DevEco Studio installed):"
+          echo "  ./scripts/build-native.sh --release"
+          echo ""
+          echo "Output location:"
+          echo "  apps/harmony-app/entry/libs/arm64-v8a/libreadmigo_native.so"
+
+      # Upload placeholder artefact so the artefact slot exists in the CI run.
+      # When the SDK is available the real .so will be uploaded instead.
+      - name: Prepare artefact
+        run: |
+          mkdir -p apps/harmony-app/entry/libs/arm64-v8a
+          # If the real .so was not built, write a placeholder file so the
+          # upload-artifact step always has something to attach.
+          if [[ ! -f apps/harmony-app/entry/libs/arm64-v8a/libreadmigo_native.so ]]; then
+            echo "placeholder — SDK unavailable in CI; build locally with ./scripts/build-native.sh" \
+              > apps/harmony-app/entry/libs/arm64-v8a/BUILD_PLACEHOLDER.txt
+          fi
+
+      - name: Upload native library artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: libreadmigo_native-arm64-v8a
+          path: apps/harmony-app/entry/libs/arm64-v8a/
+          # Retain for 7 days; production releases should be tagged releases.
+          retention-days: 7

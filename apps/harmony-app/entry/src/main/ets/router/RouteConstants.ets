@@ -13,6 +13,12 @@ export class RoutePath {
   static readonly AUDIOBOOK_PLAYER: string = 'AudiobookPlayer';
   static readonly SETTINGS: string = 'Settings';
   static readonly NOTES: string = 'Notes';
+  /**
+   * 开发者工具：原生组件 demo（W2-C5）。
+   * 实际页路径：pages/native/XComponentDemo（router.pushUrl 使用）。
+   */
+  static readonly XCOMPONENT_DEMO: string = 'xcomponent-demo';
+  static readonly XCOMPONENT_DEMO_URL: string = 'pages/native/XComponentDemo';
 }
 
 export interface ReaderRouteParams {
