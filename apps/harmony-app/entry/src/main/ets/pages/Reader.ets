@@ -7,8 +7,10 @@ import { SettingsStore } from '../store/SettingsStore';
 import {
   TypesettingEngine,
   TypesetPage,
+  HitResult,
   createTypesettingEngine,
 } from '../native/typesetting';
+import { WordExplainSheet, WordExplainContext } from '../components/WordExplainSheet';
 
 const SAMPLE_HTML = `
 <h1>Chapter 1 — The Beginning</h1>
@@ -30,16 +32,28 @@ export struct Reader {
   @State pageCount: number = 0;
   @State currentPage: TypesetPage | null = null;
   @State fontSize: number = SettingsStore.getReaderFontSize();
-  @State engineReady: boolean = false;
+  @State explainCtx: WordExplainContext = {
+    word: '', contextSentence: '', bookId: '', chapterId: '',
+    blockIndex: 0, charOffset: 0, charLength: 0,
+  };
 
   private engine: TypesettingEngine | null = null;
   private chapterId: string = 'chapter-1';
+  private bookId: string = 'demo';
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
   private pageWidth: number = 360;
   private pageHeight: number = 640;
 
+  private explainController: CustomDialogController = new CustomDialogController({
+    builder: WordExplainSheet({ ctx: this.explainCtx }),
+    alignment: DialogAlignment.Bottom,
+    customStyle: true,
+    autoCancel: true,
+  });
+
   aboutToAppear(): void {
+    this.bookId = this.params?.bookId ?? 'demo';
     this.chapterId = this.params?.chapterId ?? 'chapter-1';
     this.engine = createTypesettingEngine();
     const summary = this.engine.layoutHtml(
@@ -50,7 +64,6 @@ export struct Reader {
       this.fontSize,
     );
     this.pageCount = summary.pageCount;
-    this.engineReady = true;
     this.loadPage(0);
   }
 
@@ -73,7 +86,6 @@ export struct Reader {
     ctx.fillStyle = AppColors.bgReader;
     ctx.fillRect(0, 0, this.pageWidth, this.pageHeight);
     if (!page) return;
-
     ctx.fillStyle = AppColors.textPrimary;
     for (const line of page.lines) {
       for (const run of line.runs) {
@@ -95,10 +107,60 @@ export struct Reader {
     }
   }
 
+  private extractContextSentence(blockIndex: number, charOffset: number): string {
+    if (!this.currentPage) return '';
+    const parts: string[] = [];
+    for (const line of this.currentPage.lines) {
+      for (const run of line.runs) {
+        if (run.blockIndex === blockIndex) parts.push(run.text);
+      }
+    }
+    const fullBlock = parts.join(' ');
+    const sentEnd = fullBlock.indexOf('.', charOffset);
+    const sentStart = Math.max(0, fullBlock.lastIndexOf('.', charOffset - 1));
+    const slice = fullBlock.slice(sentStart === 0 ? 0 : sentStart + 1, sentEnd === -1 ? fullBlock.length : sentEnd + 1);
+    return slice.trim() || fullBlock.slice(0, 200);
+  }
+
+  private extractWord(text: string): { word: string; offset: number; length: number } | null {
+    const match = text.match(/[A-Za-z][A-Za-z'-]*/);
+    if (!match) return null;
+    return {
+      word: match[0],
+      offset: match.index ?? 0,
+      length: match[0].length,
+    };
+  }
+
+  private onTap(event: ClickEvent): void {
+    if (!this.engine) return;
+    const x = event.localX;
+    const y = event.localY;
+    const hit: HitResult | null = this.engine.hitTest(this.chapterId, this.pageIndex, x, y);
+    if (!hit) return;
+    const w = this.extractWord(hit.text);
+    if (!w) return;
+    this.explainCtx = {
+      word: w.word,
+      contextSentence: this.extractContextSentence(hit.blockIndex, hit.charOffset),
+      bookId: this.bookId,
+      chapterId: this.chapterId,
+      blockIndex: hit.blockIndex,
+      charOffset: hit.charOffset + w.offset,
+      charLength: w.length,
+    };
+    this.explainController = new CustomDialogController({
+      builder: WordExplainSheet({ ctx: this.explainCtx }),
+      alignment: DialogAlignment.Bottom,
+      customStyle: true,
+      autoCancel: true,
+    });
+    this.explainController.open();
+  }
+
   build() {
     NavDestination() {
       Column() {
-        // 顶栏
         Row({ space: AppSpacing.sm }) {
           Text('< 返回')
             .fontSize(AppFontSize.sm)
@@ -120,13 +182,13 @@ export struct Reader {
         .padding({ left: AppSpacing.base, right: AppSpacing.base, top: AppSpacing.sm, bottom: AppSpacing.sm })
         .backgroundColor(AppColors.bgReader)
 
-        // 翻页画布
         Stack() {
           Canvas(this.context)
             .width(this.pageWidth)
             .height(this.pageHeight)
             .backgroundColor(AppColors.bgReader)
             .onReady(() => this.draw())
+            .onClick((e: ClickEvent) => this.onTap(e))
             .gesture(
               PanGesture({ direction: PanDirection.Horizontal })
                 .onActionEnd((e: GestureEvent) => {
@@ -140,7 +202,6 @@ export struct Reader {
         .alignContent(Alignment.Center)
         .backgroundColor(AppColors.bgReader)
 
-        // 底栏：进度
         Row() {
           Text(`${this.pageIndex + 1} / ${this.pageCount}`)
             .fontSize(AppFontSize.sm)
