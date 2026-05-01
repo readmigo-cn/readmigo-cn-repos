@@ -94,6 +94,22 @@ export struct Me {
         if (!this.sub?.isPro) this.openPaywall();
       })
 
+      // 我的笔记
+      Row() {
+        Text($r('app.string.me_notes'))
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textPrimary)
+          .layoutWeight(1)
+        Text('>')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => RouterService.push(RoutePath.NOTES))
+
       Button($r('app.string.me_logout'))
         .width('90%')
         .height(48)

@@ -6,6 +6,7 @@ import { NotesApi } from '../service/api/NotesApi';
 import { NoteRepository, LocalNote } from '../persistence/NoteRepository';
 import { UserStore } from '../store/UserStore';
 import { SettingsStore } from '../store/SettingsStore';
+import { ExplainCard, StructuredExplain, parseExplainJson } from './ExplainCard';
 import promptAction from '@ohos.promptAction';
 import util from '@ohos.util';
 
@@ -36,6 +37,7 @@ export struct WordExplainSheet {
   @State streaming: boolean = true;
   @State errMsg: string = '';
   @State saved: boolean = false;
+  @State structured: StructuredExplain | null = null;
   private stopFn: (() => void) | null = null;
 
   aboutToAppear(): void {
@@ -51,6 +53,7 @@ export struct WordExplainSheet {
     this.streamedText = '';
     this.errMsg = '';
     this.streaming = true;
+    this.structured = null;
 
     this.stopFn = AiApi.explainWordStream(
       {
@@ -65,6 +68,11 @@ export struct WordExplainSheet {
         },
         onDone: () => {
           this.streaming = false;
+          // 流式结束尝试解析为结构化卡片
+          const parsed = parseExplainJson(this.streamedText);
+          if (parsed) {
+            this.structured = parsed;
+          }
         },
         onError: (e: Error) => {
           this.streaming = false;
@@ -77,6 +85,8 @@ export struct WordExplainSheet {
   private async onSave(): Promise<void> {
     if (this.saved) return;
     const localId = util.generateRandomUUID(true);
+    // 优先存结构化中的 definition；否则存 raw 流式文本
+    const noteText = this.structured?.definition ?? this.streamedText;
     const note: LocalNote = {
       id: localId,
       bookId: this.ctx.bookId,
@@ -85,7 +95,7 @@ export struct WordExplainSheet {
       charOffset: this.ctx.charOffset,
       charLength: this.ctx.charLength,
       originalText: this.ctx.word,
-      noteText: this.streamedText,
+      noteText,
       createdAt: Date.now(),
     };
     try {
@@ -106,7 +116,7 @@ export struct WordExplainSheet {
         charOffset: this.ctx.charOffset,
         charLength: this.ctx.charLength,
         originalText: this.ctx.word,
-        noteText: this.streamedText,
+        noteText,
         kind: 'word',
       }).catch(() => {
         // 静默：本地已存，下次同步任务再推
@@ -147,6 +157,8 @@ export struct WordExplainSheet {
               .fontSize(AppFontSize.sm)
               .fontColor(AppColors.danger)
               .width('100%')
+          } else if (this.structured) {
+            ExplainCard({ data: this.structured })
           } else {
             Text(this.streamedText.length > 0 ? this.streamedText : '...')
               .fontSize(AppFontSize.base)
@@ -162,7 +174,7 @@ export struct WordExplainSheet {
         }
         .alignItems(HorizontalAlign.Start)
       }
-      .height(240)
+      .height(280)
       .width('100%')
 
       Row({ space: AppSpacing.sm }) {

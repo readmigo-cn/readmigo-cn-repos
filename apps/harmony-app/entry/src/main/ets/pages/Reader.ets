@@ -122,32 +122,22 @@ export struct Reader {
     return slice.trim() || fullBlock.slice(0, 200);
   }
 
-  private extractWord(text: string): { word: string; offset: number; length: number } | null {
-    const match = text.match(/[A-Za-z][A-Za-z'-]*/);
-    if (!match) return null;
-    return {
-      word: match[0],
-      offset: match.index ?? 0,
-      length: match[0].length,
-    };
-  }
-
   private onTap(event: ClickEvent): void {
     if (!this.engine) return;
     const x = event.localX;
     const y = event.localY;
     const hit: HitResult | null = this.engine.hitTest(this.chapterId, this.pageIndex, x, y);
-    if (!hit) return;
-    const w = this.extractWord(hit.text);
-    if (!w) return;
+    if (!hit || !hit.text) return;
+    // hitTest 已返回精确 word + 字符位置（C++ / Mock 同实现）
+    if (!/[A-Za-z]/.test(hit.text)) return;
     this.explainCtx = {
-      word: w.word,
+      word: hit.text,
       contextSentence: this.extractContextSentence(hit.blockIndex, hit.charOffset),
       bookId: this.bookId,
       chapterId: this.chapterId,
       blockIndex: hit.blockIndex,
-      charOffset: hit.charOffset + w.offset,
-      charLength: w.length,
+      charOffset: hit.charOffset,
+      charLength: hit.charLength,
     };
     this.explainController = new CustomDialogController({
       builder: WordExplainSheet({ ctx: this.explainCtx }),

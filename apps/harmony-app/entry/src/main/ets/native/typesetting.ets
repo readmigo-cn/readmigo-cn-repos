@@ -226,16 +226,54 @@ class MockTypesettingEngine implements TypesettingEngine {
       if (y < line.y - line.ascent || y > line.y + line.descent) continue;
       for (const run of line.runs) {
         if (x < run.x || x > run.x + run.w) continue;
+        // 字符精度命中：按比例估算被点字符位置
+        let charIdx = 0;
+        if (run.charLength > 0 && run.w > 0) {
+          const ratio = (x - run.x) / run.w;
+          charIdx = Math.floor(ratio * run.charLength);
+          if (charIdx >= run.text.length) charIdx = run.text.length - 1;
+          if (charIdx < 0) charIdx = 0;
+        }
+        const bounds = MockTypesettingEngine.findWordBounds(run.text, charIdx);
         return {
           blockIndex: run.blockIndex,
           inlineIndex: run.inlineIndex,
-          charOffset: run.charOffset,
-          charLength: run.charLength,
-          text: run.text,
+          charOffset: run.charOffset + bounds.start,
+          charLength: bounds.length,
+          text: run.text.slice(bounds.start, bounds.start + bounds.length),
         };
       }
     }
     return null;
+  }
+
+  /** 在 text 中找包含 charIdx 的英文词边界（字母/撇号/连字符）。 */
+  private static findWordBounds(text: string, charIdx: number): { start: number; length: number } {
+    if (!text) return { start: 0, length: 0 };
+    if (charIdx < 0) charIdx = 0;
+    if (charIdx >= text.length) charIdx = text.length - 1;
+
+    const isWordChar = (c: string): boolean => /[A-Za-z'\-]/.test(c);
+
+    if (!isWordChar(text[charIdx])) {
+      let found = false;
+      for (let d = 1; d <= 8 && !found; d++) {
+        if (charIdx - d >= 0 && isWordChar(text[charIdx - d])) {
+          charIdx -= d;
+          found = true;
+        } else if (charIdx + d < text.length && isWordChar(text[charIdx + d])) {
+          charIdx += d;
+          found = true;
+        }
+      }
+      if (!found) return { start: charIdx, length: 1 };
+    }
+
+    let start = charIdx;
+    while (start > 0 && isWordChar(text[start - 1])) start--;
+    let end = charIdx;
+    while (end + 1 < text.length && isWordChar(text[end + 1])) end++;
+    return { start, length: end - start + 1 };
   }
 
   destroy(): void {

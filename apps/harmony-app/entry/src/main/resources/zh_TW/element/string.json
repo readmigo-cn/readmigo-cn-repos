@@ -56,7 +56,11 @@
     { "name": "me_title", "value": "我的" },
     { "name": "me_settings", "value": "設定" },
     { "name": "me_about", "value": "關於" },
+    { "name": "me_notes", "value": "我的筆記" },
     { "name": "me_logout", "value": "登出" },
+
+    { "name": "notes_title", "value": "我的筆記" },
+    { "name": "notes_empty", "value": "還沒有筆記。在任何一本書裡點擊單字即可儲存釋義。" },
 
     { "name": "onboarding_welcome", "value": "歡迎使用閱可" },
     { "name": "onboarding_subtitle", "value": "AI 時代的英語閱讀夥伴" },

@@ -56,7 +56,11 @@
     { "name": "me_title", "value": "我的" },
     { "name": "me_settings", "value": "设置" },
     { "name": "me_about", "value": "关于" },
+    { "name": "me_notes", "value": "我的笔记" },
     { "name": "me_logout", "value": "退出登录" },
+
+    { "name": "notes_title", "value": "我的笔记" },
+    { "name": "notes_empty", "value": "还没有笔记。在任何一本书里点击单词即可保存释义。" },
 
     { "name": "onboarding_welcome", "value": "欢迎使用阅可" },
     { "name": "onboarding_subtitle", "value": "AI 时代的英语阅读伴侣" },

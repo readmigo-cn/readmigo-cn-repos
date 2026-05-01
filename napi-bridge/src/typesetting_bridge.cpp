@@ -241,6 +241,48 @@ char* readmigo_typesetting_get_chapter_anchors_json(
   return dupCString(os.str());
 }
 
+// Helper: 在 run.text 中找到包含 charIdx 的 word 边界（字母+撇号）
+static void findWordBounds(const std::string& text, size_t charIdx, size_t* outStart, size_t* outLen) {
+  if (text.empty()) {
+    *outStart = 0;
+    *outLen = 0;
+    return;
+  }
+  if (charIdx >= text.size()) charIdx = text.size() - 1;
+
+  auto isWordChar = [](char c) {
+    return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '\'' || c == '-';
+  };
+
+  // 不在词内则向左/右各扩 8 字符寻找最近词
+  if (!isWordChar(text[charIdx])) {
+    size_t left = charIdx;
+    size_t right = charIdx;
+    bool found = false;
+    for (int d = 1; d <= 8 && !found; ++d) {
+      if (charIdx >= static_cast<size_t>(d) && isWordChar(text[charIdx - d])) {
+        charIdx -= d;
+        found = true;
+      } else if (charIdx + d < text.size() && isWordChar(text[charIdx + d])) {
+        charIdx += d;
+        found = true;
+      }
+    }
+    if (!found) {
+      *outStart = charIdx;
+      *outLen = 1;
+      return;
+    }
+  }
+
+  size_t start = charIdx;
+  while (start > 0 && isWordChar(text[start - 1])) --start;
+  size_t end = charIdx;
+  while (end + 1 < text.size() && isWordChar(text[end + 1])) ++end;
+  *outStart = start;
+  *outLen = end - start + 1;
+}
+
 char* readmigo_typesetting_hit_test_json(
     ReadmigoTypesettingHandle handle,
     const char* chapter_id,
@@ -259,13 +301,25 @@ char* readmigo_typesetting_hit_test_json(
     if (y < line.y - line.ascent || y > line.y + line.descent) continue;
     for (const auto& run : line.runs) {
       if (x < run.x || x > run.x + run.width) continue;
+      // 字符精度：按比例估算被点字符
+      // TODO(W3): 用 PlatformAdapter::measure_text 拿真实字宽做二分
+      size_t charIdx = 0;
+      if (run.charLength > 0 && run.width > 0) {
+        const float ratio = (x - run.x) / run.width;
+        charIdx = static_cast<size_t>(ratio * static_cast<float>(run.charLength));
+        if (charIdx >= run.text.size()) charIdx = run.text.size() - 1;
+      }
+      size_t wStart = 0, wLen = 0;
+      findWordBounds(run.text, charIdx, &wStart, &wLen);
+      const std::string word = run.text.substr(wStart, wLen);
+
       std::ostringstream os;
       os << "{\"blockIndex\":" << run.blockIndex
          << ",\"inlineIndex\":" << run.inlineIndex
-         << ",\"charOffset\":" << run.charOffset
-         << ",\"charLength\":" << run.charLength
+         << ",\"charOffset\":" << (run.charOffset + static_cast<int>(wStart))
+         << ",\"charLength\":" << static_cast<int>(wLen)
          << ",\"text\":";
-      appendEscaped(os, run.text);
+      appendEscaped(os, word);
       os << '}';
       return dupCString(os.str());
     }

@@ -10,6 +10,7 @@ import { Reader } from './Reader';
 import { Me } from './Me';
 import { AudiobookTab } from './AudiobookTab';
 import { AudiobookPlayer } from './AudiobookPlayer';
+import { Notes } from './Notes';
 
 @Entry
 @Component
@@ -34,6 +35,8 @@ struct Index {
       Reader({ params: param as ReaderRouteParams });
     } else if (name === RoutePath.AUDIOBOOK_PLAYER) {
       AudiobookPlayer({ params: param as AudiobookPlayerParams });
+    } else if (name === RoutePath.NOTES) {
+      Notes();
     }
   }
 

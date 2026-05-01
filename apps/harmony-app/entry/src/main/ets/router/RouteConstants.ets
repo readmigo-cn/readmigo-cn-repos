@@ -12,6 +12,7 @@ export class RoutePath {
   static readonly AUDIOBOOK_TAB: string = 'AudiobookTab';
   static readonly AUDIOBOOK_PLAYER: string = 'AudiobookPlayer';
   static readonly SETTINGS: string = 'Settings';
+  static readonly NOTES: string = 'Notes';
 }
 
 export interface ReaderRouteParams {

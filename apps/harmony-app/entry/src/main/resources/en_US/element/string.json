@@ -56,7 +56,11 @@
     { "name": "me_title", "value": "Me" },
     { "name": "me_settings", "value": "Settings" },
     { "name": "me_about", "value": "About" },
+    { "name": "me_notes", "value": "My Notes" },
     { "name": "me_logout", "value": "Sign out" },
+
+    { "name": "notes_title", "value": "My Notes" },
+    { "name": "notes_empty", "value": "No notes yet. Tap a word in any book to save its meaning." },
 
     { "name": "onboarding_welcome", "value": "Welcome to Readmigo" },
     { "name": "onboarding_subtitle", "value": "Your AI-powered English reading companion" },
