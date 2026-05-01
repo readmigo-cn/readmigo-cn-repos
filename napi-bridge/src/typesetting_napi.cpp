@@ -172,11 +172,103 @@ napi_value layoutHtml(napi_env env, napi_callback_info info) {
   return result;
 }
 
+// 共享：取 handle + 解析 chapter_id + page_index
+struct CallContext {
+  ReadmigoTypesettingHandle handle = nullptr;
+  std::string chapterId;
+};
+
+bool extractContext(napi_env env, napi_value handleVal, napi_value chapterVal, CallContext* out) {
+  void* data = nullptr;
+  if (napi_get_value_external(env, handleVal, &data) != napi_ok) {
+    throwTypeError(env, "Invalid engine handle");
+    return false;
+  }
+  auto* holder = static_cast<TypesettingExternalHolder*>(data);
+  if (!holder || !holder->handle) {
+    throwTypeError(env, "Typesetting engine has been destroyed");
+    return false;
+  }
+  out->handle = holder->handle;
+  if (!getString(env, chapterVal, &out->chapterId)) {
+    throwTypeError(env, "Invalid chapterId");
+    return false;
+  }
+  return true;
+}
+
+napi_value jsonToString(napi_env env, char* json) {
+  if (!json) {
+    napi_value n;
+    napi_get_null(env, &n);
+    return n;
+  }
+  napi_value out;
+  napi_create_string_utf8(env, json, NAPI_AUTO_LENGTH, &out);
+  readmigo_typesetting_free_json(json);
+  return out;
+}
+
+napi_value getPageJson(napi_env env, napi_callback_info info) {
+  size_t argc = 3;
+  napi_value argv[3];
+  napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+  if (argc < 3) {
+    throwTypeError(env, "Expected (handle, chapterId, pageIndex)");
+    return nullptr;
+  }
+  CallContext ctx;
+  if (!extractContext(env, argv[0], argv[1], &ctx)) return nullptr;
+  uint32_t pageIndex = 0;
+  if (napi_get_value_uint32(env, argv[2], &pageIndex) != napi_ok) {
+    throwTypeError(env, "Invalid pageIndex");
+    return nullptr;
+  }
+  return jsonToString(env, readmigo_typesetting_get_page_json(ctx.handle, ctx.chapterId.c_str(), pageIndex));
+}
+
+napi_value getChapterAnchorsJson(napi_env env, napi_callback_info info) {
+  size_t argc = 2;
+  napi_value argv[2];
+  napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+  if (argc < 2) {
+    throwTypeError(env, "Expected (handle, chapterId)");
+    return nullptr;
+  }
+  CallContext ctx;
+  if (!extractContext(env, argv[0], argv[1], &ctx)) return nullptr;
+  return jsonToString(env, readmigo_typesetting_get_chapter_anchors_json(ctx.handle, ctx.chapterId.c_str()));
+}
+
+napi_value hitTestJson(napi_env env, napi_callback_info info) {
+  size_t argc = 5;
+  napi_value argv[5];
+  napi_get_cb_info(env, info, &argc, argv, nullptr, nullptr);
+  if (argc < 5) {
+    throwTypeError(env, "Expected (handle, chapterId, pageIndex, x, y)");
+    return nullptr;
+  }
+  CallContext ctx;
+  if (!extractContext(env, argv[0], argv[1], &ctx)) return nullptr;
+  uint32_t pageIndex = 0;
+  float x = 0, y = 0;
+  if (napi_get_value_uint32(env, argv[2], &pageIndex) != napi_ok ||
+      !getFloat(env, argv[3], &x) ||
+      !getFloat(env, argv[4], &y)) {
+    throwTypeError(env, "Invalid coords");
+    return nullptr;
+  }
+  return jsonToString(env, readmigo_typesetting_hit_test_json(ctx.handle, ctx.chapterId.c_str(), pageIndex, x, y));
+}
+
 napi_value init(napi_env env, napi_value exports) {
   napi_property_descriptor descriptors[] = {
       {"createTypesettingEngine", nullptr, createTypesettingEngine, nullptr, nullptr, nullptr, napi_default, nullptr},
       {"destroyTypesettingEngine", nullptr, destroyTypesettingEngine, nullptr, nullptr, nullptr, napi_default, nullptr},
       {"layoutHtml", nullptr, layoutHtml, nullptr, nullptr, nullptr, napi_default, nullptr},
+      {"getPageJson", nullptr, getPageJson, nullptr, nullptr, nullptr, napi_default, nullptr},
+      {"getChapterAnchorsJson", nullptr, getChapterAnchorsJson, nullptr, nullptr, nullptr, napi_default, nullptr},
+      {"hitTestJson", nullptr, hitTestJson, nullptr, nullptr, nullptr, napi_default, nullptr},
   };
 
   napi_define_properties(env, exports, sizeof(descriptors) / sizeof(descriptors[0]), descriptors);

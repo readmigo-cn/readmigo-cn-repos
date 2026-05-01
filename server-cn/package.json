@@ -9,9 +9,12 @@
     "start": "nest start",
     "start:prod": "node dist/main.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "db:up": "docker compose up -d postgres redis adminer",
+    "db:down": "docker compose down",
     "db:migrate": "typeorm-ts-node-esm migration:run -d src/database/data-source.ts",
     "db:revert": "typeorm-ts-node-esm migration:revert -d src/database/data-source.ts",
-    "db:gen": "typeorm-ts-node-esm migration:generate -d src/database/data-source.ts"
+    "db:gen": "typeorm-ts-node-esm migration:generate -d src/database/data-source.ts",
+    "dev:full": "./scripts/dev.sh"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.16",

@@ -3,10 +3,15 @@
 #include "typesetting/engine.h"
 #include "typesetting/platform_harmony.h"
 #include "typesetting/style.h"
+#include "typesetting/page.h"
 
+#include <cstdlib>
+#include <cstring>
 #include <memory>
 #include <new>
+#include <sstream>
 #include <string>
+#include <unordered_map>
 #include <utility>
 
 namespace {
@@ -14,6 +19,8 @@ namespace {
 struct TypesettingBridgeEngine {
   std::shared_ptr<typesetting::PlatformAdapter> platform;
   std::unique_ptr<typesetting::Engine> engine;
+  // 缓存上一次 layout 结果，按 chapterId 索引，供 getPage / hit-test 使用
+  std::unordered_map<std::string, typesetting::LayoutResult> cache;
 };
 
 typesetting::Style buildStyle(const ReadmigoTypesettingLayoutOptions* options) {
@@ -36,6 +43,109 @@ std::string buildChapterId(const ReadmigoTypesettingLayoutOptions* options) {
     return options->chapter_id;
   }
   return "chapter-1";
+}
+
+// ---------- JSON helpers (minimal, no external dep) ----------
+
+void appendEscaped(std::ostringstream& os, const std::string& s) {
+  os << '"';
+  for (unsigned char c : s) {
+    switch (c) {
+      case '"':  os << "\\\""; break;
+      case '\\': os << "\\\\"; break;
+      case '\n': os << "\\n";  break;
+      case '\r': os << "\\r";  break;
+      case '\t': os << "\\t";  break;
+      default:
+        if (c < 0x20) {
+          char buf[8];
+          std::snprintf(buf, sizeof(buf), "\\u%04x", c);
+          os << buf;
+        } else {
+          os << static_cast<char>(c);
+        }
+    }
+  }
+  os << '"';
+}
+
+void serializeRun(std::ostringstream& os, const typesetting::TextRun& r) {
+  os << '{';
+  os << "\"x\":" << r.x;
+  os << ",\"y\":" << r.y;
+  os << ",\"w\":" << r.width;
+  os << ",\"fontSize\":" << r.font.size;
+  os << ",\"blockIndex\":" << r.blockIndex;
+  os << ",\"inlineIndex\":" << r.inlineIndex;
+  os << ",\"charOffset\":" << r.charOffset;
+  os << ",\"charLength\":" << r.charLength;
+  os << ",\"isLink\":" << (r.isLink ? "true" : "false");
+  os << ",\"text\":"; appendEscaped(os, r.text);
+  os << '}';
+}
+
+void serializeLine(std::ostringstream& os, const typesetting::Line& l) {
+  os << "{\"x\":" << l.x
+     << ",\"y\":" << l.y
+     << ",\"w\":" << l.width
+     << ",\"h\":" << l.height
+     << ",\"ascent\":" << l.ascent
+     << ",\"descent\":" << l.descent
+     << ",\"runs\":[";
+  for (size_t i = 0; i < l.runs.size(); ++i) {
+    if (i > 0) os << ',';
+    serializeRun(os, l.runs[i]);
+  }
+  os << "]}";
+}
+
+void serializeDecoration(std::ostringstream& os, const typesetting::Decoration& d) {
+  const char* type = "hr";
+  if (d.type == typesetting::DecorationType::ImagePlaceholder) type = "img";
+  else if (d.type == typesetting::DecorationType::TableBorder) type = "table";
+  os << "{\"type\":\"" << type << "\""
+     << ",\"x\":" << d.x
+     << ",\"y\":" << d.y
+     << ",\"w\":" << d.width
+     << ",\"h\":" << d.height;
+  if (d.type == typesetting::DecorationType::ImagePlaceholder) {
+    os << ",\"src\":"; appendEscaped(os, d.imageSrc);
+    os << ",\"alt\":"; appendEscaped(os, d.imageAlt);
+  }
+  os << '}';
+}
+
+std::string serializePage(const typesetting::Page& p) {
+  std::ostringstream os;
+  os << "{\"pageIndex\":" << p.pageIndex
+     << ",\"width\":" << p.width
+     << ",\"height\":" << p.height
+     << ",\"contentX\":" << p.contentX
+     << ",\"contentY\":" << p.contentY
+     << ",\"contentWidth\":" << p.contentWidth
+     << ",\"contentHeight\":" << p.contentHeight
+     << ",\"firstBlockIndex\":" << p.firstBlockIndex
+     << ",\"lastBlockIndex\":" << p.lastBlockIndex
+     << ",\"lines\":[";
+  for (size_t i = 0; i < p.lines.size(); ++i) {
+    if (i > 0) os << ',';
+    serializeLine(os, p.lines[i]);
+  }
+  os << "],\"decorations\":[";
+  for (size_t i = 0; i < p.decorations.size(); ++i) {
+    if (i > 0) os << ',';
+    serializeDecoration(os, p.decorations[i]);
+  }
+  os << "]}";
+  return os.str();
+}
+
+char* dupCString(const std::string& s) {
+  char* mem = static_cast<char*>(std::malloc(s.size() + 1));
+  if (!mem) return nullptr;
+  std::memcpy(mem, s.data(), s.size());
+  mem[s.size()] = '\0';
+  return mem;
 }
 
 }  // namespace
@@ -85,11 +195,86 @@ int readmigo_typesetting_layout_html(
   const auto pageSize = buildPageSize(options);
   const auto chapterId = buildChapterId(options);
 
-  const auto result = bridge->engine->layoutHTML(html, chapterId, style, pageSize);
+  auto result = bridge->engine->layoutHTML(html, chapterId, style, pageSize);
   out_summary->page_count = static_cast<uint32_t>(result.pages.size());
   out_summary->total_blocks = static_cast<uint32_t>(result.totalBlocks);
   out_summary->warning_count = static_cast<uint32_t>(result.warnings.size());
+
+  bridge->cache[chapterId] = std::move(result);
   return 0;
+}
+
+char* readmigo_typesetting_get_page_json(
+    ReadmigoTypesettingHandle handle,
+    const char* chapter_id,
+    uint32_t page_index) {
+  if (!handle) return nullptr;
+  auto* bridge = reinterpret_cast<TypesettingBridgeEngine*>(handle);
+  const std::string key = (chapter_id && chapter_id[0]) ? chapter_id : "chapter-1";
+  auto it = bridge->cache.find(key);
+  if (it == bridge->cache.end()) return nullptr;
+  if (page_index >= it->second.pages.size()) return nullptr;
+  return dupCString(serializePage(it->second.pages[page_index]));
+}
+
+char* readmigo_typesetting_get_chapter_anchors_json(
+    ReadmigoTypesettingHandle handle,
+    const char* chapter_id) {
+  if (!handle) return nullptr;
+  auto* bridge = reinterpret_cast<TypesettingBridgeEngine*>(handle);
+  const std::string key = (chapter_id && chapter_id[0]) ? chapter_id : "chapter-1";
+  auto it = bridge->cache.find(key);
+  if (it == bridge->cache.end()) return nullptr;
+
+  std::ostringstream os;
+  os << '[';
+  bool first = true;
+  for (const auto& page : it->second.pages) {
+    if (!first) os << ',';
+    first = false;
+    os << "{\"pageIndex\":" << page.pageIndex
+       << ",\"firstBlockIndex\":" << page.firstBlockIndex
+       << ",\"lastBlockIndex\":" << page.lastBlockIndex
+       << '}';
+  }
+  os << ']';
+  return dupCString(os.str());
+}
+
+char* readmigo_typesetting_hit_test_json(
+    ReadmigoTypesettingHandle handle,
+    const char* chapter_id,
+    uint32_t page_index,
+    float x,
+    float y) {
+  if (!handle) return nullptr;
+  auto* bridge = reinterpret_cast<TypesettingBridgeEngine*>(handle);
+  const std::string key = (chapter_id && chapter_id[0]) ? chapter_id : "chapter-1";
+  auto it = bridge->cache.find(key);
+  if (it == bridge->cache.end()) return nullptr;
+  if (page_index >= it->second.pages.size()) return nullptr;
+
+  const auto& page = it->second.pages[page_index];
+  for (const auto& line : page.lines) {
+    if (y < line.y - line.ascent || y > line.y + line.descent) continue;
+    for (const auto& run : line.runs) {
+      if (x < run.x || x > run.x + run.width) continue;
+      std::ostringstream os;
+      os << "{\"blockIndex\":" << run.blockIndex
+         << ",\"inlineIndex\":" << run.inlineIndex
+         << ",\"charOffset\":" << run.charOffset
+         << ",\"charLength\":" << run.charLength
+         << ",\"text\":";
+      appendEscaped(os, run.text);
+      os << '}';
+      return dupCString(os.str());
+    }
+  }
+  return nullptr;
+}
+
+void readmigo_typesetting_free_json(char* json_str) {
+  if (json_str) std::free(json_str);
 }
 
 }  // extern "C"
