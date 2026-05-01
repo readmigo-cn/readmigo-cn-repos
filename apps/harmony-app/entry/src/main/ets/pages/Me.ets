@@ -4,18 +4,41 @@ import { AppSpacing, AppRadius } from '../theme/AppSpacing';
 import { UserStore, UserProfile } from '../store/UserStore';
 import { RouterService } from '../router/RouterService';
 import { RoutePath } from '../router/RouteConstants';
+import { PaywallSheet } from '../components/PaywallSheet';
+import { SubscriptionApi, SubscriptionInfo } from '../service/api/SubscriptionApi';
 
 @Component
 export struct Me {
   @State profile: UserProfile | null = null;
+  @State sub: SubscriptionInfo | null = null;
+
+  private paywallController: CustomDialogController = new CustomDialogController({
+    builder: PaywallSheet({ onPurchaseSuccess: () => this.loadSubscription() }),
+    alignment: DialogAlignment.Bottom,
+    customStyle: true,
+  });
 
   aboutToAppear(): void {
     this.profile = UserStore.getProfile() ?? null;
+    this.loadSubscription();
+  }
+
+  private async loadSubscription(): Promise<void> {
+    if (!UserStore.isLoggedIn()) return;
+    try {
+      this.sub = await SubscriptionApi.me();
+    } catch (_e) {
+      this.sub = null;
+    }
   }
 
   private onLogout(): void {
     UserStore.clear();
     RouterService.push(RoutePath.LOGIN);
+  }
+
+  private openPaywall(): void {
+    this.paywallController.open();
   }
 
   build() {
@@ -43,6 +66,33 @@ export struct Me {
       }
       .width('100%')
       .padding(AppSpacing.base)
+
+      // Pro 卡片
+      Column({ space: AppSpacing.xs }) {
+        Row() {
+          Text(this.sub?.isPro ? '✨ Pro 已开通' : '升级 Pro')
+            .fontSize(AppFontSize.md)
+            .fontWeight(AppFontWeight.bold)
+            .fontColor(this.sub?.isPro ? AppColors.brand : AppColors.textPrimary)
+            .layoutWeight(1)
+          Text('>')
+            .fontSize(AppFontSize.md)
+            .fontColor(AppColors.textSecondary)
+        }
+        .width('100%')
+        Text(this.sub?.isPro && this.sub.subscription?.expiresAt
+          ? `续费至 ${this.sub.subscription.expiresAt.slice(0, 10)}`
+          : '解锁全部图书与 AI 学习功能')
+          .fontSize(AppFontSize.sm)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => {
+        if (!this.sub?.isPro) this.openPaywall();
+      })
 
       Button($r('app.string.me_logout'))
         .width('90%')

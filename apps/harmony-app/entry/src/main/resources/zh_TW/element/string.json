@@ -60,6 +60,9 @@
 
     { "name": "onboarding_welcome", "value": "歡迎使用閱可" },
     { "name": "onboarding_subtitle", "value": "AI 時代的英語閱讀夥伴" },
-    { "name": "onboarding_start", "value": "開始" }
+    { "name": "onboarding_start", "value": "開始" },
+
+    { "name": "widget_daily_word_label", "value": "今日一詞" },
+    { "name": "widget_daily_word_desc", "value": "每日一個英語單詞" }
   ]
 }

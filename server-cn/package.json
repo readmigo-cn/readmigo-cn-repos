@@ -14,6 +14,7 @@
     "db:migrate": "typeorm-ts-node-esm migration:run -d src/database/data-source.ts",
     "db:revert": "typeorm-ts-node-esm migration:revert -d src/database/data-source.ts",
     "db:gen": "typeorm-ts-node-esm migration:generate -d src/database/data-source.ts",
+    "db:seed": "tsx scripts/seed-demo-books.ts",
     "dev:full": "./scripts/dev.sh"
   },
   "dependencies": {
@@ -49,6 +50,7 @@
     "@types/pg": "^8.11.10",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.19.2",
     "typescript": "^5.8.3"
   }
 }

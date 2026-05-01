@@ -33,6 +33,21 @@
         ]
       }
     ],
+    "extensionAbilities": [
+      {
+        "name": "DailyWordExtensionAbility",
+        "srcEntry": "./ets/widget/DailyWordExtensionAbility.ets",
+        "label": "$string:widget_daily_word_label",
+        "description": "$string:widget_daily_word_desc",
+        "type": "form",
+        "metadata": [
+          {
+            "name": "ohos.extension.form",
+            "resource": "$profile:form_config"
+          }
+        ]
+      }
+    ],
     "requestPermissions": [
       {
         "name": "ohos.permission.INTERNET"

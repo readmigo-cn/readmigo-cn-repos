@@ -60,6 +60,9 @@
 
     { "name": "onboarding_welcome", "value": "欢迎使用阅可" },
     { "name": "onboarding_subtitle", "value": "AI 时代的英语阅读伴侣" },
-    { "name": "onboarding_start", "value": "开始" }
+    { "name": "onboarding_start", "value": "开始" },
+
+    { "name": "widget_daily_word_label", "value": "今日一词" },
+    { "name": "widget_daily_word_desc", "value": "每日一个英语单词" }
   ]
 }

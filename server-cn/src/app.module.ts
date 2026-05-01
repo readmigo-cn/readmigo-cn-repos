@@ -9,8 +9,10 @@ import { BooksModule } from './modules/books/books.module.js';
 import { BookshelfModule } from './modules/bookshelf/bookshelf.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { ReadingModule } from './modules/reading/reading.module.js';
+import { SubscriptionModule } from './modules/subscription/subscription.module.js';
 import { SyncModule } from './modules/sync/sync.module.js';
 import { UsersModule } from './modules/users/users.module.js';
+import { WidgetModule } from './modules/widget/widget.module.js';
 
 @Module({
   imports: [
@@ -26,8 +28,10 @@ import { UsersModule } from './modules/users/users.module.js';
     BooksModule,
     BookshelfModule,
     ReadingModule,
+    SubscriptionModule,
     SyncModule,
     AiModule,
+    WidgetModule,
   ],
 })
 export class AppModule {}

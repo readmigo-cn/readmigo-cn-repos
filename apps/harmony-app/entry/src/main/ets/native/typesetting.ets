@@ -12,7 +12,47 @@
  *   2. 修改 NATIVE_AVAILABLE 为 true
  */
 
-const NATIVE_AVAILABLE: boolean = false;
+/**
+ * NATIVE_AVAILABLE flips to true once libreadmigo_typesetting.so is bundled.
+ * 切换步骤：
+ *   1. 在 DevEco Studio 里 Build → Make HAP，确认 entry/libs/arm64-v8a/ 出现 libreadmigo_typesetting.so
+ *   2. 把下面的 false 改成 true
+ *   3. Reader 页会自动切到真实 native 引擎
+ *
+ * tryLoadNative 会捕获加载失败并 fallback 到 mock，所以即使 .so 缺失也不会闪退。
+ */
+let NATIVE_AVAILABLE: boolean = false;
+
+interface NativeTypesettingModule {
+  createTypesettingEngine(): object;
+  destroyTypesettingEngine(handle: object): void;
+  layoutHtml(handle: object, html: string, chapterId: string, w: number, h: number, fs?: number): LayoutSummary;
+  getPageJson(handle: object, chapterId: string, pageIndex: number): string | null;
+  getChapterAnchorsJson(handle: object, chapterId: string): string | null;
+  hitTestJson(handle: object, chapterId: string, pageIndex: number, x: number, y: number): string | null;
+}
+
+let cachedNativeModule: NativeTypesettingModule | null = null;
+
+function tryLoadNative(): NativeTypesettingModule | null {
+  if (cachedNativeModule) return cachedNativeModule;
+  if (!NATIVE_AVAILABLE) return null;
+  try {
+    // 真实加载（ohos NAPI 模块）。.so 没 ready 时此 import 会抛错，被 catch 后降级 mock。
+    // @ts-ignore — 仅在 .so 进 HAP 后才能解析
+    const mod: NativeTypesettingModule = globalThis['requireNapi']
+      ? globalThis['requireNapi']('libreadmigo_typesetting.so')
+      : null;
+    if (mod && typeof mod.createTypesettingEngine === 'function') {
+      cachedNativeModule = mod;
+      return mod;
+    }
+  } catch (_e) {
+    // fall through to mock
+  }
+  NATIVE_AVAILABLE = false;
+  return null;
+}
 
 export interface TextRun {
   x: number;
@@ -227,26 +267,71 @@ class MockTypesettingEngine implements TypesettingEngine {
   }
 }
 
-// ----- Native Engine（NATIVE_AVAILABLE=true 时使用） -----
-// 注意：当前 NATIVE_AVAILABLE=false，此类先存桩，等 .so 编入 HAP 时启用 import。
+// ----- Native Engine（.so ready 后启用） -----
+
 class NativeTypesettingEngine implements TypesettingEngine {
   private handle: object | null = null;
+  private mod: NativeTypesettingModule;
 
-  constructor() {
-    // const native: TypesettingNativeModule = globalThis['libreadmigo_typesetting'];
-    // this.handle = native.createTypesettingEngine();
-    throw new Error('Native typesetting not yet linked. Set NATIVE_AVAILABLE=true after .so is bundled.');
+  constructor(mod: NativeTypesettingModule) {
+    this.mod = mod;
+    this.handle = mod.createTypesettingEngine();
   }
 
-  layoutHtml(_html: string, _chapterId: string, _width: number, _height: number, _fontSize?: number): LayoutSummary {
-    throw new Error('not_implemented');
+  layoutHtml(html: string, chapterId: string, width: number, height: number, fontSize?: number): LayoutSummary {
+    if (!this.handle) throw new Error('engine_destroyed');
+    return this.mod.layoutHtml(this.handle, html, chapterId, width, height, fontSize);
   }
-  getPage(_chapterId: string, _pageIndex: number): TypesetPage | null { return null; }
-  getChapterAnchors(_chapterId: string): ChapterAnchor[] { return []; }
-  hitTest(_chapterId: string, _pageIndex: number, _x: number, _y: number): HitResult | null { return null; }
-  destroy(): void { this.handle = null; }
+
+  getPage(chapterId: string, pageIndex: number): TypesetPage | null {
+    if (!this.handle) return null;
+    const json = this.mod.getPageJson(this.handle, chapterId, pageIndex);
+    if (!json) return null;
+    try {
+      return JSON.parse(json) as TypesetPage;
+    } catch (_e) {
+      return null;
+    }
+  }
+
+  getChapterAnchors(chapterId: string): ChapterAnchor[] {
+    if (!this.handle) return [];
+    const json = this.mod.getChapterAnchorsJson(this.handle, chapterId);
+    if (!json) return [];
+    try {
+      return JSON.parse(json) as ChapterAnchor[];
+    } catch (_e) {
+      return [];
+    }
+  }
+
+  hitTest(chapterId: string, pageIndex: number, x: number, y: number): HitResult | null {
+    if (!this.handle) return null;
+    const json = this.mod.hitTestJson(this.handle, chapterId, pageIndex, x, y);
+    if (!json) return null;
+    try {
+      return JSON.parse(json) as HitResult;
+    } catch (_e) {
+      return null;
+    }
+  }
+
+  destroy(): void {
+    if (this.handle) {
+      this.mod.destroyTypesettingEngine(this.handle);
+      this.handle = null;
+    }
+  }
 }
 
 export function createTypesettingEngine(): TypesettingEngine {
-  return NATIVE_AVAILABLE ? new NativeTypesettingEngine() : new MockTypesettingEngine();
+  const native = tryLoadNative();
+  if (native) {
+    try {
+      return new NativeTypesettingEngine(native);
+    } catch (_e) {
+      // native init failed, fall back to mock
+    }
+  }
+  return new MockTypesettingEngine();
 }

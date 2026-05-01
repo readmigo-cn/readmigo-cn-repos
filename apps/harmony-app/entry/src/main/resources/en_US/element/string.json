@@ -60,6 +60,9 @@
 
     { "name": "onboarding_welcome", "value": "Welcome to Readmigo" },
     { "name": "onboarding_subtitle", "value": "Your AI-powered English reading companion" },
-    { "name": "onboarding_start", "value": "Get started" }
+    { "name": "onboarding_start", "value": "Get started" },
+
+    { "name": "widget_daily_word_label", "value": "Word of the day" },
+    { "name": "widget_daily_word_desc", "value": "A new English word each morning" }
   ]
 }
