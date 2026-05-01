@@ -8,7 +8,10 @@
     "dev": "nest start --watch",
     "start": "nest start",
     "start:prod": "node dist/main.js",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "db:migrate": "typeorm-ts-node-esm migration:run -d src/database/data-source.ts",
+    "db:revert": "typeorm-ts-node-esm migration:revert -d src/database/data-source.ts",
+    "db:gen": "typeorm-ts-node-esm migration:generate -d src/database/data-source.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.16",
@@ -16,21 +19,31 @@
     "@nestjs/core": "^11.1.16",
     "@nestjs/platform-express": "^11.1.16",
     "@nestjs/swagger": "^11.2.6",
+    "@nestjs/typeorm": "^11.0.0",
     "@readmigo-cn/llm-adapter": "workspace:*",
+    "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "compression": "^1.8.1",
     "dotenv": "^16.5.0",
     "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.1",
+    "pino": "^9.5.0",
+    "pino-http": "^10.4.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "typeorm": "^0.3.21",
     "zod": "^3.24.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.10",
     "@nestjs/schematics": "^11.0.7",
+    "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^22.15.3",
+    "@types/pg": "^8.11.10",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3"

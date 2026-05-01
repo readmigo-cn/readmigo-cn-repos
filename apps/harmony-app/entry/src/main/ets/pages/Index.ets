@@ -1,42 +1,87 @@
-/**
- * Index Page - Main entry with navigation
- */
+import { RoutePath, ReaderRouteParams, AudiobookPlayerParams } from '../router/RouteConstants';
+import { RouterService } from '../router/RouterService';
+import { UserStore } from '../store/UserStore';
+import { AppColors } from '../theme/AppColors';
+import { Login } from './Login';
+import { Onboarding } from './Onboarding';
+import { Discover } from './Discover';
+import { Library } from './Library';
+import { Reader } from './Reader';
+import { Me } from './Me';
+import { AudiobookTab } from './AudiobookTab';
+import { AudiobookPlayer } from './AudiobookPlayer';
+
 @Entry
 @Component
 struct Index {
-  build() {
-    Column({ space: 16 }) {
-      Text('阅可')
-        .fontSize(28)
-        .fontWeight(FontWeight.Bold)
+  @State currentTab: number = 0;
+  private navStack: NavPathStack = new NavPathStack();
 
-      Text('Readmigo 鸿蒙版工程骨架')
-        .fontSize(16)
+  aboutToAppear(): void {
+    RouterService.bind(this.navStack);
+    if (!UserStore.isLoggedIn()) {
+      this.navStack.pushPathByName(RoutePath.LOGIN, null);
+    }
+  }
 
-      Text('将 agconnect-services.json 放到 entry 目录后再接入 AGC')
-        .fontSize(14)
-        .padding(16)
-        .backgroundColor('#f5f5f5')
-        .borderRadius(16)
+  @Builder
+  pageMap(name: string, param: object) {
+    if (name === RoutePath.LOGIN) {
+      Login();
+    } else if (name === RoutePath.ONBOARDING) {
+      Onboarding();
+    } else if (name === RoutePath.READER) {
+      Reader({ params: param as ReaderRouteParams });
+    } else if (name === RoutePath.AUDIOBOOK_PLAYER) {
+      AudiobookPlayer({ params: param as AudiobookPlayerParams });
+    }
+  }
 
-      Column({ space: 10 }) {
-        Text('Discover')
-          .fontSize(15)
-        Text('Library')
-          .fontSize(15)
-        Text('Reader')
-          .fontSize(15)
-        Text('Me')
-          .fontSize(15)
-        Text('Audiobook')
-          .fontSize(15)
-      }
+  @Builder
+  tabBuilder(index: number, labelRes: Resource, icon: Resource) {
+    Column() {
+      Image(icon)
+        .width(24)
+        .height(24)
+        .fillColor(this.currentTab === index ? AppColors.brand : AppColors.textSecondary)
+      Text(labelRes)
+        .fontSize(11)
+        .fontColor(this.currentTab === index ? AppColors.brand : AppColors.textSecondary)
+        .margin({ top: 2 })
     }
     .width('100%')
-    .height('100%')
+    .height(56)
     .justifyContent(FlexAlign.Center)
-    .alignItems(HorizontalAlign.Center)
-    .padding(24)
-    .backgroundColor('#FFFDF9')
+  }
+
+  build() {
+    Navigation(this.navStack) {
+      Tabs({ index: this.currentTab, barPosition: BarPosition.End }) {
+        TabContent() {
+          Discover()
+        }.tabBar(this.tabBuilder(0, $r('app.string.tab_discover'), $r('app.media.app_icon')))
+
+        TabContent() {
+          Library()
+        }.tabBar(this.tabBuilder(1, $r('app.string.tab_library'), $r('app.media.app_icon')))
+
+        TabContent() {
+          AudiobookTab()
+        }.tabBar(this.tabBuilder(2, $r('app.string.tab_audiobook'), $r('app.media.app_icon')))
+
+        TabContent() {
+          Me()
+        }.tabBar(this.tabBuilder(3, $r('app.string.tab_me'), $r('app.media.app_icon')))
+      }
+      .barHeight(56)
+      .barMode(BarMode.Fixed)
+      .onChange((idx: number) => {
+        this.currentTab = idx;
+      })
+    }
+    .navDestination(this.pageMap)
+    .mode(NavigationMode.Stack)
+    .hideTitleBar(true)
+    .backgroundColor(AppColors.bgPrimary)
   }
 }

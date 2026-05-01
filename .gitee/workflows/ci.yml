@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 10.11.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck — server-cn
+        working-directory: server-cn
+        run: pnpm typecheck
+
+      - name: Build — server-cn
+        working-directory: server-cn
+        run: pnpm build
+
+      - name: Typecheck — llm-adapter
+        working-directory: packages/llm-adapter
+        run: pnpm typecheck || true   # 包内尚未实现，允许失败

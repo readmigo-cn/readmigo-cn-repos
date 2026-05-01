@@ -1,25 +1,45 @@
-/**
- * Audiobook Player Page - Placeholder
- * 功能对齐：mobile/src/features/audiobook/components/AudioPlayer.tsx
- */
+import { AppColors } from '../theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
+import { AppSpacing } from '../theme/AppSpacing';
+import { AudiobookPlayerParams } from '../router/RouteConstants';
+import { RouterService } from '../router/RouterService';
 
-@Entry
 @Component
-struct AudiobookPlayer {
+export struct AudiobookPlayer {
+  @Prop params: AudiobookPlayerParams;
+  @State playing: boolean = false;
+
   build() {
-    Column() {
-      Text('听书播放器')
-        .fontSize(20)
-        .fontWeight(FontWeight.Bold)
-      Text('功能开发中...')
-        .fontSize(16)
-        .fontColor('#666666')
-        .margin({ top: 20 })
+    NavDestination() {
+      Column({ space: AppSpacing.xl }) {
+        Row() {
+          Text('< ')
+            .fontSize(AppFontSize.md)
+            .fontColor(AppColors.brand)
+            .onClick(() => RouterService.pop())
+          Text($r('app.string.audiobook_title'))
+            .fontSize(AppFontSize.md)
+            .fontColor(AppColors.textInverse)
+        }
+        .width('100%')
+        .padding(AppSpacing.base)
+
+        Text(`audiobookId: ${this.params?.audiobookId ?? ''}`)
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textInverse)
+
+        Button(this.playing ? $r('app.string.audiobook_pause') : $r('app.string.audiobook_play'))
+          .width(160)
+          .height(48)
+          .backgroundColor(AppColors.brand)
+          .onClick(() => { this.playing = !this.playing; })
+      }
+      .width('100%')
+      .height('100%')
+      .justifyContent(FlexAlign.Center)
+      .alignItems(HorizontalAlign.Center)
+      .backgroundColor('#0F0F1A')
     }
-    .width('100%')
-    .height('100%')
-    .justifyContent(FlexAlign.Center)
-    .alignItems(HorizontalAlign.Center)
-    .backgroundColor('#0f0f1a')
+    .hideTitleBar(true)
   }
 }

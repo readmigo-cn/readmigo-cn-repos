@@ -1,25 +1,34 @@
-/**
- * Audiobook Tab Page - Placeholder
- * 功能对齐：mobile/src/features/audiobook/components + overseas audiobook list
- */
+import { AppColors } from '../theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
+import { AppSpacing } from '../theme/AppSpacing';
+import { RouterService } from '../router/RouterService';
+import { RoutePath } from '../router/RouteConstants';
 
-@Entry
 @Component
-struct AudiobookTab {
+export struct AudiobookTab {
   build() {
-    Column() {
-      Text('听书')
-        .fontSize(20)
-        .fontWeight(FontWeight.Bold)
-      Text('功能开发中...')
-        .fontSize(16)
-        .fontColor('#666666')
-        .margin({ top: 20 })
+    Column({ space: AppSpacing.lg }) {
+      Text($r('app.string.audiobook_title'))
+        .fontSize(AppFontSize.xl)
+        .fontWeight(AppFontWeight.bold)
+        .fontColor(AppColors.textPrimary)
+        .padding(AppSpacing.base)
+        .width('100%')
+        .textAlign(TextAlign.Start)
+
+      Text($r('app.string.common_empty'))
+        .fontSize(AppFontSize.sm)
+        .fontColor(AppColors.textTertiary)
+
+      Button($r('app.string.audiobook_play'))
+        .onClick(() => {
+          const params: Record<string, string | number> = { audiobookId: 'demo', chapterIndex: 0 };
+          RouterService.push(RoutePath.AUDIOBOOK_PLAYER, params);
+        })
     }
     .width('100%')
     .height('100%')
-    .justifyContent(FlexAlign.Center)
-    .alignItems(HorizontalAlign.Center)
-    .backgroundColor('#FFFDF9')
+    .alignItems(HorizontalAlign.Start)
+    .backgroundColor(AppColors.bgPrimary)
   }
 }

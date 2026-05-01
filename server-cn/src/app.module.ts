@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
+import { DatabaseModule } from './database/database.module.js';
 import { AiModule } from './modules/ai/ai.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { AppConfigModule } from './modules/config/config.module.js';
@@ -17,6 +18,7 @@ import { UsersModule } from './modules/users/users.module.js';
       isGlobal: true,
       envFilePath: ['.env.local', '.env'],
     }),
+    DatabaseModule,
     HealthModule,
     AppConfigModule,
     AuthModule,

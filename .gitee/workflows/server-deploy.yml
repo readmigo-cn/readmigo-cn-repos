@@ -1,0 +1,56 @@
+name: Deploy server-cn to ECS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'server-cn/**'
+      - 'packages/llm-adapter/**'
+      - '.gitee/workflows/server-deploy.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. 构建 Docker 镜像
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Huawei SWR
+        uses: docker/login-action@v3
+        with:
+          registry: swr.cn-north-4.myhuaweicloud.com
+          username: ${{ secrets.SWR_USERNAME }}
+          password: ${{ secrets.SWR_PASSWORD }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: server-cn/Dockerfile
+          push: true
+          tags: |
+            swr.cn-north-4.myhuaweicloud.com/readmigo-cn/server-cn:${{ github.sha }}
+            swr.cn-north-4.myhuaweicloud.com/readmigo-cn/server-cn:staging-latest
+
+      # 2. SSH 到 ECS 拉镜像并重启
+      - name: Deploy on ECS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.ECS_HOST }}
+          username: ${{ secrets.ECS_USER }}
+          key: ${{ secrets.ECS_SSH_KEY }}
+          script: |
+            docker pull swr.cn-north-4.myhuaweicloud.com/readmigo-cn/server-cn:staging-latest
+            docker stop readmigo-server-cn || true
+            docker rm readmigo-server-cn || true
+            docker run -d \
+              --name readmigo-server-cn \
+              --restart unless-stopped \
+              --env-file /opt/readmigo/server-cn.env \
+              -p 3001:3001 \
+              swr.cn-north-4.myhuaweicloud.com/readmigo-cn/server-cn:staging-latest
