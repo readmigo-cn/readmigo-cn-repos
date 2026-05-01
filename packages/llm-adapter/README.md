@@ -1,6 +1,6 @@
 # @readmigo-cn/llm-adapter
 
-LLM adapter layer for Readmigo China (阅可), providing unified interface for Chinese AI providers.
+LLM adapter layer for Readmigo China (米果智读), providing unified interface for Chinese AI providers.
 
 ## Features
 
