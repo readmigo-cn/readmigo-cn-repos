@@ -21,6 +21,20 @@ export interface RecentBookEntry {
   visitedAt: number;
 }
 
+/** W7-C5：单章节阅读状态。 */
+export type ChapterStatus = 'unread' | 'reading' | 'finished';
+
+/** 章节状态嵌套结构：bookId -> chapterIndex(string) -> status。
+ *  外层 Map 序列化：避免 JSON 不支持 Map 直接 stringify，统一持久化为 plain object。 */
+export interface ChapterStatusMap {
+  [bookId: string]: { [chapterIndex: string]: ChapterStatus };
+}
+
+/** lastSyncedAt 持久化结构：bookId -> 时间戳（ms）。 */
+export interface LastSyncedMap {
+  [bookId: string]: number;
+}
+
 const MAX_RECENT = 10;
 
 /**
@@ -66,6 +80,30 @@ export class ReadingStore {
     } else {
       AppStorage.SetOrCreate<RecentBookEntry[]>(StoreKeys.READING_RECENT_BOOKS, []);
     }
+
+    // W7-C5：章节状态（chapterProgress）回灌
+    const chProgressRaw = await PreferencesManager.getString(StoreKeys.READING_CHAPTER_PROGRESS, '');
+    let chProgress: ChapterStatusMap = {};
+    if (chProgressRaw.length > 0) {
+      try {
+        chProgress = JSON.parse(chProgressRaw) as ChapterStatusMap;
+      } catch (_) {
+        chProgress = {};
+      }
+    }
+    AppStorage.SetOrCreate<ChapterStatusMap>(StoreKeys.READING_CHAPTER_PROGRESS, chProgress);
+
+    // W7-C6：lastSyncedAt 回灌
+    const syncedRaw = await PreferencesManager.getString(StoreKeys.READING_LAST_SYNCED_AT, '');
+    let synced: LastSyncedMap = {};
+    if (syncedRaw.length > 0) {
+      try {
+        synced = JSON.parse(syncedRaw) as LastSyncedMap;
+      } catch (_) {
+        synced = {};
+      }
+    }
+    AppStorage.SetOrCreate<LastSyncedMap>(StoreKeys.READING_LAST_SYNCED_AT, synced);
   }
 
   /**
@@ -153,6 +191,49 @@ export class ReadingStore {
     return AppStorage.Get<RecentBookEntry[]>(StoreKeys.READING_RECENT_BOOKS) ?? [];
   }
 
+  // ─── W7-C5 章节状态 ──────────────────────────────────────────
+
+  /** 写入单个章节状态，并持久化整张表。 */
+  static setChapterStatus(bookId: string, chapterIndex: number, status: ChapterStatus): void {
+    if (!bookId) return;
+    const all = AppStorage.Get<ChapterStatusMap>(StoreKeys.READING_CHAPTER_PROGRESS) ?? {};
+    const bookMap = all[bookId] ?? {};
+    bookMap[chapterIndex.toString()] = status;
+    all[bookId] = bookMap;
+    AppStorage.SetOrCreate<ChapterStatusMap>(StoreKeys.READING_CHAPTER_PROGRESS, all);
+    PreferencesManager.setString(StoreKeys.READING_CHAPTER_PROGRESS, JSON.stringify(all));
+  }
+
+  /** 返回某本书的章节状态键值表，组件层可转 Map<number, ChapterStatus>。 */
+  static getChapterStatuses(bookId: string): Record<string, ChapterStatus> {
+    const all = AppStorage.Get<ChapterStatusMap>(StoreKeys.READING_CHAPTER_PROGRESS) ?? {};
+    return all[bookId] ?? {};
+  }
+
+  /** 批量设置（pull 云端进度后回灌全书） */
+  static setBookChapterStatuses(bookId: string, map: Record<string, ChapterStatus>): void {
+    if (!bookId) return;
+    const all = AppStorage.Get<ChapterStatusMap>(StoreKeys.READING_CHAPTER_PROGRESS) ?? {};
+    all[bookId] = map;
+    AppStorage.SetOrCreate<ChapterStatusMap>(StoreKeys.READING_CHAPTER_PROGRESS, all);
+    PreferencesManager.setString(StoreKeys.READING_CHAPTER_PROGRESS, JSON.stringify(all));
+  }
+
+  // ─── W7-C6 lastSyncedAt ─────────────────────────────────────
+
+  static setLastSyncedAt(bookId: string, ts: number): void {
+    if (!bookId) return;
+    const all = AppStorage.Get<LastSyncedMap>(StoreKeys.READING_LAST_SYNCED_AT) ?? {};
+    all[bookId] = ts;
+    AppStorage.SetOrCreate<LastSyncedMap>(StoreKeys.READING_LAST_SYNCED_AT, all);
+    PreferencesManager.setString(StoreKeys.READING_LAST_SYNCED_AT, JSON.stringify(all));
+  }
+
+  static getLastSyncedAt(bookId: string): number {
+    const all = AppStorage.Get<LastSyncedMap>(StoreKeys.READING_LAST_SYNCED_AT) ?? {};
+    return all[bookId] ?? 0;
+  }
+
   static clear(): void {
     AppStorage.Delete(StoreKeys.READING_CURRENT_BOOK);
     AppStorage.Delete(StoreKeys.READING_CURRENT_SLUG);
@@ -168,5 +249,10 @@ export class ReadingStore {
     PreferencesManager.remove(StoreKeys.READING_LAST_PROGRESS);
     PreferencesManager.remove(StoreKeys.READING_SESSION_ID);
     PreferencesManager.remove(StoreKeys.READING_RECENT_BOOKS);
+    AppStorage.Delete(StoreKeys.READING_CHAPTER_PROGRESS);
+    AppStorage.Delete(StoreKeys.READING_LAST_SYNCED_AT);
+    PreferencesManager.remove(StoreKeys.READING_CHAPTER_PROGRESS);
+    PreferencesManager.remove(StoreKeys.READING_LAST_SYNCED_AT);
+    PreferencesManager.remove(StoreKeys.READING_PROGRESS_QUEUE);
   }
 }

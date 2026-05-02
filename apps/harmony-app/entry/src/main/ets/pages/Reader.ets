@@ -3,7 +3,12 @@ import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
 import { AppSpacing, AppRadius } from '../theme/AppSpacing';
 import { ReaderRouteParams } from '../router/RouteConstants';
 import { RouterService } from '../router/RouterService';
-import { SettingsStore, ReaderTheme } from '../store/SettingsStore';
+import {
+  SettingsStore,
+  ReaderTheme,
+  PageTurnMode,
+  ReaderFont,
+} from '../store/SettingsStore';
 import { ReadingStore, ReadingProgress as LocalProgress } from '../store/ReadingStore';
 import {
   TypesettingEngine,
@@ -12,6 +17,11 @@ import {
   createTypesettingEngine,
 } from '../native/typesetting';
 import { WordExplainSheet, WordExplainContext } from '../components/WordExplainSheet';
+import { ReaderSettingsSheet } from '../components/ReaderSettingsSheet';
+import { ChapterTocSheet } from '../components/ChapterTocSheet';
+import { ProgressSync } from '../service/ProgressSync';
+import { ReadingSession } from '../service/ReadingSession';
+import { EffectiveTheme } from '../theme/Theme.types';
 import { BooksApi } from '../service/api/BooksApi';
 import { ReadingApi } from '../service/api/ReadingApi';
 import { NotesApi, NoteRecord } from '../service/api/NotesApi';
@@ -59,9 +69,17 @@ export struct Reader {
 
   // ---- reader settings ----------------------------------------------------
   @State fontSize: number = SettingsStore.getReaderFontSize();
-  @State lineHeight: number = 1.6;
+  @State lineHeight: number = SettingsStore.getReaderLineHeight();
   @State theme: ReaderTheme = SettingsStore.getReaderTheme();
   @State fontFamily: string = 'HarmonyOS Sans';
+  @State pageTurnMode: PageTurnMode = SettingsStore.getReaderPageTurnMode();
+  @State readerFont: ReaderFont = SettingsStore.getReaderFont();
+  /**
+   * 监听 ThemeService 推送的 effective theme（'day' | 'night' | 'sepia'）。
+   * 用户切换 'system' / 系统暗色变化时由 ThemeService.recompute() 写入。
+   * @Watch 在变化时触发 onEffectiveThemeChange 重绘 Canvas。
+   */
+  @StorageProp('app_theme_mode') @Watch('onEffectiveThemeChange') effectiveTheme: EffectiveTheme = 'day';
 
   // ---- UI state -----------------------------------------------------------
   @State toolbarVisible: boolean = false;
@@ -105,6 +123,9 @@ export struct Reader {
 
   // ---------- lifecycle ---------------------------------------------------
 
+  // W7-C6：每 30s tick 一次 ReadingSession，更新 activeMs
+  private sessionTickTimer: number = -1;
+
   aboutToAppear(): void {
     this.bookId = this.params?.bookId ?? 'demo';
     this.bookSlug = (this.params as Record<string, string> | undefined)?.['slug'] ?? this.bookId;
@@ -112,22 +133,55 @@ export struct Reader {
     this.engine = createTypesettingEngine();
     this.engine.setLineHeight(this.lineHeight);
     this.bootstrap();
+    // W7-C6：启动会话；ProgressSync.pull 由 bootstrap 触发
+    ReadingSession.start(this.bookId, this.chapterIndex);
+    this.startSessionTickTimer();
   }
 
   aboutToDisappear(): void {
+    this.stopSessionTickTimer();
     this.persistProgress();
-    this.endSessionFireAndForget();
+    // W7-C6：结束 session + flush 队列（替代旧 endSessionFireAndForget）
+    ReadingSession.end();
+    ProgressSync.flush();
     this.engine?.destroy();
     this.engine = null;
   }
 
   onPageShow(): void {
-    this.startSessionFireAndForget();
+    // W7-C6：从 background 切回前台（替代旧 startSessionFireAndForget）
+    ReadingSession.onForeground(this.bookId);
+    this.startSessionTickTimer();
+    // 主动 pull 一次拿云端最新进度
+    ProgressSync.pull(this.bookId).then((server) => {
+      if (!server) return;
+      // 仅当 server 更新且与当前章节不同 → 提示用户（不自动跳）
+      if (typeof server.chapterIndex === 'number' && server.chapterIndex !== this.chapterIndex) {
+        promptAction.showToast({ message: '检测到云端进度，可在目录中跳转' });
+      }
+    }).catch(() => {});
   }
 
   onPageHide(): void {
+    this.stopSessionTickTimer();
     this.persistProgress();
-    this.endSessionFireAndForget();
+    // W7-C6：进入后台 → 暂停会话 + flush（替代旧 endSessionFireAndForget）
+    ReadingSession.onBackground();
+    ProgressSync.flush();
+  }
+
+  private startSessionTickTimer(): void {
+    if (this.sessionTickTimer !== -1) return;
+    this.sessionTickTimer = setInterval(() => {
+      ReadingSession.tick();
+    }, 30_000) as unknown as number;
+  }
+
+  private stopSessionTickTimer(): void {
+    if (this.sessionTickTimer !== -1) {
+      clearInterval(this.sessionTickTimer);
+      this.sessionTickTimer = -1;
+    }
   }
 
   // ---------- bootstrap ---------------------------------------------------
@@ -148,7 +202,6 @@ export struct Reader {
       const startChapter = progress?.chapterIndex ?? 0;
       this.chapterIndex = Math.max(0, Math.min(chapters.length - 1, startChapter));
       await this.loadChapter(this.chapterIndex, progress?.pageIndex ?? 0);
-      this.startSessionFireAndForget();
     } catch (err) {
       this.errMsg = (err as Error).message ?? '加载失败';
       // 排版引擎兜底
@@ -185,10 +238,17 @@ export struct Reader {
   private async loadChapter(index: number, startPage: number = 0): Promise<void> {
     if (!this.engine) return;
     if (index < 0 || index >= this.chapters.length) return;
+    const oldIndex = this.chapterIndex;
     this.chapterIndex = index;
     const ch = this.chapters[index];
     this.chapterTitle = ch?.title ?? `Chapter ${index + 1}`;
     this.chapterId = ch?.id ?? `chapter-${index + 1}`;
+    // W7-C5：旧章节标记 finished，新章节标记 reading
+    if (oldIndex !== index) {
+      ReadingStore.setChapterStatus(this.bookId, oldIndex, 'finished');
+      ReadingSession.recordChapterChange(index);
+    }
+    ReadingStore.setChapterStatus(this.bookId, index, 'reading');
     let content: ChapterContent | null = null;
     try {
       content = await BooksApi.getChapterContent(this.bookSlug, index);
@@ -260,6 +320,8 @@ export struct Reader {
     this.pageIndex = index;
     this.currentPage = this.engine.getPage(this.chapterId, index);
     this.pagesReadInSession += 1;
+    // W7-C6：累加 session 翻页计数
+    ReadingSession.recordPageTurn();
     this.draw();
     this.persistProgressDebounced();
   }
@@ -380,6 +442,8 @@ export struct Reader {
       customStyle: true,
       autoCancel: true,
     });
+    // W7-C6：记一次查词
+    ReadingSession.recordWordLookup();
     this.explainController.open();
   }
 
@@ -449,6 +513,101 @@ export struct Reader {
     this.draw();
   }
 
+  // ---------- W7-C settings sheet handlers --------------------------------
+
+  /**
+   * @StorageProp('app_theme_mode') 变化时被 ArkUI 触发。
+   * ThemeService 切换主题时此 callback 会被调用 → 重绘 Canvas（不需要 relayout）。
+   */
+  private onEffectiveThemeChange(): void {
+    // 把 ThemeService 的 effective ('day'/'night'/'sepia') 同步给本地 theme + engine
+    const eff = this.effectiveTheme;
+    if (eff === 'day' || eff === 'night' || eff === 'sepia') {
+      this.theme = eff === 'sepia' ? 'paper' : eff;
+      this.engine?.setTheme(eff);
+      this.draw();
+    }
+  }
+
+  /**
+   * 保留阅读位置的 relayout：基于 percentComplete 重新定位 pageIndex。
+   * 字号 / 行距变化后总页数会变，简单 keep pageIndex 会跳跃。
+   */
+  private async relayoutPreservingPosition(): Promise<void> {
+    const oldPercent = this.pageCount > 0
+      ? (this.pageIndex + 1) / this.pageCount
+      : 0;
+    if (!this.engine) return;
+    this.engine.setFontSize(this.fontSize);
+    this.engine.setLineHeight(this.lineHeight);
+    this.engine.setLayoutProfile({
+      pageWidth: this.pageWidth,
+      pageHeight: this.pageHeight,
+      fontSize: this.fontSize,
+      lineHeight: this.lineHeight,
+    });
+    try {
+      const summary = this.engine.layoutHtml(
+        this.chapterHtml + (this.chapterCss ? `\n<style>${this.chapterCss}</style>` : ''),
+        this.chapterId,
+        this.pageWidth,
+        this.pageHeight,
+        this.fontSize,
+      );
+      this.pageCount = summary.pageCount;
+      const target = Math.max(
+        0,
+        Math.min(this.pageCount - 1, Math.round(oldPercent * this.pageCount) - 1),
+      );
+      this.loadPage(target);
+    } catch (e) {
+      this.errMsg = (e as Error).message ?? '排版失败';
+      this.fallbackLocalRender();
+    }
+  }
+
+  /** ReaderSettingsSheet 字号变化回调 */
+  private onSettingsFontSizeChange(size: number): void {
+    if (size === this.fontSize) return;
+    this.fontSize = size;
+    this.relayoutPreservingPosition();
+  }
+
+  /** ReaderSettingsSheet 行距变化回调 */
+  private onSettingsLineHeightChange(multiplier: number): void {
+    if (Math.abs(multiplier - this.lineHeight) < 1e-3) return;
+    this.lineHeight = multiplier;
+    this.relayoutPreservingPosition();
+  }
+
+  /** ReaderSettingsSheet 主题变化回调（ThemeService 已写 SettingsStore） */
+  private onSettingsThemeChange(t: ReaderTheme): void {
+    this.theme = t;
+    // engine 接受 day/night/sepia；'paper' 归一为 sepia；'system' 让 effectiveTheme 推送
+    if (t === 'day' || t === 'night') {
+      this.engine?.setTheme(t);
+    } else if (t === 'paper' || t === 'sepia') {
+      this.engine?.setTheme('sepia');
+    }
+    this.draw();
+  }
+
+  /** ReaderSettingsSheet 翻页方式变化回调 */
+  private onSettingsPageTurnModeChange(mode: PageTurnMode): void {
+    if (this.pageTurnMode === mode) return;
+    this.pageTurnMode = mode;
+    // 翻页 controller 重置：当前 Canvas + PanGesture 实现是"瞬时翻页"，
+    // 三种模式共享同一手势组件，仅在交互动效上有差别（卷页快照 / drag-follow / 整页滚动）。
+    // 重新触发一次 draw() 让模式切换立即可见。
+    this.draw();
+  }
+
+  /** ReaderSettingsSheet 字体变化回调 */
+  private onSettingsFontChange(_font: ReaderFont, family: string): void {
+    this.fontFamily = family;
+    this.draw();
+  }
+
   // ---------- progress / session -----------------------------------------
 
   private progressDebounceTimer: number | null = null;
@@ -479,8 +638,10 @@ export struct Reader {
       chapterIndex: this.chapterIndex,
       pageIndex: this.pageIndex,
       percent,
+      updatedAt: new Date().toISOString(),
     };
-    ReadingApi.updateProgress(this.bookId, dto).catch(() => {});
+    // W7-C6：进入 ProgressSync 队列（debounce 5s + 失败退避 + 持久化崩溃恢复）
+    ProgressSync.queueUpdate(this.bookId, dto);
   }
 
   private startSessionFireAndForget(): void {
@@ -534,6 +695,12 @@ export struct Reader {
       }
       .layoutWeight(1)
       .alignItems(HorizontalAlign.Center)
+      // W7-C5：目录按钮
+      Text('☰')
+        .fontSize(AppFontSize.lg)
+        .fontColor(THEME_MAP[this.theme].text)
+        .padding(AppSpacing.xs)
+        .onClick(() => { this.showToc = true; })
       Text('⚙')
         .fontSize(AppFontSize.lg)
         .fontColor(THEME_MAP[this.theme].text)
@@ -781,8 +948,26 @@ export struct Reader {
         .width('100%').height('100%')
         .backgroundColor(THEME_MAP[this.theme].bg)
 
-        if (this.showSettings) { this.settingsDrawer() }
-        if (this.showToc) { this.tocDrawer() }
+        // W7-C：阅读视觉设置面板（替代旧 settingsDrawer @Builder）
+        ReaderSettingsSheet({
+          visible: $showSettings,
+          isDark: this.theme === 'night',
+          onFontSizeChange: (size: number) => this.onSettingsFontSizeChange(size),
+          onLineHeightChange: (m: number) => this.onSettingsLineHeightChange(m),
+          onThemeChange: (t: ReaderTheme) => this.onSettingsThemeChange(t),
+          onPageTurnModeChange: (m: PageTurnMode) => this.onSettingsPageTurnModeChange(m),
+          onFontChange: (f: ReaderFont, family: string) => this.onSettingsFontChange(f, family),
+        })
+        // W7-C5：章节目录底部弹窗
+        ChapterTocSheet({
+          visible: $showToc,
+          bookSlug: this.bookSlug,
+          bookId: this.bookId,
+          bookTitle: this.chapterTitle,
+          currentChapterIndex: this.chapterIndex,
+          isDark: this.theme === 'night',
+          onChapterSelect: (idx: number) => this.loadChapter(idx, 0),
+        })
         if (this.showNotes) { this.notesDrawer() }
       }
       .width('100%').height('100%')

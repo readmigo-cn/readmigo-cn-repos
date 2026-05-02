@@ -13,6 +13,7 @@ import { RouterService } from '../router/RouterService';
 import { PagePath } from '../router/RouteConstants';
 import { ThemeService } from '../theme/ThemeService';
 import { FontRegistry } from '../theme/FontRegistry';
+import { ProgressSync } from '../service/ProgressSync';
 
 const TAG = 'EntryAbility';
 
@@ -45,6 +46,11 @@ export default class EntryAbility extends UIAbility {
       // W5-C5 字体：缺文件容错，不阻塞启动
       FontRegistry.registerFonts(this.context).catch((err: Error) => {
         console.warn(`${TAG} font registration failed: ${err.message}`);
+      });
+
+      // W7-C6：恢复进度同步队列（崩溃续传）
+      ProgressSync.init().catch((err: Error) => {
+        console.warn(`${TAG} ProgressSync init failed: ${err.message}`);
       });
 
       // 首次启动判定：APP_FIRST_LAUNCH 默认 true，初始化后写 false
@@ -106,6 +112,8 @@ export default class EntryAbility extends UIAbility {
   onForeground(): void {
     // 恢复 reading session：当前没有 active timer，留给 Reader 页 onPageShow 触发
     console.info(`${TAG} onForeground`);
+    // W7-C6：恢复联机后立即把队列里残留的更新推上去
+    ProgressSync.flush().catch(() => {});
   }
 
   onBackground(): void {
@@ -114,6 +122,8 @@ export default class EntryAbility extends UIAbility {
     if (progress) {
       ReadingStore.setLastProgress(progress); // 触发一次 flush
     }
+    // W7-C6：进入后台前强制 flush，避免因系统挂起丢失最新进度
+    ProgressSync.flush().catch(() => {});
     console.info(`${TAG} onBackground`);
   }
 

@@ -26,6 +26,10 @@ export class StoreKeys {
   static readonly SETTINGS_READER_FONT_SIZE: string = 'settings_reader_font_size';
   static readonly SETTINGS_READER_THEME: string = 'settings_reader_theme';
   static readonly SETTINGS_READER_LINE_HEIGHT: string = 'settings_reader_line_height';
+  static readonly SETTINGS_READER_FONT_SIZE_LEVEL: string = 'settings_reader_font_size_level';
+  static readonly SETTINGS_READER_LINE_HEIGHT_LEVEL: string = 'settings_reader_line_height_level';
+  static readonly SETTINGS_READER_PAGE_TURN_MODE: string = 'settings_reader_page_turn_mode';
+  static readonly SETTINGS_READER_FONT: string = 'settings_reader_font';
   static readonly SETTINGS_NOTIFICATIONS_DAILY: string = 'settings_notifications_daily';
   static readonly SETTINGS_NOTIFICATIONS_TIME: string = 'settings_notifications_time';
   static readonly SETTINGS_TTS_VOICE: string = 'settings_tts_voice';
@@ -39,6 +43,10 @@ export class StoreKeys {
   static readonly READING_LAST_PROGRESS: string = 'reading_last_progress';
   static readonly READING_SESSION_ID: string = 'reading_session_id';
   static readonly READING_RECENT_BOOKS: string = 'reading_recent_books';
+  // W7-C5/C6 章节状态 + 云端同步
+  static readonly READING_CHAPTER_PROGRESS: string = 'reading_chapter_progress';
+  static readonly READING_LAST_SYNCED_AT: string = 'reading_last_synced_at';
+  static readonly READING_PROGRESS_QUEUE: string = 'reading_progress_queue';
 
   // app
   static readonly APP_FIRST_LAUNCH: string = 'app_first_launch';

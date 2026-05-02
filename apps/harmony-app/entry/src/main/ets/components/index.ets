@@ -89,3 +89,8 @@ export {
   TabIndicator,
   TabBarItem,
 } from './Tab';
+
+// ─── W7-C5 章节目录 ──────────────────────────────
+export {
+  ChapterTocSheet,
+} from './ChapterTocSheet';
