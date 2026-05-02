@@ -4,12 +4,15 @@
     "type": "entry",
     "description": "$string:module_desc",
     "mainElement": "EntryAbility",
+    // W11-C4：声明支持的设备类型；元服务（installationFree）必须覆盖 phone / tablet / 2in1
     "deviceTypes": [
       "phone",
-      "tablet"
+      "tablet",
+      "2in1"
     ],
     "deliveryWithInstall": true,
-    "installationFree": false,
+    // W11-C4：开启 Atomic Service 模式，允许免安装直接运行
+    "installationFree": true,
     "pages": "$profile:main_pages",
     "abilities": [
       {
@@ -28,6 +31,21 @@
             ],
             "actions": [
               "action.system.home"
+            ]
+          },
+          // W11-B2 占位：从主 App 接收元服务回传（接续 / 分享回包）
+          {
+            "actions": [
+              "ohos.want.action.viewData"
+            ],
+            "entities": [
+              "entity.system.atomicService"
+            ],
+            "uris": [
+              {
+                "scheme": "readmigo",
+                "host": "open"
+              }
             ]
           }
         ]
@@ -49,6 +67,13 @@
             ],
             "actions": [
               "ohos.want.action.viewData"
+            ],
+            // 阅读接续元服务深链 readmigo://reader?bookId=xxx&chapter=N&page=M
+            "uris": [
+              {
+                "scheme": "readmigo",
+                "host": "reader"
+              }
             ]
           }
         ]
@@ -85,6 +110,109 @@
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
         "launchType": "singleton"
+      },
+      // W11-C1：划词查询元服务（lookup）
+      // 三种入口共用一个 skills 段：
+      //   1. 主 App / 其他 App startAbility（want.parameters.word）
+      //   2. NFC 碰一碰：ACTION_NDEF_DISCOVERED → 解析 text record 取出 word
+      //   3. 短链 readmigo://lookup?word=foo&context=bar
+      {
+        "name": "LookupAbility",
+        "srcEntry": "./ets/abilities/LookupAbility.ets",
+        "description": "$string:ability_lookup_desc",
+        "icon": "$media:app_icon",
+        "label": "$string:ability_lookup_label",
+        "startWindowIcon": "$media:app_icon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "launchType": "singleton",
+        "skills": [
+          {
+            "actions": [
+              "ohos.want.action.viewData"
+            ],
+            "entities": [
+              "entity.system.atomicService"
+            ],
+            "uris": [
+              {
+                "scheme": "readmigo",
+                "host": "lookup"
+              }
+            ]
+          },
+          {
+            // NFC 碰一碰（NDEF text record）
+            "actions": [
+              "ohos.nfc.tag.action.TAG_FOUND"
+            ],
+            "entities": [
+              "entity.system.atomicService"
+            ]
+          }
+        ]
+      },
+      // W11-C2：单词分享元服务
+      // 拉起方式：
+      //   1. 主 App 划词后调 startAbility（want.parameters.word/context/...）
+      //   2. 短链 readmigo://share-word?word=foo
+      {
+        "name": "ShareWordAbility",
+        "srcEntry": "./ets/abilities/ShareWordAbility.ets",
+        "description": "$string:ability_share_word_desc",
+        "icon": "$media:app_icon",
+        "label": "$string:ability_share_word_label",
+        "startWindowIcon": "$media:app_icon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "launchType": "singleton",
+        "skills": [
+          {
+            "actions": [
+              "ohos.want.action.viewData"
+            ],
+            "entities": [
+              "entity.system.atomicService"
+            ],
+            "uris": [
+              {
+                "scheme": "readmigo",
+                "host": "share-word"
+              }
+            ]
+          }
+        ]
+      },
+      // W11-C3：阅读接续元服务（多端协同）
+      // launchType=specified：每本书一个实例（onAcceptWant 决定）
+      // continuable=true：开启 HarmonyOS 跨端 Continuation 框架
+      {
+        "name": "ContinueReadingAbility",
+        "srcEntry": "./ets/abilities/ContinueReadingAbility.ets",
+        "description": "$string:ability_continue_reading_desc",
+        "icon": "$media:app_icon",
+        "label": "$string:ability_continue_reading_label",
+        "startWindowIcon": "$media:app_icon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "launchType": "specified",
+        "continuable": true,
+        "skills": [
+          {
+            "actions": [
+              "ohos.want.action.viewData"
+            ],
+            "entities": [
+              "entity.system.atomicService"
+            ],
+            "uris": [
+              {
+                "scheme": "readmigo",
+                "host": "continue-reading"
+              }
+            ]
+          }
+        ]
       }
     ],
     "extensionAbilities": [
@@ -93,6 +221,32 @@
         "srcEntry": "./ets/widget/DailyWordExtensionAbility.ets",
         "label": "$string:widget_daily_word_label",
         "description": "$string:widget_daily_word_desc",
+        "type": "form",
+        "metadata": [
+          {
+            "name": "ohos.extension.form",
+            "resource": "$profile:form_config"
+          }
+        ]
+      },
+      {
+        "name": "ReadingProgressExtensionAbility",
+        "srcEntry": "./ets/widget/ReadingProgressExtensionAbility.ets",
+        "label": "$string:widget_reading_progress_label",
+        "description": "$string:widget_reading_progress_desc",
+        "type": "form",
+        "metadata": [
+          {
+            "name": "ohos.extension.form",
+            "resource": "$profile:form_config"
+          }
+        ]
+      },
+      {
+        "name": "AiTipExtensionAbility",
+        "srcEntry": "./ets/widget/AiTipExtensionAbility.ets",
+        "label": "$string:widget_ai_tip_label",
+        "description": "$string:widget_ai_tip_desc",
         "type": "form",
         "metadata": [
           {
@@ -123,6 +277,31 @@
     "requestPermissions": [
       {
         "name": "ohos.permission.INTERNET"
+      },
+      // W11-C4：碰一碰（NFC NDEF 读取）— 元服务用
+      {
+        "name": "ohos.permission.NFC",
+        "reason": "$string:permission_nfc_reason",
+        "usedScene": {
+          "abilities": [
+            "LookupAbility"
+          ],
+          "when": "inuse"
+        }
+      },
+      // W11-C4：分布式数据同步（手机 → 平板接续）
+      {
+        "name": "ohos.permission.DISTRIBUTED_DATASYNC",
+        "reason": "$string:permission_distributed_reason",
+        "usedScene": {
+          "abilities": [
+            "ReaderAbility",
+            "AudioAbility",
+            "LookupAbility",
+            "ContinueReadingAbility"
+          ],
+          "when": "inuse"
+        }
       }
     ]
   }

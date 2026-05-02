@@ -289,7 +289,15 @@ export class TranslateService {
       from: sourceLang,
       to: targetLang,
     };
-    const resp = await HttpClient.post<ServerTranslateResp>('/ai/translate/sentence', body);
+    // W11 Critical 修复：默认 30s 超时（HttpClient 自身可能不带；用 Promise.race 保底）
+    // 防止后端卡住时客户端无限等待
+    const TIMEOUT_MS = 30000;
+    const resp = await Promise.race<ServerTranslateResp>([
+      HttpClient.post<ServerTranslateResp>('/ai/translate/sentence', body),
+      new Promise<ServerTranslateResp>((_resolve, reject) => {
+        setTimeout(() => reject(new Error('translate_timeout')), TIMEOUT_MS);
+      }),
+    ]);
     return {
       translated: resp?.translated ?? '',
       sourceLang,

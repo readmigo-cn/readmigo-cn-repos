@@ -20,6 +20,8 @@
     "pages/StudyPlan",
     "pages/ReadingComprehension",
     "pages/Vocab",
-    "pages/FlashcardSession"
+    "pages/FlashcardSession",
+    "pages/atomic/LookupPage",
+    "pages/atomic/ShareCardPage"
   ]
 }

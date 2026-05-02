@@ -168,19 +168,63 @@ export struct ExplainCard {
       bookId: this.bookId.length > 0 ? this.bookId : undefined,
     };
 
+    // W11 Critical 修复：watchdog timeout — 45s 内无任何 chunk 视为 stalled，切错误态
+    // 同时 onDone 后清理 timer，避免误触发
+    let watchdog: number = -1;
+    const armWatchdog = (): void => {
+      if (watchdog !== -1) clearTimeout(watchdog);
+      watchdog = setTimeout(() => {
+        if (!this.streaming) return;
+        this.streaming = false;
+        // 已有部分解析则仍展示，否则提示超时
+        if (!this.parsed) {
+          this.errMsg = '响应超时，请重试';
+        }
+        this.stopFn?.();
+        this.stopFn = null;
+      }, 45000) as unknown as number;
+    };
+    const clearWatchdog = (): void => {
+      if (watchdog !== -1) {
+        clearTimeout(watchdog);
+        watchdog = -1;
+      }
+    };
+
+    armWatchdog();
+
     this.stopFn = AiApi.explainWordStream(payload, {
       onChunk: (delta: string) => {
+        if (!this.streaming) return; // 防 watchdog 触发后的延迟 chunk
         this.streamedText += delta;
+        armWatchdog(); // 收到 chunk 重置看门狗
         // 边收边尝试解析（很多场景 JSON 在 done 前已闭合）
-        const partial = parseExplainData(this.streamedText, this.word, this.context);
-        if (partial) this.parsed = partial;
+        try {
+          const partial = parseExplainData(this.streamedText, this.word, this.context);
+          if (partial) this.parsed = partial;
+        } catch (e) {
+          // 解析异常不影响流，等下个 chunk 重试
+        }
       },
       onDone: () => {
+        clearWatchdog();
         this.streaming = false;
-        const final = parseExplainData(this.streamedText, this.word, this.context);
-        if (final) this.parsed = final;
+        try {
+          const final = parseExplainData(this.streamedText, this.word, this.context);
+          if (final) {
+            this.parsed = final;
+          } else if (!this.parsed) {
+            // 解析失败且无 partial：切错误态，让用户能 retry
+            this.errMsg = '解析失败，请重试';
+          }
+        } catch (e) {
+          if (!this.parsed) {
+            this.errMsg = '解析失败，请重试';
+          }
+        }
       },
       onError: (e: Error) => {
+        clearWatchdog();
         this.streaming = false;
         this.errMsg = e.message ?? '请求失败';
       },

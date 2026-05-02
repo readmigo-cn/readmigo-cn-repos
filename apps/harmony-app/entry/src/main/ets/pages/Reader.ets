@@ -34,6 +34,11 @@ import { TranslateService, TranslateResult } from '../service/translation/Transl
 import { TtsService, TtsHandle, Voice } from '../service/tts/TtsService';
 import { SentenceHighlight, SentenceRect } from '../components/SentenceHighlight';
 import { ToastManager } from '../components/Toast';
+// W11-C3：阅读接续（手机 ↔ 平板 多端协同）
+import { ContinuationManager } from '../service/atomic/ContinuationManager';
+// W11-C2 / W11-C4：单词分享 / 划词查询元服务
+import { AtomicLauncher } from '../service/atomic/AtomicLauncher';
+import common from '@ohos.app.ability.common';
 
 const FALLBACK_HTML = `
 <h1>Chapter 1 — Sample</h1>
@@ -153,6 +158,14 @@ export struct Reader {
     // W7-C6：启动会话；ProgressSync.pull 由 bootstrap 触发
     ReadingSession.start(this.bookId, this.chapterIndex);
     this.startSessionTickTimer();
+    // W11-C3：注册接续会话，让附近设备可发现并接管
+    ContinuationManager.enableContinuation(
+      this.bookId,
+      AppStorage.Get<string>('reading_current_title') ?? '',
+      this.chapterIndex,
+      this.pageIndex,
+      this.pageCount > 0 ? Math.round(((this.pageIndex + 1) / this.pageCount) * 100) : 0,
+    );
   }
 
   aboutToDisappear(): void {
@@ -161,6 +174,8 @@ export struct Reader {
     // W7-C6：结束 session + flush 队列（替代旧 endSessionFireAndForget）
     ReadingSession.end();
     ProgressSync.flush();
+    // W11-C3：离开 Reader → 注销接续会话
+    ContinuationManager.disableContinuation(this.bookId);
     // W8-C5：停止 TTS（页面销毁不允许后台续播本会话）
     this.stopTts();
     this.engine?.destroy();
@@ -470,6 +485,22 @@ export struct Reader {
     this.explainController.open();
   }
 
+  /**
+   * W11-C4 占位：把当前单词分享到「划词查询元服务」（独立窗口 / 跨设备分享）。
+   * 暂未在 UI 暴露按钮（SelectionLayer 还未接入）；
+   * 后续接入 SelectionLayer 时在 onLookup 旁加一个「分享到元服务」action 调本方法。
+   * 不破坏原 happy path：调用失败仅 toast，不影响阅读流程。
+   */
+  private async shareWordToAtomic(word: string, contextSentence?: string): Promise<void> {
+    if (!word) return;
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext;
+      await AtomicLauncher.launchLookup(ctx, word, contextSentence ?? this.extractContextSentence(0, 0));
+    } catch (e) {
+      ToastManager.error(`分享到元服务失败: ${(e as Error).message}`);
+    }
+  }
+
   private async tryHighlightSentence(hit: HitResult): Promise<void> {
     if (!this.engine) return;
     const sentence = this.engine.findSentenceAt(this.pageIndex, 0, 0) ?? hit;
@@ -538,6 +569,33 @@ export struct Reader {
       chapterIndex: this.chapterIndex,
     };
     RouterService.push(RoutePath.READING_COMPREHENSION, params);
+  }
+
+  /**
+   * W11-C2：分享当前选中的单词到 ShareWordAbility 元服务。
+   *
+   * 复用 explainCtx 中已经收集好的 word + contextSentence + bookId/chapterId。
+   * 走 AtomicLauncher.launchShareWord：触发主包内 ShareWordAbility 渲染分享卡片。
+   */
+  private async shareSelectedWord(): Promise<void> {
+    if (!this.explainCtx.word) {
+      promptAction.showToast({ message: '请先长按选词' });
+      return;
+    }
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext;
+      await AtomicLauncher.launchShareWord(
+        ctx,
+        this.explainCtx.word,
+        this.explainCtx.contextSentence,
+        {
+          bookTitle: AppStorage.Get<string>('reading_current_title') ?? '',
+          chapterTitle: this.chapterTitle,
+        },
+      );
+    } catch (_e) {
+      promptAction.showToast({ message: '分享卡片暂不可用' });
+    }
   }
 
   private setFontFamily(name: string): void {
@@ -898,6 +956,10 @@ export struct Reader {
       this.bottomBtn('✎', () => { this.showNotes = !this.showNotes; })
       this.bottomBtn('▶', () => this.startTts())
       this.bottomBtn('?', () => this.openComprehension())
+      // W11-C2：分享选中单词到元服务卡片（划词后才显示）
+      if (this.explainCtx.word.length > 0) {
+        this.bottomBtn('↗', () => this.shareSelectedWord())
+      }
     }
     .width('100%')
     .justifyContent(FlexAlign.SpaceAround)

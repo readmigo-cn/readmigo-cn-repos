@@ -128,13 +128,16 @@ class MockTtsHandle implements TtsHandle {
     // 模拟 10 chars/sec * speed
     const intervalMs = Math.max(20, Math.round(1000 / (10 * this.speed)));
     this.timer = setInterval(() => {
+      // W11 Critical 修复：每次 callback 前都重新校验 status，避免 cancel 后回调污染
       if (this.status !== 'playing') return;
       this.currentCharIndex += 1;
-      this.progressCb(this.currentCharIndex, this.total);
-      if (this.currentCharIndex >= this.total) {
+      // 再次校验：在自增和回调之间 cancel 的极小窗口
+      if (this.status === 'playing') this.progressCb(this.currentCharIndex, this.total);
+      if (this.currentCharIndex >= this.total && this.status === 'playing') {
         this.status = 'completed';
         this.stopTicking();
-        this.completeCb();
+        // 仅 completed 状态触发 complete 回调（避免与 cancel 竞争）
+        if (this.status === 'completed') this.completeCb();
       }
     }, intervalMs) as unknown as number;
   }
