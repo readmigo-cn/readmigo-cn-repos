@@ -11,6 +11,7 @@ import { SubscriptionPlanEntity } from './entities/subscription-plan.entity.js';
 import {
   SubscriptionEntity,
   type SubscriptionPlan,
+  type SubscriptionProvider,
   type SubscriptionStatus,
 } from './entities/subscription.entity.js';
 
@@ -368,7 +369,8 @@ export class SubscriptionService {
       userId,
       plan,
       status: 'active',
-      provider: order.provider as any,
+      // PaymentProvider 与 SubscriptionProvider 已对齐枚举（W4 TODO #6）
+      provider: order.provider as SubscriptionProvider,
       startedAt,
       expiresAt,
       autoRenew: true,

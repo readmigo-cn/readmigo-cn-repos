@@ -31,6 +31,60 @@
             ]
           }
         ]
+      },
+      {
+        "name": "ReaderAbility",
+        "srcEntry": "./ets/abilities/ReaderAbility.ets",
+        "description": "$string:ability_reader_desc",
+        "icon": "$media:app_icon",
+        "label": "$string:ability_reader_label",
+        "startWindowIcon": "$media:app_icon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "launchType": "singleton",
+        "skills": [
+          {
+            "entities": [
+              "entity.system.default"
+            ],
+            "actions": [
+              "ohos.want.action.viewData"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "LibraryAbility",
+        "srcEntry": "./ets/abilities/LibraryAbility.ets",
+        "description": "$string:ability_library_desc",
+        "icon": "$media:app_icon",
+        "label": "$string:ability_library_label",
+        "startWindowIcon": "$media:app_icon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "launchType": "singleton"
+      },
+      {
+        "name": "SettingsAbility",
+        "srcEntry": "./ets/abilities/SettingsAbility.ets",
+        "description": "$string:ability_settings_desc",
+        "icon": "$media:app_icon",
+        "label": "$string:ability_settings_label",
+        "startWindowIcon": "$media:app_icon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "launchType": "singleton"
+      },
+      {
+        "name": "AudioAbility",
+        "srcEntry": "./ets/abilities/AudioAbility.ets",
+        "description": "$string:ability_audio_desc",
+        "icon": "$media:app_icon",
+        "label": "$string:ability_audio_label",
+        "startWindowIcon": "$media:app_icon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "launchType": "singleton"
       }
     ],
     "extensionAbilities": [
@@ -46,6 +100,24 @@
             "resource": "$profile:form_config"
           }
         ]
+      },
+      {
+        "name": "TtsServiceExtAbility",
+        "srcEntry": "./ets/extensions/TtsServiceExtAbility.ets",
+        "label": "$string:ext_tts_label",
+        "description": "$string:ext_tts_desc",
+        "icon": "$media:app_icon",
+        "type": "service",
+        "exported": false
+      },
+      {
+        "name": "SyncServiceExtAbility",
+        "srcEntry": "./ets/extensions/SyncServiceExtAbility.ets",
+        "label": "$string:ext_sync_label",
+        "description": "$string:ext_sync_desc",
+        "icon": "$media:app_icon",
+        "type": "service",
+        "exported": false
       }
     ],
     "requestPermissions": [

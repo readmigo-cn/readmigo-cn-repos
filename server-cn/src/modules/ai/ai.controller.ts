@@ -27,6 +27,7 @@ import { ChatRequestDto } from './dto/chat-request.dto.js';
 import { ContentQaDto } from './dto/content-qa.dto.js';
 import { ExplainWordDto } from './dto/explain.dto.js';
 import { ExplainWordRequestDto } from './dto/explain-word.dto.js';
+import { GrammarHelpDto } from './dto/grammar-help.dto.js';
 import { ListConversationsDto } from './dto/list-conversations.dto.js';
 import { TranslateDto } from './dto/translate.dto.js';
 import { TranslateSentenceDto } from './dto/translate-sentence.dto.js';
@@ -161,6 +162,43 @@ export class AiController {
   ): Observable<SseMessageEvent> {
     const sink = new Subject<SseMessageEvent>();
     void this.ai.translateSentenceStream(user.id, dto, sink as Subject<{ data: string }>);
+    return sink.asObservable();
+  }
+
+  // =========================================================================
+  // Grammar help — sync
+  // =========================================================================
+
+  @Post('grammar/help')
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: '语法解释（同步，含缓存）' })
+  @ApiResponse({ status: 200, description: '解释结果 JSON' })
+  @ApiResponse({ status: 403, description: 'quota_exceeded' })
+  async grammarHelp(
+    @Body() dto: GrammarHelpDto,
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return this.ai.grammarHelp(user.id, dto);
+  }
+
+  // =========================================================================
+  // Grammar help — SSE stream
+  // =========================================================================
+
+  @Post('grammar/help/stream')
+  @UseGuards(JwtAuthGuard)
+  @ApiProduces('text/event-stream')
+  @ApiBody({ type: GrammarHelpDto })
+  @ApiOperation({ summary: '语法解释（SSE 流式）' })
+  @ApiResponse({ status: 200, description: 'SSE 流，每帧 {delta:string} 或 {done:true}' })
+  @ApiResponse({ status: 403, description: 'quota_exceeded' })
+  @Sse()
+  grammarHelpStream(
+    @Body() dto: GrammarHelpDto,
+    @CurrentUser() user: CurrentUserPayload,
+  ): Observable<SseMessageEvent> {
+    const sink = new Subject<SseMessageEvent>();
+    void this.ai.grammarHelpStream(user.id, dto, sink as Subject<{ data: string }>);
     return sink.asObservable();
   }
 

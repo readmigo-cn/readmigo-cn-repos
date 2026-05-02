@@ -67,6 +67,20 @@
     { "name": "onboarding_start", "value": "Get started" },
 
     { "name": "widget_daily_word_label", "value": "Word of the day" },
-    { "name": "widget_daily_word_desc", "value": "A new English word each morning" }
+    { "name": "widget_daily_word_desc", "value": "A new English word each morning" },
+
+    { "name": "ability_reader_label", "value": "Reader" },
+    { "name": "ability_reader_desc", "value": "Open last reading book" },
+    { "name": "ability_library_label", "value": "Library" },
+    { "name": "ability_library_desc", "value": "Open my bookshelf" },
+    { "name": "ability_settings_label", "value": "Settings" },
+    { "name": "ability_settings_desc", "value": "Open Readmigo settings" },
+    { "name": "ability_audio_label", "value": "Audiobook" },
+    { "name": "ability_audio_desc", "value": "Open audiobook player" },
+
+    { "name": "ext_tts_label", "value": "TTS Service" },
+    { "name": "ext_tts_desc", "value": "Background text-to-speech" },
+    { "name": "ext_sync_label", "value": "Sync Service" },
+    { "name": "ext_sync_desc", "value": "Background data sync" }
   ]
 }

@@ -10,13 +10,13 @@
  */
 
 import router from '@ohos.router';
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
+import { AppColors } from '../../theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../../theme/AppTypography';
+import { AppSpacing, AppRadius } from '../../theme/AppSpacing';
 import {
   TypesettingEngine,
   RenderedPage,
-} from './typesetting';
+} from '../../native/typesetting';
 import {
   BadgeEngine,
   BadgeFace,
@@ -24,7 +24,7 @@ import {
   CeremonyType,
   BadgeEvent,
   BadgeEventKind,
-} from './badge-engine';
+} from '../../native/badge-engine';
 
 const SAMPLE_HTML = `
 <h2>XComponent Demo Chapter</h2>

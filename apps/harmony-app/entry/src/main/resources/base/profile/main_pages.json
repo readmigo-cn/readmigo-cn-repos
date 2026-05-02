@@ -3,12 +3,14 @@
     "pages/Index",
     "pages/Onboarding",
     "pages/Login",
+    "pages/PasswordReset",
     "pages/Discover",
     "pages/Library",
     "pages/Reader",
     "pages/Notes",
     "pages/Me",
     "pages/AudiobookTab",
-    "pages/AudiobookPlayer"
+    "pages/AudiobookPlayer",
+    "pages/native/XComponentDemo"
   ]
 }

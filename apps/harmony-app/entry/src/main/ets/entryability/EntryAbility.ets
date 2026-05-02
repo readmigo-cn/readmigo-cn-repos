@@ -2,6 +2,7 @@ import UIAbility from '@ohos.app.ability.UIAbility';
 import AbilityConstant from '@ohos.app.ability.AbilityConstant';
 import Want from '@ohos.app.ability.Want';
 import window from '@ohos.window';
+import Configuration from '@ohos.app.ability.Configuration';
 import { PreferencesManager } from '../persistence/PreferencesManager';
 import { DatabaseManager } from '../persistence/DatabaseManager';
 import { UserStore } from '../store/UserStore';
@@ -10,6 +11,8 @@ import { SettingsStore } from '../store/SettingsStore';
 import { StoreKeys } from '../store/StoreKeys';
 import { RouterService } from '../router/RouterService';
 import { PagePath } from '../router/RouteConstants';
+import { ThemeService } from '../theme/ThemeService';
+import { FontRegistry } from '../theme/FontRegistry';
 
 const TAG = 'EntryAbility';
 
@@ -36,6 +39,13 @@ export default class EntryAbility extends UIAbility {
       await UserStore.init();
       await ReadingStore.init();
       await SettingsStore.init();
+
+      // W5-C4 主题：必须在 SettingsStore 之后
+      ThemeService.init(this.context);
+      // W5-C5 字体：缺文件容错，不阻塞启动
+      FontRegistry.registerFonts(this.context).catch((err: Error) => {
+        console.warn(`${TAG} font registration failed: ${err.message}`);
+      });
 
       // 首次启动判定：APP_FIRST_LAUNCH 默认 true，初始化后写 false
       const seen = await PreferencesManager.getBool(StoreKeys.APP_FIRST_LAUNCH, false);
@@ -118,7 +128,54 @@ export default class EntryAbility extends UIAbility {
     }
   }
 
+  /**
+   * 系统配置变化（暗色模式切换、locale 变更等）。
+   * W5-C4：把 colorMode 转给 ThemeService 重算。
+   */
+  onConfigurationUpdate(newConfig: Configuration): void {
+    try {
+      if (newConfig && typeof newConfig.colorMode === 'number') {
+        ThemeService.onSystemColorModeChange(newConfig.colorMode);
+      }
+    } catch (err) {
+      const e = err as Error;
+      console.warn(`${TAG} onConfigurationUpdate failed: ${e.message}`);
+    }
+  }
+
   onDestroy(): void {
     console.info(`${TAG} onDestroy`);
+  }
+
+  /**
+   * 根据 want.parameters.target 决定深链落到哪个子 ability。
+   * deep link / shortcut 解析完得到一个 logical target，再 startAbility 到对应 ability。
+   *
+   *   target=reader  -> ReaderAbility
+   *   target=library -> LibraryAbility
+   *   target=settings-> SettingsAbility
+   *   target=audio   -> AudioAbility
+   *   default        -> EntryAbility（继续走 NavPathStack 路由）
+   *
+   * 不在 onCreate 自动 startAbility，由 RouterService 在 NavPathStack 就绪后调用。
+   */
+  getDispatchedAbility(want: Want): string {
+    if (!want || !want.parameters) {
+      return 'EntryAbility';
+    }
+    const params = want.parameters as Record<string, Object>;
+    const target = (params.target as string) ?? '';
+    switch (target) {
+      case 'reader':
+        return 'ReaderAbility';
+      case 'library':
+        return 'LibraryAbility';
+      case 'settings':
+        return 'SettingsAbility';
+      case 'audio':
+        return 'AudioAbility';
+      default:
+        return 'EntryAbility';
+    }
   }
 }

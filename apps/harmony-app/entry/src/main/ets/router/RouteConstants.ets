@@ -25,6 +25,13 @@ export class RoutePath {
   static readonly XCOMPONENT_DEMO_URL: string = 'pages/native/XComponentDemo';
   /** 别名：与任务命名对齐。 */
   static readonly NATIVE_DEMO: string = 'xcomponent-demo';
+
+  /**
+   * 忘记密码 / 重置密码（未登录可访问，无 auth guard）。
+   * router.pushUrl 用 PASSWORD_RESET_URL；name key 保留用于将来切换到 NavPathStack。
+   */
+  static readonly PASSWORD_RESET: string = 'password-reset';
+  static readonly PASSWORD_RESET_URL: string = 'pages/PasswordReset';
 }
 
 /**

@@ -62,7 +62,7 @@ async function bootstrap() {
     process.env.SERVER_URL ??
     (process.env.NODE_ENV === 'production'
       ? 'https://api.readmigo.cn'
-      : `http://localhost:${process.env.PORT ?? 3001}`);
+      : `http://localhost:${process.env.PORT ?? 3000}`);
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('米果智读 API')
@@ -112,7 +112,7 @@ async function bootstrap() {
     }
   }
 
-  const port = Number(process.env.PORT ?? 3001);
+  const port = Number(process.env.PORT ?? 3000);
   await app.listen(port, '0.0.0.0');
 }
 

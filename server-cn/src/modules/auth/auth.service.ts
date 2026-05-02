@@ -33,6 +33,9 @@ const REFRESH_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 const SMS_TTL_MS = 5 * 60 * 1000;
 /** 单条 SMS 记录最多允许错误尝试次数 */
 const SMS_MAX_ATTEMPTS = 5;
+/** 同手机号在过去 1 小时内最多发送的短信验证码次数（DB-based fallback；W18 切 Redis 滑窗） */
+const SMS_RATE_WINDOW_MS = 60 * 60 * 1000;
+const SMS_RATE_MAX_PER_HOUR = 5;
 
 @Injectable()
 export class AuthService {
@@ -57,6 +60,21 @@ export class AuthService {
    * 生产环境对接华为云 SMS（P2 TODO），当前仅写库并在非生产环境日志打印。
    */
   async sendSmsCode(phone: string): Promise<{ sent: boolean }> {
+    // 限频：同手机号过去 1 小时内最多 5 条（dev 环境跳过，方便联调）。
+    // TODO: Redis sliding window in W18 —— 用 Redis ZSET 维护毫秒级时间戳，比 DB 计数精准。
+    const isProduction = this.cfg.get<string>('NODE_ENV') === 'production';
+    if (isProduction) {
+      const since = new Date(Date.now() - SMS_RATE_WINDOW_MS);
+      const recentCount = await this.smsCodes
+        .createQueryBuilder('s')
+        .where('s.phone = :phone', { phone })
+        .andWhere('s.createdAt > :since', { since })
+        .getCount();
+      if (recentCount >= SMS_RATE_MAX_PER_HOUR) {
+        throw new BadRequestException('rate_limited');
+      }
+    }
+
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + SMS_TTL_MS);
 

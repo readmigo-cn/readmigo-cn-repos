@@ -16,6 +16,7 @@ import type { ChatRequestDto } from './dto/chat-request.dto.js';
 import type { ContentQaDto } from './dto/content-qa.dto.js';
 import type { ExplainWordDto } from './dto/explain.dto.js';
 import type { ExplainWordRequestDto } from './dto/explain-word.dto.js';
+import type { GrammarHelpDto } from './dto/grammar-help.dto.js';
 import type { TranslateDto } from './dto/translate.dto.js';
 import type { TranslateSentenceDto } from './dto/translate-sentence.dto.js';
 import type { AiConversationKind } from './entities/ai-conversation.entity.js';
@@ -26,6 +27,7 @@ import { AiQuotaEntity } from './entities/ai-quota.entity.js';
 import { buildExplainWordPrompt } from './prompts/explain-word.prompt.js';
 import { buildTranslatePrompt } from './prompts/translate.prompt.js';
 import { buildContentQaPrompt } from './prompts/content-qa.prompt.js';
+import { buildGrammarHelpPrompt } from './prompts/grammar-help.prompt.js';
 
 // ---- Quota defaults (free tier; subscription tiers wired in W6) --------
 const QUOTA_DAILY_LIMITS: Record<AiConversationKind, number> = {
@@ -536,6 +538,122 @@ export class AiService {
       title: `Word: ${dto.word}`,
     });
     await this._persistMessage(conv.id, 'user', `${dto.word}\n${dto.context}`, null, null, 0);
+    await this._persistMessage(conv.id, 'assistant', full, provider.name, null, 0);
+  }
+
+  // =========================================================================
+  // Public: grammar help (sync + SSE stream)
+  // =========================================================================
+
+  async grammarHelp(
+    userId: string,
+    dto: GrammarHelpDto,
+  ): Promise<{ explanation: string; fromCache: boolean }> {
+    await this._checkQuota(userId, 'grammar-help');
+
+    const locale = dto.locale ?? 'zh-CN';
+    const cefrLevel = dto.cefrLevel ?? 'B1';
+    const focusKey = dto.focus?.trim() ?? '';
+    // 缓存 key 包含 focus + locale + cefr，确保不同关注点 / 语言互不命中
+    const cacheKey = this._buildCacheKey(
+      'grammar-help',
+      `${dto.sentence.trim()}|${focusKey}|${locale}|${cefrLevel}`,
+    );
+
+    const { response, fromCache } = await this._getCachedOrFetch(
+      cacheKey,
+      'grammar-help',
+      async () => {
+        const provider = this._chooseProvider('grammar-help');
+        const { system, user } = buildGrammarHelpPrompt({
+          sentence: dto.sentence,
+          focus: dto.focus,
+          locale,
+          cefrLevel,
+        });
+        const result = await provider.chat(
+          [
+            { role: 'system', content: system },
+            { role: 'user', content: user },
+          ],
+          { temperature: 0.3, maxTokens: 768 },
+        );
+        return result.content.trim();
+      },
+    );
+
+    await this._incrementQuota(userId, 'grammar-help');
+
+    const conv = await this._persistConversation(userId, 'grammar-help', {
+      bookId: dto.bookId ?? null,
+      title: dto.sentence.slice(0, 80),
+    });
+    await this._persistMessage(conv.id, 'user', dto.sentence, null, null, 0);
+    await this._persistMessage(conv.id, 'assistant', response, null, null, 0);
+
+    return { explanation: response, fromCache };
+  }
+
+  async grammarHelpStream(
+    userId: string,
+    dto: GrammarHelpDto,
+    sseSink: SseSink,
+  ): Promise<void> {
+    await this._checkQuota(userId, 'grammar-help');
+
+    const provider = this._chooseProvider('grammar-help');
+    if (!provider.streamComplete) {
+      throw new ServiceUnavailableException('provider_no_streaming');
+    }
+
+    const locale = dto.locale ?? 'zh-CN';
+    const cefrLevel = dto.cefrLevel ?? 'B1';
+    const { system, user } = buildGrammarHelpPrompt({
+      sentence: dto.sentence,
+      focus: dto.focus,
+      locale,
+      cefrLevel,
+    });
+
+    let full = '';
+    const stream = provider.streamComplete(
+      [
+        { role: 'system', content: system },
+        { role: 'user', content: user },
+      ],
+      { temperature: 0.3, maxTokens: 768 },
+    );
+
+    try {
+      for await (const chunk of stream) {
+        if (chunk.content) {
+          full += chunk.content;
+          sseSink.next({ data: JSON.stringify({ delta: chunk.content }) });
+        }
+        if (chunk.done) break;
+      }
+      sseSink.next({ data: JSON.stringify({ done: true }) });
+    } catch (err) {
+      sseSink.next({ data: JSON.stringify({ error: (err as Error).message }) });
+    } finally {
+      sseSink.complete();
+    }
+
+    await this._incrementQuota(userId, 'grammar-help');
+
+    // 缓存键与 grammarHelp 同步，sync / stream 互通
+    const focusKey = dto.focus?.trim() ?? '';
+    const cacheKey = this._buildCacheKey(
+      'grammar-help',
+      `${dto.sentence.trim()}|${focusKey}|${locale}|${cefrLevel}`,
+    );
+    await this._writeCache(cacheKey, 'grammar-help', full, provider.name);
+
+    const conv = await this._persistConversation(userId, 'grammar-help', {
+      bookId: dto.bookId ?? null,
+      title: dto.sentence.slice(0, 80),
+    });
+    await this._persistMessage(conv.id, 'user', dto.sentence, null, null, 0);
     await this._persistMessage(conv.id, 'assistant', full, provider.name, null, 0);
   }
 

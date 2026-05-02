@@ -7,6 +7,7 @@ import { UserStore } from '../store/UserStore';
 import { AuthApi, LoginResult } from '../service/api/AuthApi';
 import { ApiError } from '../service/HttpClient';
 import promptAction from '@ohos.promptAction';
+import router from '@ohos.router';
 
 /**
  * Login —— 登录页（W4-C1）。
@@ -236,8 +237,18 @@ export struct Login {
   }
 
   private onForgotPassword(): void {
-    promptAction.showToast({ message: '密码重置开发中' });
-    // TODO: RouterService.push(RoutePath.PASSWORD_RESET);
+    // 未登录态：直接用 router.pushUrl 跳转重置密码独立页
+    // 把当前输入的手机号（密码 tab 的 email 字段可能也是手机号）带过去，节省重复输入
+    const prefill = PHONE_REGEX.test(this.phone)
+      ? this.phone
+      : (PHONE_REGEX.test(this.email) ? this.email : '');
+    router.pushUrl({
+      url: RoutePath.PASSWORD_RESET_URL,
+      params: { phone: prefill },
+    }).catch((_e: Error) => {
+      // 若 main_pages.json 未注册会抛错；此处吞掉避免崩溃
+      promptAction.showToast({ message: '页面未注册' });
+    });
   }
 
   private onOpenTerms(kind: 'user' | 'privacy'): void {

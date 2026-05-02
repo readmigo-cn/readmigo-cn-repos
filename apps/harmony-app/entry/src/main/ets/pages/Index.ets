@@ -2,6 +2,8 @@ import { RoutePath, ReaderRouteParams, AudiobookPlayerParams } from '../router/R
 import { RouterService } from '../router/RouterService';
 import { UserStore } from '../store/UserStore';
 import { AppColors } from '../theme/AppColors';
+import { EffectiveTheme } from '../theme/Theme.types';
+import { APP_THEME_STORAGE_KEY, ThemeService } from '../theme/ThemeService';
 import { Login } from './Login';
 import { Onboarding } from './Onboarding';
 import { Discover } from './Discover';
@@ -16,12 +18,22 @@ import { Notes } from './Notes';
 @Component
 struct Index {
   @State currentTab: number = 0;
+  // W5-C4：根组件透传 theme 给所有后代；@StorageProp 触发重渲染
+  @StorageProp(APP_THEME_STORAGE_KEY) @Watch('onThemeChange') storageTheme: EffectiveTheme = 'day';
+  @Provide('theme') theme: EffectiveTheme = 'day';
   private navStack: NavPathStack = new NavPathStack();
 
   aboutToAppear(): void {
     RouterService.bind(this.navStack);
+    this.theme = ThemeService.getCurrentTheme();
     if (!UserStore.isLoggedIn()) {
       this.navStack.pushPathByName(RoutePath.LOGIN, null);
+    }
+  }
+
+  onThemeChange(): void {
+    if (this.storageTheme && this.storageTheme !== this.theme) {
+      this.theme = this.storageTheme;
     }
   }
 
