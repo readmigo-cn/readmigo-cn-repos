@@ -196,38 +196,25 @@ export class AiService {
     const resetAt = this._dailyResetAt();
     const limit = QUOTA_DAILY_LIMITS[kind] ?? 50;
 
-    // Upsert: insert with count=1 on first call; on conflict (userId, period, kind) increment
-    await this.quotaRepo
-      .createQueryBuilder()
-      .insert()
-      .into(AiQuotaEntity)
-      .values({
-        userId,
-        period: 'daily',
-        kind,
-        count: 1,
-        limit,
-        resetAt,
-      })
-      .orUpdate(['count', 'resetAt'], ['userId', 'period', 'kind'])
-      .setParameter('count', () => 'ai_quotas.count + 1')
-      .execute()
-      .catch(async () => {
-        // Fallback if dialect doesn't support the shorthand: manual read-then-write
-        const existing = await this.quotaRepo.findOne({ where: { userId, period: 'daily', kind } });
-        if (existing) {
-          // Reset window if expired
-          if (existing.resetAt <= new Date()) {
-            await this.quotaRepo.update(existing.id, { count: 1, resetAt, limit });
-          } else {
-            await this.quotaRepo.increment({ id: existing.id }, 'count', 1);
-          }
-        } else {
-          await this.quotaRepo.save(
-            this.quotaRepo.create({ userId, period: 'daily', kind, count: 1, limit, resetAt }),
-          );
-        }
-      });
+    // 原子 upsert：避免并发请求 double-count（W5 review 标记 Critical 1 修复）
+    // 用 PostgreSQL/GaussDB 原生 ON CONFLICT 语法，单条 SQL 完成「不存在则插入 / 存在则递增 + 重置过期窗口」
+    // 旧实现 TypeORM .orUpdate() + setParameter() 在 fallback 分支是非原子读-改-写，并发下会丢更新
+    await this.quotaRepo.query(
+      `INSERT INTO ai_quotas ("user_id", "period", "kind", "count", "limit", "reset_at", "created_at", "updated_at")
+       VALUES ($1, 'daily', $2, 1, $3, $4, NOW(), NOW())
+       ON CONFLICT ("user_id", "period", "kind") DO UPDATE SET
+         "count" = CASE
+           WHEN ai_quotas."reset_at" <= NOW() THEN 1
+           ELSE ai_quotas."count" + 1
+         END,
+         "reset_at" = CASE
+           WHEN ai_quotas."reset_at" <= NOW() THEN EXCLUDED."reset_at"
+           ELSE ai_quotas."reset_at"
+         END,
+         "limit" = EXCLUDED."limit",
+         "updated_at" = NOW()`,
+      [userId, kind, limit, resetAt],
+    );
   }
 
   // =========================================================================

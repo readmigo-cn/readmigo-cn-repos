@@ -32,6 +32,13 @@ export class RoutePath {
    */
   static readonly PASSWORD_RESET: string = 'password-reset';
   static readonly PASSWORD_RESET_URL: string = 'pages/PasswordReset';
+
+  /**
+   * 开发者工具：W6 组件演示页（W6-C10）。
+   * 实际页路径：pages/dev/ComponentGallery（router.pushUrl 使用）。
+   */
+  static readonly COMPONENT_GALLERY: string = 'component-gallery';
+  static readonly COMPONENT_GALLERY_URL: string = 'pages/dev/ComponentGallery';
 }
 
 /**

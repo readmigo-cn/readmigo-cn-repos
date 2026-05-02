@@ -234,9 +234,9 @@ export class AuthService {
     const user = await this.users.findOne({ where: { id: payload.sub } });
     if (!user || !user.isActive) throw new UnauthorizedException('user_inactive');
 
-    // 删除旧 session（轮转策略核心：旧 token 立即失效）
-    await this.sessions.delete(session.id);
-
+    // 注意：不在此处显式 delete 旧 session（W5 review Critical 2 修复）。
+    // _generateTokens 内部已用 deviceId 维度的 delete + insert 完成轮转，
+    // 提前 delete 会导致 _generateTokens 失败时旧 session 已丢，后续 retry 进入 phantom 401。
     return this._generateTokens(user, session.deviceId, session.deviceName ?? undefined);
   }
 
@@ -359,18 +359,20 @@ export class AuthService {
       { expiresIn: '30d' },
     );
 
-    // 删除同设备旧 session（单设备单 session 策略）
-    await this.sessions.delete({ userId: user.id, deviceId: resolvedDeviceId });
-
-    const session = this.sessions.create({
-      userId: user.id,
-      deviceId: resolvedDeviceId,
-      deviceName: deviceName ?? null,
-      refreshTokenHash: this._hashRefreshToken(refreshToken),
-      expiresAt: new Date(Date.now() + REFRESH_TTL_MS),
-      lastActiveAt: new Date(),
+    // 单设备单 session：delete + insert 在 transaction 内保证原子
+    // （W5 review Critical 2 修复：避免 delete 成功 / insert 失败留下空状态）
+    await this.sessions.manager.transaction(async (mgr) => {
+      await mgr.delete(AuthSessionEntity, { userId: user.id, deviceId: resolvedDeviceId });
+      const session = mgr.create(AuthSessionEntity, {
+        userId: user.id,
+        deviceId: resolvedDeviceId,
+        deviceName: deviceName ?? null,
+        refreshTokenHash: this._hashRefreshToken(refreshToken),
+        expiresAt: new Date(Date.now() + REFRESH_TTL_MS),
+        lastActiveAt: new Date(),
+      });
+      await mgr.save(session);
     });
-    await this.sessions.save(session);
 
     return { token, refreshToken, userId: user.id };
   }

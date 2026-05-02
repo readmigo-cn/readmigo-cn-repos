@@ -132,6 +132,27 @@ export struct Me {
           });
       })
 
+      // 开发者：组件演示（W6-C10；DEBUG 入口，正式版可加 BuildProfile.DEBUG 门控）
+      Row() {
+        Text('开发者：组件演示')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textPrimary)
+          .layoutWeight(1)
+        Text('>')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => {
+        router.pushUrl({ url: RoutePath.COMPONENT_GALLERY_URL })
+          .catch((_e: Error) => {
+            // 若 main_pages.json 未注册，会抛错；此处吞掉避免崩溃
+          });
+      })
+
       Button($r('app.string.me_logout'))
         .width('90%')
         .height(48)

@@ -11,6 +11,7 @@
     "pages/Me",
     "pages/AudiobookTab",
     "pages/AudiobookPlayer",
-    "pages/native/XComponentDemo"
+    "pages/native/XComponentDemo",
+    "pages/dev/ComponentGallery"
   ]
 }
