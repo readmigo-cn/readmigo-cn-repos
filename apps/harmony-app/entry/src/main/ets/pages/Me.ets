@@ -111,6 +111,69 @@ export struct Me {
       .backgroundColor(AppColors.bgElevated)
       .onClick(() => RouterService.push(RoutePath.NOTES))
 
+      // W9-C1：我的生词本（auth required，未登录走 RouterService 触发 guard）
+      Row() {
+        Text('我的生词本')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textPrimary)
+          .layoutWeight(1)
+        Text('>')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => {
+        if (!UserStore.isLoggedIn()) {
+          RouterService.push(RoutePath.VOCAB);
+          return;
+        }
+        router.pushUrl({ url: RoutePath.VOCAB_URL })
+          .catch((_e: Error) => { /* main_pages.json 未注册时吞掉 */ });
+      })
+
+      // 学习数据（W9-C5：词汇量统计 + 弱点分析入口）
+      Row() {
+        Text('学习数据')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textPrimary)
+          .layoutWeight(1)
+        Text('>')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => {
+        router.pushUrl({ url: RoutePath.VOCAB_STATS_URL })
+          .catch((_e: Error) => {
+            // 若 main_pages.json 未注册，会抛错；此处吞掉避免崩溃
+          });
+      })
+
+      // 我的学习计划（W9-C6）
+      Row() {
+        Text('我的学习计划')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textPrimary)
+          .layoutWeight(1)
+        Text('>')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => {
+        router.pushUrl({ url: RoutePath.STUDY_PLAN_URL })
+          .catch((_e: Error) => {});
+      })
+
       // 开发者：原生组件 Demo（W2-C5；目前始终显示，正式版可加 BuildProfile.DEBUG 门控）
       Row() {
         Text('开发者：原生组件 Demo')

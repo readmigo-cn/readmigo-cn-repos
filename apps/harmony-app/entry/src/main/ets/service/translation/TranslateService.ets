@@ -16,6 +16,7 @@
 
 import { HttpClient } from '../HttpClient';
 import { SseClient } from '../SseClient';
+import { TranslationCacheStrategy } from '../cache/strategies/TranslationCacheStrategy';
 
 // ---------- 公共类型 ----------
 
@@ -147,12 +148,33 @@ export class TranslateService {
       };
     }
 
+    // W10-C4：内存 LRU miss 时再查文件级缓存（30 天 TTL）
+    const persistent = await TranslationCacheStrategy.get(
+      this.provider, sourceLang, targetLang, trimmed,
+    );
+    if (persistent) {
+      const hit: TranslateResult = {
+        translated: persistent.translated,
+        sourceLang,
+        targetLang,
+        provider: this.provider,
+        fromCache: true,
+      };
+      // 同时回写内存 LRU，避免下次又走文件
+      this.cache.set(key, hit);
+      return hit;
+    }
+
     // 非 server provider 暂未实装 → fallback
     if (this.provider !== 'server') {
       console.warn(`[TranslateService] provider ${this.provider} not implemented, fallback to server`);
     }
     const result = await this.translateViaServer(trimmed, sourceLang, targetLang, opts);
     this.cache.set(key, result);
+    // 静默回写文件级缓存
+    TranslationCacheStrategy.put(
+      this.provider, sourceLang, targetLang, trimmed, result.translated,
+    ).catch(() => {});
     return result;
   }
 
@@ -206,6 +228,10 @@ export class TranslateService {
               targetLang,
               provider: 'server',
             });
+            // W10-C4：流式完成同时写入持久层
+            TranslationCacheStrategy.put(
+              'server', sourceLang, targetLang, trimmed, buffered,
+            ).catch(() => {});
             handlers.onDone?.(buffered);
           }
         } catch (_e) {
@@ -222,6 +248,9 @@ export class TranslateService {
             targetLang,
             provider: 'server',
           });
+          TranslationCacheStrategy.put(
+            'server', sourceLang, targetLang, trimmed, buffered,
+          ).catch(() => {});
         }
         handlers.onDone?.(buffered);
       },

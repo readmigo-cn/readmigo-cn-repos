@@ -1,7 +1,7 @@
 import { AppColors } from '../theme/AppColors';
 import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
 import { AppSpacing, AppRadius } from '../theme/AppSpacing';
-import { ReaderRouteParams } from '../router/RouteConstants';
+import { ReaderRouteParams, RoutePath, ComprehensionRouteParams } from '../router/RouteConstants';
 import { RouterService } from '../router/RouterService';
 import {
   SettingsStore,
@@ -531,6 +531,15 @@ export struct Reader {
     this.draw();
   }
 
+  /** W9-C7：打开当前章节的阅读理解题。 */
+  private openComprehension(): void {
+    const params: ComprehensionRouteParams = {
+      bookId: this.bookId,
+      chapterIndex: this.chapterIndex,
+    };
+    RouterService.push(RoutePath.READING_COMPREHENSION, params);
+  }
+
   private setFontFamily(name: string): void {
     this.fontFamily = name;
     this.draw();
@@ -888,6 +897,7 @@ export struct Reader {
       this.bottomBtn('☰', () => { this.showToc = !this.showToc; })
       this.bottomBtn('✎', () => { this.showNotes = !this.showNotes; })
       this.bottomBtn('▶', () => this.startTts())
+      this.bottomBtn('?', () => this.openComprehension())
     }
     .width('100%')
     .justifyContent(FlexAlign.SpaceAround)

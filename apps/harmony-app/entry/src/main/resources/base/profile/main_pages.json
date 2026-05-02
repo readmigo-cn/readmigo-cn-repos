@@ -12,6 +12,14 @@
     "pages/AudiobookTab",
     "pages/AudiobookPlayer",
     "pages/native/XComponentDemo",
-    "pages/dev/ComponentGallery"
+    "pages/dev/ComponentGallery",
+    "pages/VocabStats",
+    "pages/WeaknessAnalysis",
+    "pages/WordAssociation",
+    "pages/WordFamily",
+    "pages/StudyPlan",
+    "pages/ReadingComprehension",
+    "pages/Vocab",
+    "pages/FlashcardSession"
   ]
 }

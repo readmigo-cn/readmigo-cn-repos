@@ -13,6 +13,8 @@ import { Me } from './Me';
 import { AudiobookTab } from './AudiobookTab';
 import { AudiobookPlayer } from './AudiobookPlayer';
 import { Notes } from './Notes';
+import { StudyPlanPage } from './StudyPlan';
+import { ReadingComprehensionPage } from './ReadingComprehension';
 
 @Entry
 @Component
@@ -49,6 +51,10 @@ struct Index {
       AudiobookPlayer({ params: param as AudiobookPlayerParams });
     } else if (name === RoutePath.NOTES) {
       Notes();
+    } else if (name === RoutePath.STUDY_PLAN) {
+      StudyPlanPage();
+    } else if (name === RoutePath.READING_COMPREHENSION) {
+      ReadingComprehensionPage();
     }
   }
 

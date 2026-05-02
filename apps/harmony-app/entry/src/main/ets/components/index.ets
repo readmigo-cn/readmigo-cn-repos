@@ -94,3 +94,13 @@ export {
 export {
   ChapterTocSheet,
 } from './ChapterTocSheet';
+
+// ─── W8 双语对照 / 笔记编辑 ──────────────────────
+export {
+  BilingualReader,
+  BilingualMode,
+} from './BilingualReader';
+
+export {
+  NoteEditorSheet,
+} from './NoteEditorSheet';

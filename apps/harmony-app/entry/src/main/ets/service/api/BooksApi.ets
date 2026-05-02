@@ -7,6 +7,7 @@ import {
   Rating,
 } from '../../model/Book';
 import { Chapter, ChapterContent } from '../../model/Chapter';
+import { ChapterCacheStrategy } from '../cache/strategies/ChapterCacheStrategy';
 
 /**
  * BookSummary —— 旧 import 兼容（discover/library 旧调用点用）。
@@ -55,11 +56,59 @@ export class BooksApi {
     return HttpClient.get<Chapter[]>(`/api/v1/books/${encodeURIComponent(slug)}/chapters`);
   }
 
-  /** 章节内容（含 html + css）。 */
-  static getChapterContent(slug: string, index: number): Promise<ChapterContent> {
-    return HttpClient.get<ChapterContent>(
+  /**
+   * 章节内容（含 html + css）。
+   * W10-C4：先查 ChapterCache，miss 才请求后端；命中后异步刷新。
+   * `forceFresh=true` 跳过 cache，强制走网络（设置 / pull-to-refresh 用）。
+   */
+  static async getChapterContent(
+    slug: string,
+    index: number,
+    forceFresh: boolean = false,
+  ): Promise<ChapterContent> {
+    if (!forceFresh) {
+      const cached = await ChapterCacheStrategy.get(slug, index);
+      if (cached) {
+        // 已命中本地，不阻塞 UI；忽略后台刷新错误
+        return cached;
+      }
+    }
+    const fresh = await HttpClient.get<ChapterContent>(
       `/api/v1/books/${encodeURIComponent(slug)}/chapters/${index}`,
     );
+    // 静默写入缓存
+    ChapterCacheStrategy.put(slug, index, fresh, false).catch(() => {});
+    return fresh;
+  }
+
+  /**
+   * 后台 prefetch：用户翻页时调用，最多预拉 lookahead 章。
+   * 失败静默；命中已缓存自动跳过。
+   */
+  static async prefetchChapters(
+    slug: string,
+    fromIndex: number,
+    lookahead: number = 2,
+  ): Promise<void> {
+    for (let i = 1; i <= lookahead; i++) {
+      const idx = fromIndex + i;
+      const cached = await ChapterCacheStrategy.get(slug, idx);
+      if (cached) continue;
+      try {
+        const fresh = await HttpClient.get<ChapterContent>(
+          `/api/v1/books/${encodeURIComponent(slug)}/chapters/${idx}`,
+        );
+        await ChapterCacheStrategy.put(slug, idx, fresh, false);
+      } catch (_e) {
+        // 章节不存在或网络失败：直接退出，避免无意义的连环请求
+        break;
+      }
+    }
+  }
+
+  /** 标记某章节为“已读”，pin 在缓存里不被淘汰。 */
+  static async pinReadChapter(slug: string, index: number, content: ChapterContent): Promise<void> {
+    await ChapterCacheStrategy.put(slug, index, content, true);
   }
 
   /** 模糊搜索。 */
