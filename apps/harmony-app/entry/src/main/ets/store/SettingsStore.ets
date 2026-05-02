@@ -23,6 +23,9 @@ export interface TtsSettings {
   speed: number; // 0.5 - 2.0
 }
 
+/** W8-C5：TTS provider 选择（持久化用，运行时由 TtsService 持有） */
+export type TtsProvider = 'huawei-system' | 'xunfei' | 'aliyun';
+
 const FONT_SIZE_MIN = 14;
 const FONT_SIZE_MAX = 24;
 const LINE_HEIGHT_MIN = 1.4;
@@ -68,6 +71,9 @@ export class SettingsStore {
     const reminderTime = await PreferencesManager.getString(StoreKeys.SETTINGS_NOTIFICATIONS_TIME, '20:00');
     const ttsVoice = await PreferencesManager.getString(StoreKeys.SETTINGS_TTS_VOICE, 'default');
     const ttsSpeed = await PreferencesManager.getString(StoreKeys.SETTINGS_TTS_SPEED, '1.0');
+    // W8-C5：TTS provider 持久化
+    const ttsProvider = await PreferencesManager.getString('settings_tts_provider', 'huawei-system');
+    AppStorage.SetOrCreate<string>('settings_tts_provider', ttsProvider);
 
     AppStorage.SetOrCreate<AppLocale>(StoreKeys.SETTINGS_LOCALE, locale);
     AppStorage.SetOrCreate<AppThemeMode>(StoreKeys.SETTINGS_THEME, theme);
@@ -236,6 +242,36 @@ export class SettingsStore {
     AppStorage.SetOrCreate<TtsSettings>(StoreKeys.SETTINGS_TTS_VOICE, v);
     PreferencesManager.setString(StoreKeys.SETTINGS_TTS_VOICE, v.voice);
     PreferencesManager.setString(StoreKeys.SETTINGS_TTS_SPEED, v.speed.toString());
+  }
+
+  // ---- TTS Voice / Speed / Provider 单字段访问（W8-C5） ----
+  static getTtsVoice(): string {
+    return SettingsStore.getTts().voice;
+  }
+
+  static setTtsVoice(voice: string): void {
+    const cur = SettingsStore.getTts();
+    SettingsStore.setTts({ voice, speed: cur.speed });
+  }
+
+  static getTtsSpeed(): number {
+    return SettingsStore.getTts().speed;
+  }
+
+  static setTtsSpeed(speed: number): void {
+    const cur = SettingsStore.getTts();
+    SettingsStore.setTts({ voice: cur.voice, speed });
+  }
+
+  static getTtsProvider(): TtsProvider {
+    const v = AppStorage.Get<string>('settings_tts_provider');
+    if (v === 'huawei-system' || v === 'xunfei' || v === 'aliyun') return v;
+    return 'huawei-system';
+  }
+
+  static setTtsProvider(provider: TtsProvider): void {
+    AppStorage.SetOrCreate<string>('settings_tts_provider', provider);
+    PreferencesManager.setString('settings_tts_provider', provider);
   }
 
   private static normalizeFontSizeLevel(v: number): FontSizeLevel {

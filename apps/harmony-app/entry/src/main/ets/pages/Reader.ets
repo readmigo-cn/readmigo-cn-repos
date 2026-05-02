@@ -29,6 +29,11 @@ import { Chapter, ChapterContent } from '../model/Chapter';
 import { Highlight, HighlightColor } from '../model/Highlight';
 import { ReadingProgressDto } from '../model/ReadingProgress';
 import promptAction from '@ohos.promptAction';
+// W8-C4 / C5 / C6：翻译 / TTS / 句子高亮
+import { TranslateService, TranslateResult } from '../service/translation/TranslateService';
+import { TtsService, TtsHandle, Voice } from '../service/tts/TtsService';
+import { SentenceHighlight, SentenceRect } from '../components/SentenceHighlight';
+import { ToastManager } from '../components/Toast';
 
 const FALLBACK_HTML = `
 <h1>Chapter 1 — Sample</h1>
@@ -99,6 +104,18 @@ export struct Reader {
     blockIndex: 0, charOffset: 0, charLength: 0,
   };
 
+  // ---- W8-C5：TTS 播放状态 -----------------------------------------------
+  @State ttsPlaying: boolean = false;
+  @State ttsPaused: boolean = false;
+  @State ttsCharIndex: number = 0;
+  @State ttsTotalChars: number = 0;
+  @State ttsSpeed: number = 1.0;
+  @State showVoiceSheet: boolean = false;
+  @State sentenceRects: SentenceRect[] = [];
+  private ttsHandle: TtsHandle | null = null;
+  private ttsService: TtsService = TtsService.getInstance();
+  private translateService: TranslateService = TranslateService.getInstance();
+
   // ---- engine + canvas ----------------------------------------------------
   private engine: TypesettingEngine | null = null;
   private bookId: string = 'demo';
@@ -144,6 +161,8 @@ export struct Reader {
     // W7-C6：结束 session + flush 队列（替代旧 endSessionFireAndForget）
     ReadingSession.end();
     ProgressSync.flush();
+    // W8-C5：停止 TTS（页面销毁不允许后台续播本会话）
+    this.stopTts();
     this.engine?.destroy();
     this.engine = null;
   }
@@ -168,6 +187,10 @@ export struct Reader {
     // W7-C6：进入后台 → 暂停会话 + flush（替代旧 endSessionFireAndForget）
     ReadingSession.onBackground();
     ProgressSync.flush();
+    // W8-C5：进入后台时如果在播 → 暂停（用户从通知栏 / 后台 ServiceExt 控制续播）
+    if (this.ttsPlaying && !this.ttsPaused) {
+      this.pauseTts();
+    }
   }
 
   private startSessionTickTimer(): void {
@@ -667,10 +690,154 @@ export struct Reader {
     }).catch(() => {});
   }
 
-  // ---------- TTS placeholder ---------------------------------------------
+  // ---------- W8-C5 TTS 控制 ---------------------------------------------
 
-  private startTts(): void {
-    promptAction.showToast({ message: 'Phase 2 接入 讯飞 TTS' });
+  /**
+   * 启动 TTS：朗读当前页可见文字。
+   * 文字来自 currentPage.lines，按行拼成 plain text；句子边界基于 line 的 runs，
+   * 提供给 SentenceHighlight。
+   */
+  private async startTts(text?: string): Promise<void> {
+    const speakText = text ?? this.collectPageText();
+    if (!speakText) {
+      promptAction.showToast({ message: '当前页没有可朗读文字' });
+      return;
+    }
+    try {
+      // 重建 sentence rect 列表
+      this.sentenceRects = this.buildSentenceRects(speakText);
+      this.ttsTotalChars = speakText.length;
+      this.ttsCharIndex = 0;
+      this.ttsService.setSpeed(this.ttsSpeed);
+      const handle = await this.ttsService.speak(speakText, {
+        bookId: this.bookId,
+        chapterIndex: this.chapterIndex,
+        paragraphIndex: 0,
+      });
+      this.ttsHandle = handle;
+      this.ttsPlaying = true;
+      this.ttsPaused = false;
+      handle.onProgress((idx: number, _total: number) => {
+        this.ttsCharIndex = idx;
+      });
+      handle.onComplete(() => {
+        this.ttsPlaying = false;
+        this.ttsPaused = false;
+        this.ttsHandle = null;
+        // 播放结束自动翻下一页继续
+        this.nextPage();
+      });
+      handle.onError((err: Error) => {
+        this.ttsPlaying = false;
+        this.ttsPaused = false;
+        this.ttsHandle = null;
+        ToastManager.error(`朗读失败: ${err.message}`);
+      });
+    } catch (err) {
+      ToastManager.error(`朗读启动失败: ${(err as Error).message}`);
+    }
+  }
+
+  private pauseTts(): void {
+    if (!this.ttsHandle) return;
+    this.ttsService.pause(this.ttsHandle);
+    this.ttsPaused = true;
+  }
+
+  private resumeTts(): void {
+    if (!this.ttsHandle) return;
+    this.ttsService.resume(this.ttsHandle);
+    this.ttsPaused = false;
+  }
+
+  private stopTts(): void {
+    if (this.ttsHandle) {
+      this.ttsService.stop(this.ttsHandle);
+      this.ttsHandle = null;
+    }
+    this.ttsPlaying = false;
+    this.ttsPaused = false;
+    this.ttsCharIndex = 0;
+    this.ttsTotalChars = 0;
+    this.sentenceRects = [];
+  }
+
+  private setTtsSpeed(speed: number): void {
+    this.ttsSpeed = speed;
+    this.ttsService.setSpeed(speed);
+    promptAction.showToast({ message: `朗读速度 ${speed}x` });
+  }
+
+  private setTtsVoice(voice: string): void {
+    this.ttsService.setVoice(voice);
+    this.showVoiceSheet = false;
+    promptAction.showToast({ message: '已切换音色' });
+  }
+
+  /** 收集当前页所有文字（按 line 顺序拼接，line 间用空格分隔）。 */
+  private collectPageText(): string {
+    if (!this.currentPage) return '';
+    const parts: string[] = [];
+    for (const line of this.currentPage.lines) {
+      for (const run of line.runs) {
+        parts.push(run.text);
+      }
+    }
+    return parts.join(' ').trim();
+  }
+
+  /**
+   * 把当前页的 line.runs 转成 sentence rect 列表，给 SentenceHighlight 使用。
+   * 简化版：按 line 切分，每行一个 sentence rect；起止 charIndex 根据 line 累计字数。
+   */
+  private buildSentenceRects(speakText: string): SentenceRect[] {
+    if (!this.currentPage) return [];
+    const rects: SentenceRect[] = [];
+    let cursor = 0;
+    for (const line of this.currentPage.lines) {
+      let lineText = '';
+      let xMin = Number.MAX_VALUE;
+      let xMax = 0;
+      for (const run of line.runs) {
+        lineText += run.text;
+        xMin = Math.min(xMin, run.x);
+        xMax = Math.max(xMax, run.x + run.w);
+      }
+      lineText = lineText.trim();
+      if (!lineText) continue;
+      const start = cursor;
+      const end = Math.min(speakText.length, cursor + lineText.length + 1); // +1 for join space
+      rects.push({
+        blockIndex: line.runs.length > 0 ? line.runs[0].blockIndex : 0,
+        charOffset: line.runs.length > 0 ? line.runs[0].charOffset : 0,
+        charLength: lineText.length,
+        x: xMin,
+        y: line.y - line.ascent,
+        w: Math.max(1, xMax - xMin),
+        h: line.h,
+        globalCharStart: start,
+        globalCharEnd: end,
+      });
+      cursor = end;
+    }
+    return rects;
+  }
+
+  // W8-A 提供的 SelectionLayer callback 桥接（即使 SelectionLayer 还没接入也保留接口）
+  private onTranslateRequest(text: string): void {
+    if (!text) return;
+    const lang = /[一-鿿]/.test(text) ? 'zh' : 'en';
+    const target = lang === 'zh' ? 'en' : 'zh';
+    this.translateService.translate(text, lang, target).then((res: TranslateResult) => {
+      ToastManager.info(res.translated || '(无译文)', 4000);
+    }).catch((err: Error) => {
+      ToastManager.error(`翻译失败: ${err.message}`);
+    });
+  }
+
+  private onTtsReadRequest(text: string): void {
+    if (!text) return;
+    this.startTts(text);
   }
 
   // ---------- builders ----------------------------------------------------
