@@ -8,6 +8,10 @@ import { ReadingApi } from '../service/api/ReadingApi';
 import { ApiError } from '../service/HttpClient';
 import { Book, BookStatus, SortBy, UserBook } from '../model/Book';
 import promptAction from '@ohos.promptAction';
+// W14-C2：自适应栅格列数 by 当前断点 / 折叠屏展开
+import { Breakpoint, FoldStatus, STORAGE_KEY_BREAKPOINT, STORAGE_KEY_FOLD_STATUS } from '../theme/Breakpoints';
+// W14-C3：平板双栏布局
+import { LibraryTabletLayout } from './tablet/LibraryTabletLayout';
 
 type StatusTab = 'all' | BookStatus;
 type ViewMode = 'grid' | 'list';
@@ -50,6 +54,10 @@ export struct Library {
   @State page: number = 1;
   private readonly pageSize: number = 20;
   @State hasMore: boolean = true;
+
+  // W14-C2：自适应栅格依赖的全局 breakpoint / fold status
+  @StorageProp(STORAGE_KEY_BREAKPOINT) currentBp: Breakpoint = Breakpoint.MD;
+  @StorageProp(STORAGE_KEY_FOLD_STATUS) foldStatus: FoldStatus = FoldStatus.UNKNOWN;
 
   private readonly tabs: { key: StatusTab; label: string }[] = [
     { key: 'all', label: '书架' },
@@ -195,6 +203,36 @@ export struct Library {
 
   private goSearch(): void {
     promptAction.showToast({ message: '搜索页即将上线' });
+  }
+
+  /**
+   * W14-C2：根据当前断点 + 折叠屏状态决定书库 Grid 的列数
+   *   - 手机 (XS/SM)：2 列
+   *   - 折叠屏内屏 / 平板 (MD)：4 列
+   *   - 折叠屏完全展开 / 大平板 (LG/XL)：6 列
+   */
+  private gridColumnsTemplate(): string {
+    const expanded: boolean = this.foldStatus === FoldStatus.EXPAND;
+    let cols: number = 2;
+    if (this.currentBp === Breakpoint.LG || this.currentBp === Breakpoint.XL || expanded) {
+      cols = 6;
+    } else if (this.currentBp === Breakpoint.MD) {
+      cols = 4;
+    }
+    return Array(cols).fill('1fr').join(' ');
+  }
+
+  /** W14-C2：空态推荐区 Grid 列数（与上面同一规则但少一列） */
+  private recommendedColumnsTemplate(): string {
+    let cols: number = 4;
+    if (this.currentBp === Breakpoint.LG || this.currentBp === Breakpoint.XL) {
+      cols = 6;
+    } else if (this.currentBp === Breakpoint.MD) {
+      cols = 4;
+    } else if (this.currentBp === Breakpoint.SM || this.currentBp === Breakpoint.XS) {
+      cols = 4;
+    }
+    return Array(cols).fill('1fr').join(' ');
   }
 
   // ---------- builders ------------------------------------------------------
@@ -458,7 +496,8 @@ export struct Library {
             }
           })
         }
-        .columnsTemplate('1fr 1fr 1fr 1fr')
+        // W14-C2：空态推荐 Grid 同样响应断点
+        .columnsTemplate(this.recommendedColumnsTemplate())
         .columnsGap(AppSpacing.sm)
         .rowsGap(AppSpacing.sm)
         .padding(AppSpacing.base)
@@ -517,7 +556,8 @@ export struct Library {
                   (it: LibraryItem) => it.bookId,
                 )
               }
-              .columnsTemplate('1fr 1fr 1fr')
+              // W14-C2：列数随断点切换（mobile=2, tablet/MD=4, desktop/LG/折叠展开=6）
+              .columnsTemplate(this.gridColumnsTemplate())
               .columnsGap(AppSpacing.sm)
               .rowsGap(AppSpacing.base)
               .padding(AppSpacing.base)
@@ -556,7 +596,16 @@ export struct Library {
     }
   }
 
-  build() {
+  /**
+   * W14-C3：平板（lg / xl）或折叠屏 EXPAND 状态走双栏布局；其余走手机版。
+   */
+  private isTabletLayout(): boolean {
+    if (this.currentBp === Breakpoint.LG || this.currentBp === Breakpoint.XL) return true;
+    return this.foldStatus === FoldStatus.EXPAND;
+  }
+
+  @Builder
+  mobileBuilder() {
     Column() {
       // Header
       Row({ space: AppSpacing.sm }) {
@@ -596,5 +645,13 @@ export struct Library {
     .width('100%')
     .height('100%')
     .backgroundColor(AppColors.bgPrimary)
+  }
+
+  build() {
+    if (this.isTabletLayout()) {
+      LibraryTabletLayout()
+    } else {
+      this.mobileBuilder()
+    }
   }
 }

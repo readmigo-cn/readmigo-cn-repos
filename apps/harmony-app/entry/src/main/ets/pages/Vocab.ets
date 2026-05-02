@@ -43,6 +43,8 @@ import {
   ReviewStats,
 } from '../service/api/NotesApi';
 import { TtsService } from '../service/tts/TtsService';
+// W13-C2：跨端剪贴板（复制到其它设备）
+import { DistributedClipboard, VocabPayload } from '../service/distributed/DistributedClipboard';
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
 
@@ -212,9 +214,11 @@ struct Vocab {
     promptAction.showActionMenu({
       title: v.word,
       buttons: [
-        { text: '编辑详情',   color: useColor(TextColors.primary, this.isDark) as string },
-        { text: '标记掌握',   color: useColor(AccentColors.primary, this.isDark) as string },
-        { text: '删除',       color: useColor(StateColors.error, this.isDark) as string },
+        { text: '编辑详情',         color: useColor(TextColors.primary, this.isDark) as string },
+        { text: '标记掌握',         color: useColor(AccentColors.primary, this.isDark) as string },
+        // W13-C2：跨端剪贴板，目标设备弹起 PasteFromOtherDeviceSheet
+        { text: '复制到其它设备',   color: useColor(AccentColors.primary, this.isDark) as string },
+        { text: '删除',             color: useColor(StateColors.error, this.isDark) as string },
       ],
     }).then((result) => {
       if (result.index === 0) {
@@ -222,9 +226,30 @@ struct Vocab {
       } else if (result.index === 1) {
         this.markKnown(v);
       } else if (result.index === 2) {
+        this.copyVocabToOtherDevice(v);
+      } else if (result.index === 3) {
         this.confirmDelete(v);
       }
     }).catch(() => {});
+  }
+
+  /** W13-C2：把生词写入分布式剪贴板，其它登录同账号设备会自动收到。 */
+  private async copyVocabToOtherDevice(v: VocabNoteRecord): Promise<void> {
+    const payload: VocabPayload = {
+      word: v.word ?? '',
+      phonetic: v.pronunciation,
+      definition: v.definition,
+      context: v.sourceContext,
+      bookId: undefined,
+      bookTitle: undefined,
+      timestamp: Date.now(),
+    };
+    try {
+      await DistributedClipboard.copyVocab(payload);
+      ToastManager.show({ message: '已复制，到其它设备粘贴或自动接收', type: 'success' });
+    } catch (_e) {
+      ToastManager.show({ message: '复制失败', type: 'error' });
+    }
   }
 
   private openDetail(v: VocabNoteRecord): void {

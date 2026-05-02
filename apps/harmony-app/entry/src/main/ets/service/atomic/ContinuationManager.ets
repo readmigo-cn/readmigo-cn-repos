@@ -1,23 +1,31 @@
 /**
- * ContinuationManager — 阅读接续管理器（W11-C3）
+ * ContinuationManager — 阅读接续管理器（W11-C3 + W13-C3 增强）
  *
  * 职责：
- *   - 注册 / 注销当前阅读会话到 HarmonyOS 分布式数据（让附近设备发现可接续）
- *   - 周期检测附近可接续的设备列表（手机/平板/手表/PC）
- *   - 主动发起转移：把当前会话推到目标设备
- *   - 占位：实际能力依赖 W14 分布式接入
+ *   - 注册 / 注销当前阅读会话到 HarmonyOS 分布式 KV（让附近设备发现可接续）
+ *   - 周期检测附近可接续的设备列表（手机/平板/手表/PC）via DeviceManager
+ *   - 主动发起转移：把当前会话推到目标设备（context.startAbility ContinueReadingAbility）
+ *   - 监听其它设备发起的接续请求 → 触发 onIncomingContinuation 回调（业务层弹 toast）
+ *   - 与 EntryAbility lifecycle 集成（onForeground / onBackground 自动启停 polling）
  *
  * 与 ContinueReadingAbility 的协作：
  *   - Reader 页 aboutToAppear → enableContinuation
  *   - Reader 页 aboutToDisappear → disableContinuation
- *   - 用户在转移面板选目标设备 → transferTo → 系统调用 ContinueReadingAbility.onContinue
+ *   - 用户在 DeviceSelectorSheet 选目标设备 → transferTo → 系统启动 ContinueReadingAbility
  *
  * 数据通道选择：
  *   - 短期：分布式 KV（@ohos.distributedKVStore）— 跨设备同步当前阅读会话
- *   - 长期：HarmonyOS Continuation 框架（系统级 onContinue/onCreate hook）
+ *   - 长期：HarmonyOS Continuation 框架（系统级 onContinue/onCreate hook，已在
+ *     ContinueReadingAbility.ets 实现）
  *
- * 当前实现：所有 distributed API 用占位 mock，不引入真实 import 避免编译失败。
+ * 占位策略：
+ *   - 模拟器：所有 distributed API 用占位 mock；transferTo 仅打 console
+ *   - 真机：TODO 标注，由 W14 真机阶段替换
  */
+
+import common from '@ohos.app.ability.common';
+import Want from '@ohos.app.ability.Want';
+import { DeviceManager, TrustedDevice } from '../distributed/DeviceManager';
 
 const TAG = 'ContinuationManager';
 
@@ -43,8 +51,21 @@ export interface NearbyDevice {
   trusted: boolean;
 }
 
+/** 接收方收到的接续请求。 */
+export interface IncomingContinuationRequest {
+  /** 来源设备 ID */
+  sourceDeviceId: string;
+  /** 来源设备名（用户可读，"Logan 的平板"） */
+  sourceDeviceName: string;
+  /** 对端推过来的 session 快照（章节 / 页码 / 进度） */
+  session: ContinuationSession;
+}
+
+type IncomingCallback = (req: IncomingContinuationRequest) => void;
+
 const KV_STORE_ID = 'readmigo_continuation';
 const KV_KEY_PREFIX = 'reading_session_';
+const POLL_INTERVAL_MS = 30_000;
 
 class ContinuationManagerImpl {
   /** 当前已注册的接续会话。null 表示未启用。 */
@@ -53,6 +74,10 @@ class ContinuationManagerImpl {
   private pollTimer: number = -1;
   /** 缓存最近一次 pollNearbyDevices 的结果。 */
   private lastNearby: NearbyDevice[] = [];
+  /** 来电回调 */
+  private incomingListeners: IncomingCallback[] = [];
+  /** EntryAbility 是否处于前台（控制 polling 是否真正发起 IO） */
+  private foreground: boolean = true;
 
   /**
    * 启用接续：注册当前阅读会话到分布式 KV。
@@ -115,19 +140,30 @@ class ContinuationManagerImpl {
   /**
    * 检测附近可接续的设备。
    *
-   * 实际实现：@ohos.distributedDeviceManager.getAvailableDeviceListSync()
-   * 占位：返回空列表 + console 标记。
+   * 真实实现：DeviceManager.discoverDevices() → 过滤 trusted + 在线 + 非本机
+   * 同账号设备发现（W13-C3 增强）：发现后若有非本机设备活跃 → emit incoming candidate
    *
    * 周期内反复调用会去重（lastNearby cache）。
    */
   async pollNearbyDevices(): Promise<NearbyDevice[]> {
-    // 占位：真实实现示例
-    // const dm = deviceManager.createDeviceManager('cn.readmigo.app');
-    // const list = dm.getAvailableDeviceListSync();
-    // this.lastNearby = list.map((d) => ({...}));
-    this.lastNearby = [];
-    console.info(`${TAG} pollNearbyDevices (mock) found=${this.lastNearby.length}`);
-    return this.lastNearby;
+    if (!this.foreground) return this.lastNearby;
+    try {
+      const all: TrustedDevice[] = await DeviceManager.discoverDevices();
+      const nearby: NearbyDevice[] = all
+        .filter((d) => !d.isLocal && d.online)
+        .map((d) => ({
+          deviceId: d.deviceId,
+          deviceName: d.deviceName,
+          deviceType: d.deviceType === 'car' ? 'unknown' : d.deviceType,
+          trusted: true,
+        }));
+      this.lastNearby = nearby;
+      console.info(`${TAG} pollNearbyDevices found=${nearby.length}`);
+      return nearby;
+    } catch (e) {
+      console.warn(`${TAG} pollNearbyDevices failed: ${(e as Error).message}`);
+      return this.lastNearby;
+    }
   }
 
   /** 同步获取最近一次缓存的设备列表（无 IO）。 */
@@ -138,10 +174,18 @@ class ContinuationManagerImpl {
   /**
    * 主动转移到目标设备。
    *
-   * 实际实现：context.continueAbility(deviceId, want)
+   * 真机实现：context.startAbility(want) 带 deviceId + ContinueReadingAbility 名
+   *   want = {
+   *     deviceId: targetDeviceId,
+   *     bundleName, abilityName: 'ContinueReadingAbility',
+   *     parameters: { bookId, chapterIndex, pageIndex, percentComplete }
+   *   }
    * 占位：把目标 deviceId 写到日志，业务层用 toast 反馈。
+   *
+   * @param deviceId 目标设备 ID（DeviceManager 中的 deviceId / networkId）
+   * @param ctx UIAbilityContext，调用方持有
    */
-  async transferTo(deviceId: string): Promise<boolean> {
+  async transferTo(deviceId: string, ctx?: common.UIAbilityContext): Promise<boolean> {
     if (!this.session) {
       console.warn(`${TAG} transferTo no active session`);
       return false;
@@ -150,8 +194,88 @@ class ContinuationManagerImpl {
       console.warn(`${TAG} transferTo empty deviceId`);
       return false;
     }
-    console.info(`${TAG} transferTo (mock) targetDevice=${deviceId} bookId=${this.session.bookId}`);
-    return true;
+    try {
+      // TODO(W14 真机)：替换为真实 startAbility 调用
+      // const want: Want = {
+      //   deviceId,
+      //   bundleName: 'cn.readmigo.app',
+      //   abilityName: 'ContinueReadingAbility',
+      //   parameters: {
+      //     bookId: this.session.bookId,
+      //     chapterIndex: this.session.chapterIndex,
+      //     pageIndex: this.session.pageIndex,
+      //     percentComplete: this.session.percentComplete,
+      //     sourceDeviceId: this.session.sourceDeviceId,
+      //   },
+      // };
+      // await ctx?.startAbility(want);
+      const _placeholderWant: Want = {
+        bundleName: 'cn.readmigo.app',
+        abilityName: 'ContinueReadingAbility',
+        parameters: {
+          bookId: this.session.bookId,
+          chapterIndex: this.session.chapterIndex,
+        },
+      };
+      console.info(
+        `${TAG} transferTo (mock) targetDevice=${deviceId} bookId=${this.session.bookId} hasCtx=${ctx !== undefined}`,
+      );
+      return true;
+    } catch (e) {
+      console.warn(`${TAG} transferTo failed: ${(e as Error).message}`);
+      return false;
+    }
+  }
+
+  /**
+   * 注册「收到来自其它设备的接续请求」回调。
+   *
+   * 真实场景：分布式 KV.on('dataChange') 监听到 KV_KEY_PREFIX/* 由对端写入 →
+   *   解析 ContinuationSession + 查 sourceDeviceName → 走 incomingListeners
+   * 占位：在模拟器永不触发，仅注册 listener 以保证 API 完整。
+   *
+   * UI 侧典型用法（Reader / Index）：
+   *   ContinuationManager.onIncomingContinuation((req) => {
+   *     ToastManager.info(`平板上正在读到第 ${req.session.chapterIndex+1} 章，是否接续？`);
+   *   });
+   */
+  onIncomingContinuation(cb: IncomingCallback): () => void {
+    this.incomingListeners.push(cb);
+    return () => {
+      const i = this.incomingListeners.indexOf(cb);
+      if (i >= 0) this.incomingListeners.splice(i, 1);
+    };
+  }
+
+  /** 内部 / 测试用：手动模拟一次 incoming 请求。 */
+  emitIncomingForTest(req: IncomingContinuationRequest): void {
+    for (const cb of this.incomingListeners) {
+      try { cb(req); } catch (_) { /* ignore */ }
+    }
+  }
+
+  // ─── EntryAbility lifecycle 集成（W13-C3 增强） ───
+
+  /**
+   * 应用回到前台：恢复 polling（如果已有 active session）。
+   * EntryAbility.onForeground 调用。
+   */
+  onAppForeground(): void {
+    this.foreground = true;
+    if (this.session) {
+      this.startPolling();
+    }
+    console.info(`${TAG} onAppForeground hasSession=${this.session !== null}`);
+  }
+
+  /**
+   * 应用进入后台：暂停 polling 节省电量；session 仍在 KV 中保留 30 分钟。
+   * EntryAbility.onBackground 调用。
+   */
+  onAppBackground(): void {
+    this.foreground = false;
+    this.stopPolling();
+    console.info(`${TAG} onAppBackground`);
   }
 
   /** 当前是否有活跃的接续会话。 */
@@ -167,9 +291,10 @@ class ContinuationManagerImpl {
 
   private startPolling(): void {
     if (this.pollTimer !== -1) return;
+    if (!this.foreground) return;
     this.pollTimer = setInterval(() => {
       this.pollNearbyDevices().catch(() => {});
-    }, 30_000) as unknown as number;
+    }, POLL_INTERVAL_MS) as unknown as number;
   }
 
   private stopPolling(): void {
@@ -200,8 +325,8 @@ class ContinuationManagerImpl {
 
   /** 占位：获取本地设备 ID。 */
   private getLocalDeviceId(): string {
-    // 真实：deviceManager.getLocalDeviceInfoSync().deviceId
-    return 'local-device';
+    // 真实：DeviceManager.getLocalDeviceId() / deviceManager.getLocalDeviceInfoSync().deviceId
+    return DeviceManager.getLocalDeviceId();
   }
 }
 

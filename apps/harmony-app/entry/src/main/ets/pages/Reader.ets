@@ -34,11 +34,23 @@ import { TranslateService, TranslateResult } from '../service/translation/Transl
 import { TtsService, TtsHandle, Voice } from '../service/tts/TtsService';
 import { SentenceHighlight, SentenceRect } from '../components/SentenceHighlight';
 import { ToastManager } from '../components/Toast';
-// W11-C3：阅读接续（手机 ↔ 平板 多端协同）
+// W11-C3 / W13-C3：阅读接续（手机 ↔ 平板 多端协同）+ 设备选择
 import { ContinuationManager } from '../service/atomic/ContinuationManager';
+import { DeviceSelectorSheet } from '../components/DeviceSelectorSheet';
+import { TrustedDevice } from '../service/distributed/DeviceManager';
 // W11-C2 / W11-C4：单词分享 / 划词查询元服务
 import { AtomicLauncher } from '../service/atomic/AtomicLauncher';
+// W13-C2：跨端剪贴板（把选中单词分享到其它设备）
+import { DistributedClipboard, VocabPayload } from '../service/distributed/DistributedClipboard';
 import common from '@ohos.app.ability.common';
+// W14-C4：平板双页阅读布局
+import {
+  Breakpoint,
+  FoldStatus,
+  STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_FOLD_STATUS,
+} from '../theme/Breakpoints';
+import { ReaderTabletLayout } from './tablet/ReaderTabletLayout';
 
 const FALLBACK_HTML = `
 <h1>Chapter 1 — Sample</h1>
@@ -90,12 +102,17 @@ export struct Reader {
    * @Watch 在变化时触发 onEffectiveThemeChange 重绘 Canvas。
    */
   @StorageProp('app_theme_mode') @Watch('onEffectiveThemeChange') effectiveTheme: EffectiveTheme = 'day';
+  // W14-C4：平板双页阅读判定（lg/xl 或 折叠屏 EXPAND）
+  @StorageProp(STORAGE_KEY_BREAKPOINT) currentBp: Breakpoint = Breakpoint.MD;
+  @StorageProp(STORAGE_KEY_FOLD_STATUS) foldStatus: FoldStatus = FoldStatus.UNKNOWN;
 
   // ---- UI state -----------------------------------------------------------
   @State toolbarVisible: boolean = false;
   @State showSettings: boolean = false;
   @State showToc: boolean = false;
   @State showNotes: boolean = false;
+  /** W13-C3：设备选择 sheet（接续到其它设备） */
+  @State showDeviceSelector: boolean = false;
   @State loading: boolean = true;
   @State errMsg: string = '';
 
@@ -166,6 +183,8 @@ export struct Reader {
       this.pageIndex,
       this.pageCount > 0 ? Math.round(((this.pageIndex + 1) / this.pageCount) * 100) : 0,
     );
+    // W13-C3：监听其它设备发起的接续请求
+    this.subscribeIncomingContinuation();
   }
 
   aboutToDisappear(): void {
@@ -176,6 +195,8 @@ export struct Reader {
     ProgressSync.flush();
     // W11-C3：离开 Reader → 注销接续会话
     ContinuationManager.disableContinuation(this.bookId);
+    // W13-C3：取消接续来电监听
+    this.unsubscribeIncomingContinuation();
     // W8-C5：停止 TTS（页面销毁不允许后台续播本会话）
     this.stopTts();
     this.engine?.destroy();
@@ -598,9 +619,85 @@ export struct Reader {
     }
   }
 
+  /**
+   * W13-C2：把选中单词写入分布式剪贴板，其它登录同账号设备会自动收到。
+   *
+   * 与 W11-C2 shareSelectedWord 区别：
+   *   - W11-C2 走元服务卡片，目标是「分享出去给别人看」（截图 / 转发）
+   *   - W13-C2 走分布式剪贴板，目标是「同步给我的另一台设备继续学」
+   */
+  private async copySelectedWordToOtherDevice(): Promise<void> {
+    if (!this.explainCtx.word) {
+      promptAction.showToast({ message: '请先长按选词' });
+      return;
+    }
+    const payload: VocabPayload = {
+      word: this.explainCtx.word,
+      context: this.explainCtx.contextSentence,
+      bookId: AppStorage.Get<string>('reading_current_book_id') ?? undefined,
+      bookTitle: AppStorage.Get<string>('reading_current_title') ?? undefined,
+      chapterTitle: this.chapterTitle,
+      timestamp: Date.now(),
+    };
+    try {
+      await DistributedClipboard.copyVocab(payload);
+      promptAction.showToast({ message: '已复制，到其它设备粘贴' });
+    } catch (_e) {
+      promptAction.showToast({ message: '复制失败' });
+    }
+  }
+
   private setFontFamily(name: string): void {
     this.fontFamily = name;
     this.draw();
+  }
+
+  // ---------- W13-C3 跨设备接续 ------------------------------------------
+
+  /** 取消监听接续来电的句柄；aboutToDisappear 释放。 */
+  private incomingUnsubscribe: (() => void) | null = null;
+
+  /** 打开设备选择 sheet（toolbar 「转到其它设备」按钮）。 */
+  private openDeviceSelector(): void {
+    if (!ContinuationManager.hasActiveSession()) {
+      promptAction.showToast({ message: '当前无活跃阅读会话' });
+      return;
+    }
+    this.showDeviceSelector = true;
+  }
+
+  /** DeviceSelectorSheet onSelect 回调：触发 transferTo + toast 反馈。 */
+  private async onDeviceSelected(deviceId: string, device: TrustedDevice): Promise<void> {
+    try {
+      const ctx = getContext(this) as common.UIAbilityContext;
+      const ok = await ContinuationManager.transferTo(deviceId, ctx);
+      if (ok) {
+        promptAction.showToast({ message: `已请求转到 ${device.deviceName}` });
+      } else {
+        promptAction.showToast({ message: '转移失败，请稍后重试' });
+      }
+    } catch (e) {
+      promptAction.showToast({ message: `转移失败: ${(e as Error).message}` });
+    }
+  }
+
+  /** 注册「来自其它设备的接续请求」回调（aboutToAppear 调用一次）。 */
+  private subscribeIncomingContinuation(): void {
+    if (this.incomingUnsubscribe) return;
+    this.incomingUnsubscribe = ContinuationManager.onIncomingContinuation((req) => {
+      const chapterNo = req.session.chapterIndex + 1;
+      promptAction.showToast({
+        message: `${req.sourceDeviceName}上读到第 ${chapterNo} 章，可在目录跳转接续`,
+        duration: 4000,
+      });
+    });
+  }
+
+  private unsubscribeIncomingContinuation(): void {
+    if (this.incomingUnsubscribe) {
+      this.incomingUnsubscribe();
+      this.incomingUnsubscribe = null;
+    }
   }
 
   // ---------- W7-C settings sheet handlers --------------------------------
@@ -959,7 +1056,11 @@ export struct Reader {
       // W11-C2：分享选中单词到元服务卡片（划词后才显示）
       if (this.explainCtx.word.length > 0) {
         this.bottomBtn('↗', () => this.shareSelectedWord())
+        // W13-C2：写入分布式剪贴板（同账号其它设备直接收到）
+        this.bottomBtn('⎘', () => this.copySelectedWordToOtherDevice())
       }
+      // W13-C3：转到其它设备（仅当存在 active continuation session）
+      this.bottomBtn('📲', () => this.openDeviceSelector())
     }
     .width('100%')
     .justifyContent(FlexAlign.SpaceAround)
@@ -1139,8 +1240,20 @@ export struct Reader {
     .justifyContent(FlexAlign.Center)
   }
 
+  /** W14-C4：是否走平板双页布局 */
+  private isTabletLayout(): boolean {
+    if (this.currentBp === Breakpoint.LG || this.currentBp === Breakpoint.XL) return true;
+    return this.foldStatus === FoldStatus.EXPAND;
+  }
+
   build() {
     NavDestination() {
+      if (this.isTabletLayout()) {
+        // W14-C4：平板双页阅读布局；mobile 状态（高亮 / 笔记 / TTS）暂不
+        // 在双页布局中暴露，由 ReaderTabletLayout 自管最小态。Settings 仍然
+        // 通过 SettingsStore 共享 —— 字号 / 主题修改在 mobile / tablet 切回时立即生效。
+        ReaderTabletLayout({ params: this.params })
+      } else {
       Stack({ alignContent: Alignment.Bottom }) {
         Column() {
           if (this.toolbarVisible) { this.topBar() }
@@ -1207,9 +1320,17 @@ export struct Reader {
           isDark: this.theme === 'night',
           onChapterSelect: (idx: number) => this.loadChapter(idx, 0),
         })
+        // W13-C3：设备选择 sheet（接续到其它设备）
+        DeviceSelectorSheet({
+          visible: $showDeviceSelector,
+          isDark: this.theme === 'night',
+          onSelect: (deviceId: string, device: TrustedDevice) =>
+            this.onDeviceSelected(deviceId, device),
+        })
         if (this.showNotes) { this.notesDrawer() }
       }
       .width('100%').height('100%')
+      } // end else (mobile branch)
     }
     .hideTitleBar(true)
   }

@@ -4,6 +4,9 @@ import { UserStore } from '../store/UserStore';
 import { AppColors } from '../theme/AppColors';
 import { EffectiveTheme } from '../theme/Theme.types';
 import { APP_THEME_STORAGE_KEY, ThemeService } from '../theme/ThemeService';
+// W14-C1：自适应布局 —— 平板 / 折叠屏展开态走顶部 TabBar + 双栏内容
+import { Breakpoint, STORAGE_KEY_BREAKPOINT } from '../theme/Breakpoints';
+import { ResponsiveContainer } from '../components/responsive/ResponsiveContainer';
 import { Login } from './Login';
 import { Onboarding } from './Onboarding';
 import { Discover } from './Discover';
@@ -23,6 +26,8 @@ struct Index {
   // W5-C4：根组件透传 theme 给所有后代；@StorageProp 触发重渲染
   @StorageProp(APP_THEME_STORAGE_KEY) @Watch('onThemeChange') storageTheme: EffectiveTheme = 'day';
   @Provide('theme') theme: EffectiveTheme = 'day';
+  // W14-C1：当前断点 —— 决定 TabBar 是底部（手机）还是顶部（平板/折叠展开）
+  @StorageProp(STORAGE_KEY_BREAKPOINT) currentBp: Breakpoint = Breakpoint.MD;
   private navStack: NavPathStack = new NavPathStack();
 
   aboutToAppear(): void {
@@ -75,29 +80,71 @@ struct Index {
     .justifyContent(FlexAlign.Center)
   }
 
+  /** W14-C1: 手机布局 —— 底部 TabBar（原始布局） */
+  @Builder
+  mobileLayout() {
+    Tabs({ index: this.currentTab, barPosition: BarPosition.End }) {
+      TabContent() {
+        Discover()
+      }.tabBar(this.tabBuilder(0, $r('app.string.tab_discover'), $r('app.media.app_icon')))
+
+      TabContent() {
+        Library()
+      }.tabBar(this.tabBuilder(1, $r('app.string.tab_library'), $r('app.media.app_icon')))
+
+      TabContent() {
+        AudiobookTab()
+      }.tabBar(this.tabBuilder(2, $r('app.string.tab_audiobook'), $r('app.media.app_icon')))
+
+      TabContent() {
+        Me()
+      }.tabBar(this.tabBuilder(3, $r('app.string.tab_me'), $r('app.media.app_icon')))
+    }
+    .barHeight(56)
+    .barMode(BarMode.Fixed)
+    .onChange((idx: number) => {
+      this.currentTab = idx;
+    })
+  }
+
+  /** W14-C1: 平板 / 折叠屏展开态 —— 顶部 TabBar（更宽屏更习惯） */
+  @Builder
+  tabletLayout() {
+    Tabs({ index: this.currentTab, barPosition: BarPosition.Start }) {
+      TabContent() {
+        Discover()
+      }.tabBar(this.tabBuilder(0, $r('app.string.tab_discover'), $r('app.media.app_icon')))
+
+      TabContent() {
+        Library()
+      }.tabBar(this.tabBuilder(1, $r('app.string.tab_library'), $r('app.media.app_icon')))
+
+      TabContent() {
+        AudiobookTab()
+      }.tabBar(this.tabBuilder(2, $r('app.string.tab_audiobook'), $r('app.media.app_icon')))
+
+      TabContent() {
+        Me()
+      }.tabBar(this.tabBuilder(3, $r('app.string.tab_me'), $r('app.media.app_icon')))
+    }
+    .barHeight(64)
+    .barMode(BarMode.Fixed)
+    .vertical(false)
+    .onChange((idx: number) => {
+      this.currentTab = idx;
+    })
+  }
+
   build() {
     Navigation(this.navStack) {
-      Tabs({ index: this.currentTab, barPosition: BarPosition.End }) {
-        TabContent() {
-          Discover()
-        }.tabBar(this.tabBuilder(0, $r('app.string.tab_discover'), $r('app.media.app_icon')))
-
-        TabContent() {
-          Library()
-        }.tabBar(this.tabBuilder(1, $r('app.string.tab_library'), $r('app.media.app_icon')))
-
-        TabContent() {
-          AudiobookTab()
-        }.tabBar(this.tabBuilder(2, $r('app.string.tab_audiobook'), $r('app.media.app_icon')))
-
-        TabContent() {
-          Me()
-        }.tabBar(this.tabBuilder(3, $r('app.string.tab_me'), $r('app.media.app_icon')))
-      }
-      .barHeight(56)
-      .barMode(BarMode.Fixed)
-      .onChange((idx: number) => {
-        this.currentTab = idx;
+      ResponsiveContainer({
+        mobileProvided: true,
+        tabletProvided: true,
+        desktopProvided: true,
+        mobile: () => { this.mobileLayout() },
+        tablet: () => { this.tabletLayout() },
+        desktop: () => { this.tabletLayout() },
+        fallback: () => { this.mobileLayout() },
       })
     }
     .navDestination(this.pageMap)

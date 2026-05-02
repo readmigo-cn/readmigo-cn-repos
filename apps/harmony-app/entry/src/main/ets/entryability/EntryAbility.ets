@@ -14,6 +14,15 @@ import { PagePath } from '../router/RouteConstants';
 import { ThemeService } from '../theme/ThemeService';
 import { FontRegistry } from '../theme/FontRegistry';
 import { ProgressSync } from '../service/ProgressSync';
+// W14-C1：自适应布局 / 折叠屏感知。需要 windowStage，因此在 onWindowStageCreate 里初始化
+import { initBreakpoints, disposeBreakpoints } from '../theme/Breakpoints';
+// W13-C1 / W13-C3：分布式设备发现 + 接续生命周期
+import { DeviceManager } from '../service/distributed/DeviceManager';
+import { ContinuationManager } from '../service/atomic/ContinuationManager';
+// W13-C2：跨端剪贴板订阅（接收其它设备分享的 vocab / highlight）
+import { DistributedClipboard, IncomingEntry } from '../service/distributed/DistributedClipboard';
+// W13-C4：多端通知协调器
+import { MultiDeviceNotifier } from '../service/notification/MultiDeviceNotifier';
 
 const TAG = 'EntryAbility';
 
@@ -51,6 +60,25 @@ export default class EntryAbility extends UIAbility {
       // W7-C6：恢复进度同步队列（崩溃续传）
       ProgressSync.init().catch((err: Error) => {
         console.warn(`${TAG} ProgressSync init failed: ${err.message}`);
+      });
+
+      // W13-C1：初始化分布式设备管理器（bundleName 必须与 module.json5 一致）
+      DeviceManager.init('cn.readmigo.app').catch((err: Error) => {
+        console.warn(`${TAG} DeviceManager init failed: ${err.message}`);
+      });
+
+      // W13-C4：多端通知协调器（订阅跨端 broadcast，决定本机是否 publish）
+      MultiDeviceNotifier.init().catch((err: Error) => {
+        console.warn(`${TAG} MultiDeviceNotifier init failed: ${err.message}`);
+      });
+
+      // W13-C2：监听 pasteboard 变化，收到其它设备的 vocab/highlight 时把 entry
+      // 写入 AppStorage，由当前活跃页（Reader / Vocab / Index）渲染 PasteFromOtherDeviceSheet
+      DistributedClipboard.subscribeIncoming((entry: IncomingEntry) => {
+        if (entry.kind === 'vocab' || entry.kind === 'highlight') {
+          AppStorage.SetOrCreate<IncomingEntry>('paste_incoming_entry', entry);
+          AppStorage.SetOrCreate<boolean>('paste_incoming_visible', true);
+        }
       });
 
       // 首次启动判定：APP_FIRST_LAUNCH 默认 true，初始化后写 false
@@ -102,11 +130,18 @@ export default class EntryAbility extends UIAbility {
       AppStorage.SetOrCreate<boolean>(StoreKeys.APP_FIRST_LAUNCH, this.isFirstLaunch);
       // pendingDeepLink 在 Index aboutToAppear 后由 RouterService.handleDeepLink 消费
     });
+
+    // W14-C1：注册断点 / 折叠屏监听 → AppStorage（UI 通过 @StorageProp 订阅）
+    initBreakpoints(windowStage).catch((err: Error) => {
+      console.warn(`${TAG} initBreakpoints failed: ${err.message}`);
+    });
   }
 
   onWindowStageDestroy(): void {
     // 释放运行时缓存
     RouterService.clearHistory();
+    // W14-C1：解除窗口尺寸 / 折叠屏监听
+    disposeBreakpoints();
   }
 
   onForeground(): void {
@@ -114,6 +149,10 @@ export default class EntryAbility extends UIAbility {
     console.info(`${TAG} onForeground`);
     // W7-C6：恢复联机后立即把队列里残留的更新推上去
     ProgressSync.flush().catch(() => {});
+    // W13-C3：恢复设备 polling
+    ContinuationManager.onAppForeground();
+    // W13-C4：刷新「最近活跃」时间戳，参与多端通知去重判定
+    MultiDeviceNotifier.markActive();
   }
 
   onBackground(): void {
@@ -124,6 +163,8 @@ export default class EntryAbility extends UIAbility {
     }
     // W7-C6：进入后台前强制 flush，避免因系统挂起丢失最新进度
     ProgressSync.flush().catch(() => {});
+    // W13-C3：暂停设备 polling 节省电量
+    ContinuationManager.onAppBackground();
     console.info(`${TAG} onBackground`);
   }
 

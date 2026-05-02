@@ -5,12 +5,27 @@ import { RouterService } from '../router/RouterService';
 import { RoutePath } from '../router/RouteConstants';
 import { BookSummary, BooksApi } from '../service/api/BooksApi';
 import { ApiError } from '../service/HttpClient';
+// W14-C3：平板双栏布局
+import {
+  Breakpoint,
+  FoldStatus,
+  STORAGE_KEY_BREAKPOINT,
+  STORAGE_KEY_FOLD_STATUS,
+} from '../theme/Breakpoints';
+import { DiscoverTabletLayout } from './tablet/DiscoverTabletLayout';
 
 @Component
 export struct Discover {
   @State recommended: BookSummary[] = [];
   @State loading: boolean = false;
   @State errMsg: string = '';
+  @StorageProp(STORAGE_KEY_BREAKPOINT) currentBp: Breakpoint = Breakpoint.MD;
+  @StorageProp(STORAGE_KEY_FOLD_STATUS) foldStatus: FoldStatus = FoldStatus.UNKNOWN;
+
+  private isTabletLayout(): boolean {
+    if (this.currentBp === Breakpoint.LG || this.currentBp === Breakpoint.XL) return true;
+    return this.foldStatus === FoldStatus.EXPAND;
+  }
 
   aboutToAppear(): void {
     this.load();
@@ -54,7 +69,8 @@ export struct Discover {
     })
   }
 
-  build() {
+  @Builder
+  mobileBuilder() {
     Scroll() {
       Column({ space: AppSpacing.lg }) {
         Text($r('app.string.discover_title'))
@@ -101,5 +117,13 @@ export struct Discover {
     .width('100%')
     .height('100%')
     .backgroundColor(AppColors.bgPrimary)
+  }
+
+  build() {
+    if (this.isTabletLayout()) {
+      DiscoverTabletLayout()
+    } else {
+      this.mobileBuilder()
+    }
   }
 }
