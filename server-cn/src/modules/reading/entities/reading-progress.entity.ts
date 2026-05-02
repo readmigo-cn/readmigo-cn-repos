@@ -12,14 +12,26 @@ export class ReadingProgressEntity {
   @Column({ length: 64 })
   bookId!: string;
 
-  @Column({ length: 128, nullable: true })
-  chapterId!: string | null;
+  @Column({ default: 0 })
+  currentChapterIndex!: number;
 
   @Column({ default: 0 })
-  position!: number;
+  currentParagraphIndex!: number;
+
+  @Column({ default: 0 })
+  scrollOffset!: number;
 
   @Column({ type: 'real', default: 0 })
-  percent!: number;
+  percentComplete!: number;
+
+  @Column({ nullable: true })
+  lastReadAt!: Date | null;
+
+  @Column({ default: 0 })
+  totalReadMinutes!: number;
+
+  @Column({ default: 0 })
+  sessionsCount!: number;
 
   @UpdateDateColumn()
   updatedAt!: Date;

@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
-export type ShelfStatus = 'want' | 'reading' | 'finished';
+export type ShelfStatus = 'want-to-read' | 'reading' | 'finished';
 
 @Entity('bookshelf_items')
 @Index(['userId', 'bookId'], { unique: true })
@@ -14,9 +14,18 @@ export class BookshelfItemEntity {
   @Column({ length: 64 })
   bookId!: string;
 
-  @Column({ length: 16, default: 'reading' })
+  @Column({ length: 16, default: 'want-to-read' })
   status!: ShelfStatus;
 
   @CreateDateColumn()
   addedAt!: Date;
+
+  @Column({ nullable: true })
+  finishedAt!: Date | null;
+
+  @Column({ nullable: true })
+  lastReadAt!: Date | null;
+
+  @Column({ default: false })
+  isFavorite!: boolean;
 }
