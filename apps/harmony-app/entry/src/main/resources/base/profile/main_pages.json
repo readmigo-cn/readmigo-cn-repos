@@ -1,5 +1,14 @@
 {
   "src": [
-    "pages/Index"
+    "pages/Index",
+    "pages/Onboarding",
+    "pages/Login",
+    "pages/Discover",
+    "pages/Library",
+    "pages/Reader",
+    "pages/Notes",
+    "pages/Me",
+    "pages/AudiobookTab",
+    "pages/AudiobookPlayer"
   ]
 }

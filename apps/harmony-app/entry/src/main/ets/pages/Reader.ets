@@ -1,9 +1,10 @@
 import { AppColors } from '../theme/AppColors';
 import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing } from '../theme/AppSpacing';
+import { AppSpacing, AppRadius } from '../theme/AppSpacing';
 import { ReaderRouteParams } from '../router/RouteConstants';
 import { RouterService } from '../router/RouterService';
-import { SettingsStore } from '../store/SettingsStore';
+import { SettingsStore, ReaderTheme } from '../store/SettingsStore';
+import { ReadingStore, ReadingProgress as LocalProgress } from '../store/ReadingStore';
 import {
   TypesettingEngine,
   TypesetPage,
@@ -11,39 +12,89 @@ import {
   createTypesettingEngine,
 } from '../native/typesetting';
 import { WordExplainSheet, WordExplainContext } from '../components/WordExplainSheet';
+import { BooksApi } from '../service/api/BooksApi';
+import { ReadingApi } from '../service/api/ReadingApi';
+import { NotesApi, NoteRecord } from '../service/api/NotesApi';
+import { Chapter, ChapterContent } from '../model/Chapter';
+import { Highlight, HighlightColor } from '../model/Highlight';
+import { ReadingProgressDto } from '../model/ReadingProgress';
+import promptAction from '@ohos.promptAction';
 
-const SAMPLE_HTML = `
-<h1>Chapter 1 — The Beginning</h1>
+const FALLBACK_HTML = `
+<h1>Chapter 1 — Sample</h1>
 <p>It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.</p>
 <p>However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered the rightful property of some one or other of their daughters.</p>
-<p>"My dear Mr. Bennet," said his lady to him one day, "have you heard that Netherfield Park is let at last?"</p>
-<p>Mr. Bennet replied that he had not.</p>
-<p>"But it is," returned she; "for Mrs. Long has just been here, and she told me all about it."</p>
-<p>Mr. Bennet made no answer.</p>
-<p>"Do not you want to know who has taken it?" cried his wife impatiently.</p>
-<p>"You want to tell me, and I have no objection to hearing it."</p>
-<p>This was invitation enough.</p>
 `.trim();
+
+interface ThemeColors {
+  bg: string;
+  text: string;
+  secondary: string;
+}
+
+const THEME_MAP: Record<ReaderTheme, ThemeColors> = {
+  day:   { bg: '#FBF7EE', text: '#1A1A1A', secondary: '#666666' },
+  night: { bg: '#1A1A1A', text: '#E5E5E5', secondary: '#A0A0A0' },
+  paper: { bg: '#F4ECD8', text: '#3B2F1E', secondary: '#7A6A52' },
+};
+
+const HIGHLIGHT_COLORS: HighlightColor[] = ['yellow', 'green', 'blue', 'pink', 'orange'];
+const HIGHLIGHT_HEX: Record<HighlightColor, string> = {
+  yellow: '#FFF59D', green: '#C8E6C9', blue: '#BBDEFB', pink: '#F8BBD0', orange: '#FFE0B2',
+};
 
 @Component
 export struct Reader {
   @Prop params: ReaderRouteParams;
+
+  // ---- chapter state ------------------------------------------------------
+  @State chapters: Chapter[] = [];
+  @State chapterIndex: number = 0;
+  @State chapterTitle: string = '';
+  @State chapterHtml: string = FALLBACK_HTML;
+  @State chapterCss: string = '';
   @State pageIndex: number = 0;
   @State pageCount: number = 0;
   @State currentPage: TypesetPage | null = null;
+
+  // ---- reader settings ----------------------------------------------------
   @State fontSize: number = SettingsStore.getReaderFontSize();
+  @State lineHeight: number = 1.6;
+  @State theme: ReaderTheme = SettingsStore.getReaderTheme();
+  @State fontFamily: string = 'HarmonyOS Sans';
+
+  // ---- UI state -----------------------------------------------------------
+  @State toolbarVisible: boolean = false;
+  @State showSettings: boolean = false;
+  @State showToc: boolean = false;
+  @State showNotes: boolean = false;
+  @State loading: boolean = true;
+  @State errMsg: string = '';
+
+  // ---- highlights / notes -------------------------------------------------
+  @State highlights: Highlight[] = [];
+  @State notes: NoteRecord[] = [];
+
+  // ---- explain card -------------------------------------------------------
   @State explainCtx: WordExplainContext = {
     word: '', contextSentence: '', bookId: '', chapterId: '',
     blockIndex: 0, charOffset: 0, charLength: 0,
   };
 
+  // ---- engine + canvas ----------------------------------------------------
   private engine: TypesettingEngine | null = null;
-  private chapterId: string = 'chapter-1';
   private bookId: string = 'demo';
+  private bookSlug: string = '';
+  private chapterId: string = 'chapter-1';
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
   private pageWidth: number = 360;
-  private pageHeight: number = 640;
+  private pageHeight: number = 600;
+
+  // ---- session / progress -------------------------------------------------
+  private sessionId: string | null = null;
+  private sessionStartedAt: number = 0;
+  private pagesReadInSession: number = 0;
 
   private explainController: CustomDialogController = new CustomDialogController({
     builder: WordExplainSheet({ ctx: this.explainCtx }),
@@ -52,24 +103,155 @@ export struct Reader {
     autoCancel: true,
   });
 
+  // ---------- lifecycle ---------------------------------------------------
+
   aboutToAppear(): void {
     this.bookId = this.params?.bookId ?? 'demo';
+    this.bookSlug = (this.params as Record<string, string> | undefined)?.['slug'] ?? this.bookId;
     this.chapterId = this.params?.chapterId ?? 'chapter-1';
     this.engine = createTypesettingEngine();
-    const summary = this.engine.layoutHtml(
-      SAMPLE_HTML,
-      this.chapterId,
-      this.pageWidth,
-      this.pageHeight,
-      this.fontSize,
-    );
-    this.pageCount = summary.pageCount;
-    this.loadPage(0);
+    this.engine.setLineHeight(this.lineHeight);
+    this.bootstrap();
   }
 
   aboutToDisappear(): void {
+    this.persistProgress();
+    this.endSessionFireAndForget();
     this.engine?.destroy();
     this.engine = null;
+  }
+
+  onPageShow(): void {
+    this.startSessionFireAndForget();
+  }
+
+  onPageHide(): void {
+    this.persistProgress();
+    this.endSessionFireAndForget();
+  }
+
+  // ---------- bootstrap ---------------------------------------------------
+
+  private async bootstrap(): Promise<void> {
+    this.loading = true;
+    this.errMsg = '';
+    try {
+      // 并行：章节列表 / 进度 / 高亮
+      const tasks: [Promise<Chapter[]>, Promise<ReadingProgressDto | null>, Promise<Highlight[]>] = [
+        this.loadChapterList(),
+        this.loadProgress(),
+        this.loadHighlights(),
+      ];
+      const [chapters, progress, hl] = await Promise.all(tasks);
+      this.chapters = chapters;
+      this.highlights = hl;
+      const startChapter = progress?.chapterIndex ?? 0;
+      this.chapterIndex = Math.max(0, Math.min(chapters.length - 1, startChapter));
+      await this.loadChapter(this.chapterIndex, progress?.pageIndex ?? 0);
+      this.startSessionFireAndForget();
+    } catch (err) {
+      this.errMsg = (err as Error).message ?? '加载失败';
+      // 排版引擎兜底
+      this.fallbackLocalRender();
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  private async loadChapterList(): Promise<Chapter[]> {
+    try {
+      return await BooksApi.getChapters(this.bookSlug);
+    } catch (_e) {
+      return [{ id: this.chapterId, index: 0, title: 'Chapter 1' }];
+    }
+  }
+
+  private async loadProgress(): Promise<ReadingProgressDto | null> {
+    try {
+      return await ReadingApi.getProgress(this.bookId);
+    } catch (_e) {
+      return null;
+    }
+  }
+
+  private async loadHighlights(): Promise<Highlight[]> {
+    try {
+      return await ReadingApi.listHighlights(this.bookId);
+    } catch (_e) {
+      return [];
+    }
+  }
+
+  private async loadChapter(index: number, startPage: number = 0): Promise<void> {
+    if (!this.engine) return;
+    if (index < 0 || index >= this.chapters.length) return;
+    this.chapterIndex = index;
+    const ch = this.chapters[index];
+    this.chapterTitle = ch?.title ?? `Chapter ${index + 1}`;
+    this.chapterId = ch?.id ?? `chapter-${index + 1}`;
+    let content: ChapterContent | null = null;
+    try {
+      content = await BooksApi.getChapterContent(this.bookSlug, index);
+    } catch (_e) {
+      content = null;
+    }
+    this.chapterHtml = content?.html ?? FALLBACK_HTML;
+    this.chapterCss = content?.css ?? '';
+    await this.relayoutAndRender(startPage);
+    this.notes = await this.loadNotesForChapter();
+  }
+
+  private async loadNotesForChapter(): Promise<NoteRecord[]> {
+    try {
+      return await NotesApi.listByBook(this.bookId);
+    } catch (_e) {
+      return [];
+    }
+  }
+
+  /**
+   * Relayout 流程（layout cache 持有方）：
+   *  - TypesettingEngine 内部维护 chapterId → LayoutResult LRU（C++ 5 章 / mock unbounded）
+   *  - relayout 触发条件：fontSize / pageWidth / pageHeight / lineHeight 变化，或换章
+   *  - relayoutAndRender 是 ArkUI 侧的入口，外部状态变化（如 onAreaChange）调用此处
+   */
+  private async relayoutAndRender(startPage: number = 0): Promise<void> {
+    if (!this.engine) return;
+    try {
+      this.engine.setFontSize(this.fontSize);
+      this.engine.setLineHeight(this.lineHeight);
+      this.engine.setLayoutProfile({
+        pageWidth: this.pageWidth,
+        pageHeight: this.pageHeight,
+        fontSize: this.fontSize,
+        lineHeight: this.lineHeight,
+      });
+      const summary = this.engine.layoutHtml(
+        this.chapterHtml + (this.chapterCss ? `\n<style>${this.chapterCss}</style>` : ''),
+        this.chapterId,
+        this.pageWidth,
+        this.pageHeight,
+        this.fontSize,
+      );
+      this.pageCount = summary.pageCount;
+      const target = Math.max(0, Math.min(this.pageCount - 1, startPage));
+      this.loadPage(target);
+    } catch (e) {
+      this.errMsg = (e as Error).message ?? '排版失败';
+      this.fallbackLocalRender();
+    }
+  }
+
+  /** Engine 崩溃 / 网络失败时的兜底渲染，画一段简单提示文字。 */
+  private fallbackLocalRender(): void {
+    const ctx = this.context;
+    const colors = THEME_MAP[this.theme];
+    ctx.fillStyle = colors.bg;
+    ctx.fillRect(0, 0, this.pageWidth, this.pageHeight);
+    ctx.fillStyle = colors.text;
+    ctx.font = `${this.fontSize}px ${this.fontFamily}`;
+    const msg = this.errMsg || '正在加载...';
+    ctx.fillText(msg, 24, 80);
   }
 
   private loadPage(index: number): void {
@@ -77,59 +259,112 @@ export struct Reader {
     if (index < 0 || index >= this.pageCount) return;
     this.pageIndex = index;
     this.currentPage = this.engine.getPage(this.chapterId, index);
+    this.pagesReadInSession += 1;
     this.draw();
+    this.persistProgressDebounced();
   }
+
+  private nextPage(): void {
+    if (this.pageIndex + 1 < this.pageCount) {
+      this.loadPage(this.pageIndex + 1);
+    } else if (this.chapterIndex + 1 < this.chapters.length) {
+      this.loadChapter(this.chapterIndex + 1, 0);
+    } else {
+      promptAction.showToast({ message: '已到最后一章' });
+    }
+  }
+
+  private prevPage(): void {
+    if (this.pageIndex > 0) {
+      this.loadPage(this.pageIndex - 1);
+    } else if (this.chapterIndex > 0) {
+      this.loadChapter(this.chapterIndex - 1, 0);
+    } else {
+      promptAction.showToast({ message: '已是第一章' });
+    }
+  }
+
+  // ---------- rendering ---------------------------------------------------
 
   private draw(): void {
     const ctx = this.context;
     const page = this.currentPage;
-    ctx.fillStyle = AppColors.bgReader;
+    const colors = THEME_MAP[this.theme];
+    ctx.fillStyle = colors.bg;
     ctx.fillRect(0, 0, this.pageWidth, this.pageHeight);
     if (!page) return;
-    ctx.fillStyle = AppColors.textPrimary;
+
+    // Highlights underlay —— 在文字之前画
+    for (const hl of this.highlights) {
+      this.drawHighlight(ctx, hl, page);
+    }
+
+    ctx.fillStyle = colors.text;
     for (const line of page.lines) {
       for (const run of line.runs) {
-        ctx.font = `${run.fontSize}px HarmonyOS Sans`;
+        ctx.font = `${run.fontSize}px ${this.fontFamily}`;
         ctx.fillText(run.text, run.x, run.y);
       }
     }
   }
 
-  private adjustFontSize(delta: number): void {
-    const next = Math.max(12, Math.min(28, this.fontSize + delta));
-    if (next === this.fontSize) return;
-    this.fontSize = next;
-    SettingsStore.setReaderFontSize(next);
-    if (this.engine) {
-      const summary = this.engine.layoutHtml(SAMPLE_HTML, this.chapterId, this.pageWidth, this.pageHeight, next);
-      this.pageCount = summary.pageCount;
-      this.loadPage(Math.min(this.pageIndex, this.pageCount - 1));
-    }
-  }
-
-  private extractContextSentence(blockIndex: number, charOffset: number): string {
-    if (!this.currentPage) return '';
-    const parts: string[] = [];
-    for (const line of this.currentPage.lines) {
+  private drawHighlight(ctx: CanvasRenderingContext2D, hl: Highlight, page: TypesetPage): void {
+    if (hl.chapterId && hl.chapterId !== this.chapterId) return;
+    ctx.fillStyle = HIGHLIGHT_HEX[hl.color] ?? HIGHLIGHT_HEX.yellow;
+    for (const line of page.lines) {
       for (const run of line.runs) {
-        if (run.blockIndex === blockIndex) parts.push(run.text);
+        if (run.blockIndex !== hl.blockIndex) continue;
+        const runStart = run.charOffset;
+        const runEnd = run.charOffset + run.charLength;
+        const hlStart = hl.charOffset;
+        const hlEnd = hl.charOffset + hl.charLength;
+        const overlapStart = Math.max(runStart, hlStart);
+        const overlapEnd = Math.min(runEnd, hlEnd);
+        if (overlapEnd <= overlapStart) continue;
+        const ratio = run.w / Math.max(1, run.charLength);
+        const x = run.x + (overlapStart - runStart) * ratio;
+        const w = (overlapEnd - overlapStart) * ratio;
+        ctx.fillRect(x, run.y - line.ascent, w, line.h);
       }
     }
-    const fullBlock = parts.join(' ');
-    const sentEnd = fullBlock.indexOf('.', charOffset);
-    const sentStart = Math.max(0, fullBlock.lastIndexOf('.', charOffset - 1));
-    const slice = fullBlock.slice(sentStart === 0 ? 0 : sentStart + 1, sentEnd === -1 ? fullBlock.length : sentEnd + 1);
-    return slice.trim() || fullBlock.slice(0, 200);
   }
 
+  // ---------- gestures ----------------------------------------------------
+
   private onTap(event: ClickEvent): void {
-    if (!this.engine) return;
     const x = event.localX;
     const y = event.localY;
+    const w = this.pageWidth;
+    if (x < w * 0.3) {
+      this.prevPage();
+      return;
+    }
+    if (x > w * 0.7) {
+      this.nextPage();
+      return;
+    }
+    this.toolbarVisible = !this.toolbarVisible;
+  }
+
+  private onLongPress(event: GestureEvent): void {
+    if (!this.engine) return;
+    const fingers = event.fingerList;
+    if (!fingers || fingers.length === 0) return;
+    const finger = fingers[0];
+    if (!finger) return;
+    const x = finger.localX;
+    const y = finger.localY;
     const hit: HitResult | null = this.engine.hitTest(this.chapterId, this.pageIndex, x, y);
     if (!hit || !hit.text) return;
-    // hitTest 已返回精确 word + 字符位置（C++ / Mock 同实现）
-    if (!/[A-Za-z]/.test(hit.text)) return;
+    if (!/[A-Za-z]/.test(hit.text)) {
+      // 非英文：触发选句模式
+      this.tryHighlightSentence(hit);
+      return;
+    }
+    this.openExplainCard(hit);
+  }
+
+  private openExplainCard(hit: HitResult): void {
     this.explainCtx = {
       word: hit.text,
       contextSentence: this.extractContextSentence(hit.blockIndex, hit.charOffset),
@@ -148,63 +383,409 @@ export struct Reader {
     this.explainController.open();
   }
 
-  build() {
-    NavDestination() {
-      Column() {
-        Row({ space: AppSpacing.sm }) {
-          Text('< 返回')
-            .fontSize(AppFontSize.sm)
-            .fontColor(AppColors.brand)
-            .onClick(() => RouterService.pop())
-          Blank()
-          Text(`A-`)
-            .fontSize(AppFontSize.md)
-            .fontColor(AppColors.textPrimary)
-            .padding(AppSpacing.xs)
-            .onClick(() => this.adjustFontSize(-1))
-          Text(`A+`)
-            .fontSize(AppFontSize.md)
-            .fontColor(AppColors.textPrimary)
-            .padding(AppSpacing.xs)
-            .onClick(() => this.adjustFontSize(1))
-        }
-        .width('100%')
-        .padding({ left: AppSpacing.base, right: AppSpacing.base, top: AppSpacing.sm, bottom: AppSpacing.sm })
-        .backgroundColor(AppColors.bgReader)
+  private async tryHighlightSentence(hit: HitResult): Promise<void> {
+    if (!this.engine) return;
+    const sentence = this.engine.findSentenceAt(this.pageIndex, 0, 0) ?? hit;
+    try {
+      const created = await ReadingApi.createHighlight({
+        bookId: this.bookId,
+        chapterId: this.chapterId,
+        chapterIndex: this.chapterIndex,
+        blockIndex: sentence.blockIndex,
+        charOffset: sentence.charOffset,
+        charLength: sentence.charLength,
+        text: sentence.text,
+        color: 'yellow',
+      });
+      this.highlights = [...this.highlights, created];
+      this.draw();
+      promptAction.showToast({ message: '已添加划线' });
+    } catch (_e) {
+      promptAction.showToast({ message: '划线保存失败' });
+    }
+  }
 
-        Stack() {
-          Canvas(this.context)
-            .width(this.pageWidth)
-            .height(this.pageHeight)
-            .backgroundColor(AppColors.bgReader)
-            .onReady(() => this.draw())
-            .onClick((e: ClickEvent) => this.onTap(e))
-            .gesture(
-              PanGesture({ direction: PanDirection.Horizontal })
-                .onActionEnd((e: GestureEvent) => {
-                  const dx = e.offsetX;
-                  if (dx < -50) this.loadPage(this.pageIndex + 1);
-                  else if (dx > 50) this.loadPage(this.pageIndex - 1);
-                }),
-            )
+  private extractContextSentence(blockIndex: number, charOffset: number): string {
+    if (!this.currentPage) return '';
+    const parts: string[] = [];
+    for (const line of this.currentPage.lines) {
+      for (const run of line.runs) {
+        if (run.blockIndex === blockIndex) parts.push(run.text);
+      }
+    }
+    const fullBlock = parts.join(' ');
+    const sentEnd = fullBlock.indexOf('.', charOffset);
+    const sentStart = Math.max(0, fullBlock.lastIndexOf('.', charOffset - 1));
+    const slice = fullBlock.slice(sentStart === 0 ? 0 : sentStart + 1, sentEnd === -1 ? fullBlock.length : sentEnd + 1);
+    return slice.trim() || fullBlock.slice(0, 200);
+  }
+
+  // ---------- settings actions --------------------------------------------
+
+  private adjustFontSize(delta: number): void {
+    const next = Math.max(12, Math.min(28, this.fontSize + delta));
+    if (next === this.fontSize) return;
+    this.fontSize = next;
+    SettingsStore.setReaderFontSize(next);
+    this.relayoutAndRender(this.pageIndex);
+  }
+
+  private adjustLineHeight(delta: number): void {
+    const next = Math.max(1.0, Math.min(2.4, this.lineHeight + delta));
+    if (Math.abs(next - this.lineHeight) < 1e-3) return;
+    this.lineHeight = next;
+    this.relayoutAndRender(this.pageIndex);
+  }
+
+  private setTheme(t: ReaderTheme): void {
+    this.theme = t;
+    SettingsStore.setReaderTheme(t);
+    this.engine?.setTheme(t === 'paper' ? 'sepia' : t);
+    this.draw();
+  }
+
+  private setFontFamily(name: string): void {
+    this.fontFamily = name;
+    this.draw();
+  }
+
+  // ---------- progress / session -----------------------------------------
+
+  private progressDebounceTimer: number | null = null;
+  private persistProgressDebounced(): void {
+    if (this.progressDebounceTimer !== null) return;
+    this.progressDebounceTimer = setTimeout(() => {
+      this.progressDebounceTimer = null;
+      this.persistProgress();
+    }, 800);
+  }
+
+  private persistProgress(): void {
+    const percent = this.pageCount > 0
+      ? ((this.pageIndex + 1) / this.pageCount) * 100
+      : 0;
+    const local: LocalProgress = {
+      bookId: this.bookId,
+      chapterId: this.chapterId,
+      position: this.pageIndex,
+      percent,
+      updatedAt: Date.now(),
+    };
+    ReadingStore.setLastProgress(local);
+    ReadingStore.setCurrentBook(this.bookId);
+
+    const dto: ReadingProgressDto = {
+      bookId: this.bookId,
+      chapterIndex: this.chapterIndex,
+      pageIndex: this.pageIndex,
+      percent,
+    };
+    ReadingApi.updateProgress(this.bookId, dto).catch(() => {});
+  }
+
+  private startSessionFireAndForget(): void {
+    if (this.sessionId) return;
+    this.sessionStartedAt = Date.now();
+    this.pagesReadInSession = 0;
+    ReadingApi.startSession(this.bookId).then((resp) => {
+      this.sessionId = resp.sessionId;
+    }).catch(() => {
+      this.sessionId = null;
+    });
+  }
+
+  private endSessionFireAndForget(): void {
+    const id = this.sessionId;
+    if (!id) return;
+    this.sessionId = null;
+    const duration = Math.max(0, Math.round((Date.now() - this.sessionStartedAt) / 1000));
+    ReadingApi.endSession(id, {
+      durationSeconds: duration,
+      pagesRead: this.pagesReadInSession,
+      chapterIndex: this.chapterIndex,
+    }).catch(() => {});
+  }
+
+  // ---------- TTS placeholder ---------------------------------------------
+
+  private startTts(): void {
+    promptAction.showToast({ message: 'Phase 2 接入 讯飞 TTS' });
+  }
+
+  // ---------- builders ----------------------------------------------------
+
+  @Builder
+  topBar() {
+    Row({ space: AppSpacing.sm }) {
+      Text('< 返回')
+        .fontSize(AppFontSize.sm)
+        .fontColor(THEME_MAP[this.theme].text)
+        .padding(AppSpacing.xs)
+        .onClick(() => RouterService.pop())
+      Column({ space: 2 }) {
+        Text(this.chapterTitle)
+          .fontSize(AppFontSize.sm)
+          .fontColor(THEME_MAP[this.theme].text)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+        Text(`${this.pageCount > 0 ? Math.round(((this.pageIndex + 1) / this.pageCount) * 100) : 0}%`)
+          .fontSize(AppFontSize.xs)
+          .fontColor(THEME_MAP[this.theme].secondary)
+      }
+      .layoutWeight(1)
+      .alignItems(HorizontalAlign.Center)
+      Text('⚙')
+        .fontSize(AppFontSize.lg)
+        .fontColor(THEME_MAP[this.theme].text)
+        .padding(AppSpacing.xs)
+        .onClick(() => { this.showSettings = !this.showSettings; })
+    }
+    .width('100%')
+    .padding({ left: AppSpacing.base, right: AppSpacing.base, top: AppSpacing.sm, bottom: AppSpacing.sm })
+    .backgroundColor(THEME_MAP[this.theme].bg)
+  }
+
+  @Builder
+  bottomBar() {
+    Row() {
+      this.bottomBtn('A-', () => this.adjustFontSize(-1))
+      this.bottomBtn('A+', () => this.adjustFontSize(1))
+      this.bottomBtn('☀', () => this.setTheme(this.theme === 'day' ? 'night' : 'day'))
+      this.bottomBtn('☰', () => { this.showToc = !this.showToc; })
+      this.bottomBtn('✎', () => { this.showNotes = !this.showNotes; })
+      this.bottomBtn('▶', () => this.startTts())
+    }
+    .width('100%')
+    .justifyContent(FlexAlign.SpaceAround)
+    .padding({ top: AppSpacing.sm, bottom: AppSpacing.sm })
+    .backgroundColor(THEME_MAP[this.theme].bg)
+  }
+
+  @Builder
+  bottomBtn(label: string, onTap: () => void) {
+    Text(label)
+      .fontSize(AppFontSize.md)
+      .fontColor(THEME_MAP[this.theme].text)
+      .padding(AppSpacing.sm)
+      .onClick(onTap)
+  }
+
+  @Builder
+  settingsDrawer() {
+    Column({ space: AppSpacing.base }) {
+      Text('阅读设置').fontSize(AppFontSize.md).fontWeight(AppFontWeight.bold).fontColor(AppColors.textPrimary)
+      // 字号
+      Row({ space: AppSpacing.sm }) {
+        Text('字号').fontSize(AppFontSize.sm).fontColor(AppColors.textSecondary).layoutWeight(1)
+        Button('A-').width(40).height(32).onClick(() => this.adjustFontSize(-1))
+        Text(`${this.fontSize}`).fontSize(AppFontSize.sm).width(40).textAlign(TextAlign.Center)
+        Button('A+').width(40).height(32).onClick(() => this.adjustFontSize(1))
+      }.width('100%')
+      // 行距
+      Row({ space: AppSpacing.sm }) {
+        Text('行距').fontSize(AppFontSize.sm).fontColor(AppColors.textSecondary).layoutWeight(1)
+        Button('-').width(40).height(32).onClick(() => this.adjustLineHeight(-0.1))
+        Text(this.lineHeight.toFixed(1)).fontSize(AppFontSize.sm).width(40).textAlign(TextAlign.Center)
+        Button('+').width(40).height(32).onClick(() => this.adjustLineHeight(0.1))
+      }.width('100%')
+      // 字体
+      Row({ space: AppSpacing.sm }) {
+        Text('字体').fontSize(AppFontSize.sm).fontColor(AppColors.textSecondary).layoutWeight(1)
+        Text('系统').fontSize(AppFontSize.sm)
+          .fontColor(this.fontFamily === 'HarmonyOS Sans' ? AppColors.brand : AppColors.textTertiary)
+          .padding(AppSpacing.xs)
+          .onClick(() => this.setFontFamily('HarmonyOS Sans'))
+        Text('阅读').fontSize(AppFontSize.sm)
+          .fontColor(this.fontFamily === 'HarmonyOS Reading' ? AppColors.brand : AppColors.textTertiary)
+          .padding(AppSpacing.xs)
+          .onClick(() => this.setFontFamily('HarmonyOS Reading'))
+      }.width('100%')
+      // 主题
+      Row({ space: AppSpacing.sm }) {
+        Text('主题').fontSize(AppFontSize.sm).fontColor(AppColors.textSecondary).layoutWeight(1)
+        ForEach(['day', 'paper', 'night'] as ReaderTheme[], (t: ReaderTheme) => {
+          Text(t === 'day' ? '日' : t === 'paper' ? '羊皮' : '夜')
+            .fontSize(AppFontSize.sm)
+            .fontColor(this.theme === t ? AppColors.brand : AppColors.textTertiary)
+            .padding(AppSpacing.xs)
+            .border({
+              width: this.theme === t ? 1 : 0,
+              color: AppColors.brand,
+              radius: AppRadius.sm,
+            })
+            .onClick(() => this.setTheme(t))
+        })
+      }.width('100%')
+
+      Button('关闭').width('100%').height(40)
+        .backgroundColor(AppColors.bgSecondary)
+        .fontColor(AppColors.textPrimary)
+        .borderRadius(AppRadius.base)
+        .onClick(() => { this.showSettings = false; })
+    }
+    .padding(AppSpacing.lg)
+    .backgroundColor(AppColors.bgPrimary)
+    .borderRadius({ topLeft: AppRadius.xl, topRight: AppRadius.xl })
+    .width('100%')
+  }
+
+  @Builder
+  tocDrawer() {
+    Column({ space: AppSpacing.sm }) {
+      Text('目录').fontSize(AppFontSize.md).fontWeight(AppFontWeight.bold).fontColor(AppColors.textPrimary)
+        .padding(AppSpacing.base)
+      List({ space: AppSpacing.xs }) {
+        ForEach(this.chapters, (ch: Chapter) => {
+          ListItem() {
+            Row() {
+              Text(ch.title)
+                .fontSize(AppFontSize.sm)
+                .fontColor(this.chapterIndex === ch.index ? AppColors.brand : AppColors.textPrimary)
+                .layoutWeight(1)
+                .maxLines(2)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+              if (this.chapterIndex === ch.index) {
+                Text('●').fontSize(AppFontSize.xs).fontColor(AppColors.brand)
+              }
+            }
+            .width('100%')
+            .padding(AppSpacing.sm)
+            .onClick(() => {
+              this.showToc = false;
+              this.loadChapter(ch.index, 0);
+            })
+          }
+        })
+      }
+      .layoutWeight(1)
+      .divider({ strokeWidth: 1, color: AppColors.divider })
+    }
+    .height('80%')
+    .width('100%')
+    .backgroundColor(AppColors.bgPrimary)
+    .borderRadius({ topLeft: AppRadius.xl, topRight: AppRadius.xl })
+  }
+
+  @Builder
+  notesDrawer() {
+    Column({ space: AppSpacing.sm }) {
+      Text(`笔记 (${this.notes.length})`).fontSize(AppFontSize.md).fontWeight(AppFontWeight.bold)
+        .fontColor(AppColors.textPrimary).padding(AppSpacing.base)
+      if (this.notes.length === 0) {
+        Text('还没有笔记').fontSize(AppFontSize.sm).fontColor(AppColors.textTertiary)
+          .padding(AppSpacing.lg)
+      } else {
+        List({ space: AppSpacing.xs }) {
+          ForEach(this.notes, (n: NoteRecord) => {
+            ListItem() {
+              Column({ space: AppSpacing.xs }) {
+                Text(n.originalText).fontSize(AppFontSize.sm).fontWeight(AppFontWeight.medium)
+                  .fontColor(AppColors.textPrimary)
+                if (n.noteText) {
+                  Text(n.noteText).fontSize(AppFontSize.xs).fontColor(AppColors.textSecondary).maxLines(3)
+                }
+              }
+              .alignItems(HorizontalAlign.Start)
+              .width('100%')
+              .padding(AppSpacing.sm)
+            }
+          })
         }
         .layoutWeight(1)
-        .alignContent(Alignment.Center)
-        .backgroundColor(AppColors.bgReader)
-
-        Row() {
-          Text(`${this.pageIndex + 1} / ${this.pageCount}`)
-            .fontSize(AppFontSize.sm)
-            .fontColor(AppColors.textSecondary)
-        }
-        .width('100%')
-        .justifyContent(FlexAlign.Center)
-        .padding(AppSpacing.sm)
-        .backgroundColor(AppColors.bgReader)
+        .divider({ strokeWidth: 1, color: AppColors.divider })
       }
-      .width('100%')
-      .height('100%')
-      .backgroundColor(AppColors.bgReader)
+      Button('关闭').width('90%').height(40)
+        .backgroundColor(AppColors.bgSecondary)
+        .fontColor(AppColors.textPrimary)
+        .borderRadius(AppRadius.base)
+        .onClick(() => { this.showNotes = false; })
+        .margin({ bottom: AppSpacing.base })
+    }
+    .height('70%')
+    .width('100%')
+    .backgroundColor(AppColors.bgPrimary)
+    .borderRadius({ topLeft: AppRadius.xl, topRight: AppRadius.xl })
+  }
+
+  @Builder
+  loadingOverlay() {
+    Column() {
+      LoadingProgress().width(40).height(40).color(AppColors.brand)
+      Text('加载中...').fontSize(AppFontSize.sm).fontColor(AppColors.textSecondary)
+        .margin({ top: AppSpacing.sm })
+    }
+    .width('100%').height('100%')
+    .justifyContent(FlexAlign.Center)
+    .backgroundColor(THEME_MAP[this.theme].bg)
+  }
+
+  @Builder
+  errorView() {
+    Column({ space: AppSpacing.base }) {
+      Text('加载失败').fontSize(AppFontSize.md).fontColor(AppColors.danger)
+      Text(this.errMsg).fontSize(AppFontSize.sm).fontColor(AppColors.textTertiary)
+      Button('重试').onClick(() => this.bootstrap())
+        .backgroundColor(AppColors.brand)
+        .fontColor(AppColors.textInverse)
+        .borderRadius(AppRadius.base)
+    }
+    .width('100%').height('100%')
+    .justifyContent(FlexAlign.Center)
+  }
+
+  build() {
+    NavDestination() {
+      Stack({ alignContent: Alignment.Bottom }) {
+        Column() {
+          if (this.toolbarVisible) { this.topBar() }
+
+          Stack() {
+            Canvas(this.context)
+              .width(this.pageWidth)
+              .height(this.pageHeight)
+              .backgroundColor(THEME_MAP[this.theme].bg)
+              .onReady(() => this.draw())
+              .onAreaChange((_old, newArea) => {
+                const w = Number(newArea.width);
+                const h = Number(newArea.height);
+                if (w > 0 && h > 0
+                  && (Math.abs(w - this.pageWidth) > 1 || Math.abs(h - this.pageHeight) > 1)) {
+                  this.pageWidth = w;
+                  this.pageHeight = h;
+                  this.relayoutAndRender(this.pageIndex);
+                }
+              })
+              .onClick((e: ClickEvent) => this.onTap(e))
+              .gesture(
+                GestureGroup(GestureMode.Exclusive,
+                  LongPressGesture({ repeat: false, duration: 400 })
+                    .onAction((e: GestureEvent) => this.onLongPress(e)),
+                  PanGesture({ direction: PanDirection.Horizontal })
+                    .onActionEnd((e: GestureEvent) => {
+                      const dx = e.offsetX;
+                      if (dx < -50) this.nextPage();
+                      else if (dx > 50) this.prevPage();
+                    }),
+                ),
+              )
+
+            if (this.loading) { this.loadingOverlay() }
+            if (this.errMsg && !this.loading) { this.errorView() }
+          }
+          .layoutWeight(1)
+          .alignContent(Alignment.Center)
+          .backgroundColor(THEME_MAP[this.theme].bg)
+
+          if (this.toolbarVisible) { this.bottomBar() }
+        }
+        .width('100%').height('100%')
+        .backgroundColor(THEME_MAP[this.theme].bg)
+
+        if (this.showSettings) { this.settingsDrawer() }
+        if (this.showToc) { this.tocDrawer() }
+        if (this.showNotes) { this.notesDrawer() }
+      }
+      .width('100%').height('100%')
     }
     .hideTitleBar(true)
   }

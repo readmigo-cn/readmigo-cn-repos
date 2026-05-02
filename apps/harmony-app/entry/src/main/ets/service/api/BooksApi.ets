@@ -1,5 +1,17 @@
 import { HttpClient } from '../HttpClient';
+import {
+  Book,
+  BookDetail,
+  BookFilters,
+  BookListResponse,
+  Rating,
+} from '../../model/Book';
+import { Chapter, ChapterContent } from '../../model/Chapter';
 
+/**
+ * BookSummary —— 旧 import 兼容（discover/library 旧调用点用）。
+ * 新代码统一用 model/Book.ets 中的 Book interface。
+ */
 export interface BookSummary {
   id: string;
   title: string;
@@ -9,22 +21,89 @@ export interface BookSummary {
   cefrLevel?: string;
 }
 
-export interface BookDetail extends BookSummary {
-  description: string;
-  totalChapters: number;
-  source: string;
-}
-
+/**
+ * Books API client. 与 server-cn 路由对齐：
+ *   GET    /api/v1/books?page=&limit=&language=&cefrLevel=&category=&search=&sortBy=
+ *   GET    /api/v1/books/:slug
+ *   GET    /api/v1/books/:slug/chapters
+ *   GET    /api/v1/books/:slug/chapters/:index
+ *   GET    /api/v1/books/recommend
+ *   POST   /api/v1/books/:id/rate
+ *   GET    /api/v1/books/:id/ratings
+ */
 export class BooksApi {
-  static list(page: number = 1, pageSize: number = 20): Promise<BookSummary[]> {
-    return HttpClient.get<BookSummary[]>('/books', { page, pageSize });
+  /** 列表（分页 + 多维筛选）。 */
+  static listBooks(filters: BookFilters = {}): Promise<BookListResponse> {
+    const query: Record<string, string | number> = {};
+    if (filters.page !== undefined) query.page = filters.page;
+    if (filters.limit !== undefined) query.limit = filters.limit;
+    if (filters.language) query.language = filters.language;
+    if (filters.cefrLevel) query.cefrLevel = filters.cefrLevel;
+    if (filters.category) query.category = filters.category;
+    if (filters.search) query.search = filters.search;
+    if (filters.sortBy) query.sortBy = filters.sortBy;
+    return HttpClient.get<BookListResponse>('/api/v1/books', query);
   }
 
-  static get(id: string): Promise<BookDetail> {
-    return HttpClient.get<BookDetail>(`/books/${id}`);
+  /** 详情（slug）。 */
+  static getBookBySlug(slug: string): Promise<BookDetail> {
+    return HttpClient.get<BookDetail>(`/api/v1/books/${encodeURIComponent(slug)}`);
   }
 
-  static search(keyword: string): Promise<BookSummary[]> {
-    return HttpClient.get<BookSummary[]>('/books/search', { q: keyword });
+  /** 章节目录。 */
+  static getChapters(slug: string): Promise<Chapter[]> {
+    return HttpClient.get<Chapter[]>(`/api/v1/books/${encodeURIComponent(slug)}/chapters`);
+  }
+
+  /** 章节内容（含 html + css）。 */
+  static getChapterContent(slug: string, index: number): Promise<ChapterContent> {
+    return HttpClient.get<ChapterContent>(
+      `/api/v1/books/${encodeURIComponent(slug)}/chapters/${index}`,
+    );
+  }
+
+  /** 模糊搜索。 */
+  static searchBooks(query: string, limit: number = 20): Promise<Book[]> {
+    return HttpClient.get<Book[]>('/api/v1/books', { search: query, limit });
+  }
+
+  /** 推荐（首页 / Library 空态用）。 */
+  static getRecommended(limit: number = 10): Promise<Book[]> {
+    return HttpClient.get<Book[]>('/api/v1/books/recommend', { limit });
+  }
+
+  /** 评分。 */
+  static rateBook(id: string, rating: number, comment?: string): Promise<void> {
+    const body: Record<string, string | number> = { rating };
+    if (comment) body.comment = comment;
+    return HttpClient.post<void>(`/api/v1/books/${encodeURIComponent(id)}/rate`, body);
+  }
+
+  /** 评分列表。 */
+  static getRatings(id: string): Promise<Rating[]> {
+    return HttpClient.get<Rating[]>(`/api/v1/books/${encodeURIComponent(id)}/ratings`);
+  }
+
+  // -------------------- Legacy alias（旧页面引用）----------------------------
+
+  /** Legacy: 旧 list 签名，返回扁平 Book[]，内部转 listBooks。 */
+  static async list(page: number = 1, pageSize: number = 20): Promise<BookSummary[]> {
+    const resp = await BooksApi.listBooks({ page, limit: pageSize });
+    return resp.items.map((b): BookSummary => ({
+      id: b.id,
+      title: b.title,
+      author: b.author,
+      coverUrl: b.coverUrl,
+      language: b.language,
+      cefrLevel: b.cefrLevel,
+    }));
+  }
+
+  static get(slug: string): Promise<BookDetail> {
+    return BooksApi.getBookBySlug(slug);
+  }
+
+  static search(keyword: string): Promise<Book[]> {
+    return BooksApi.searchBooks(keyword);
   }
 }
