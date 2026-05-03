@@ -10,6 +10,8 @@ import happyPathE2ETest from './e2e/HappyPath.test';
 import settingsFlowE2ETest from './e2e/SettingsFlow.test';
 import offlineModeE2ETest from './e2e/OfflineMode.test';
 import errorRecoveryE2ETest from './e2e/ErrorRecovery.test';
+// ── W20-C5 集成验收套件 ──
+import fullFlowE2ETest from './e2e/FullFlow.test';
 
 export default function testsuite() {
   exampleAbilityTest();
@@ -20,4 +22,5 @@ export default function testsuite() {
   settingsFlowE2ETest();
   offlineModeE2ETest();
   errorRecoveryE2ETest();
+  fullFlowE2ETest();
 }

@@ -33,6 +33,10 @@ import { CrashHandler } from '../service/monitoring/CrashHandler';
 import { HmsPushService } from '../service/push/HmsPushService';
 import { NotificationChannel } from '../service/push/NotificationChannel';
 import { RemoteConfig } from '../service/experiments/RemoteConfig';
+// W20-C3：性能监控 + 异步启动框架 + 内存守卫
+import { PerformanceMonitor } from '../service/performance/PerformanceMonitor';
+import { StartupOptimizer, TaskPriority } from '../service/performance/StartupOptimizer';
+import { MemoryGuard } from '../service/performance/MemoryGuard';
 
 const TAG = 'EntryAbility';
 
@@ -47,27 +51,83 @@ const SENTRY_ENV = 'production';
  * EntryAbility：app 进程入口。
  *
  * 责任：
- *   1) 启动期初始化：Preferences -> RDB -> 三个 Store 回灌 AppStorage
+ *   1) 启动期初始化：通过 StartupOptimizer 按优先级分级调度所有 init 任务
  *   2) 决定首页：first launch -> Onboarding；未登录 -> Login（W4 已在 Index.ets 内做二次保护）
  *   3) Deep link：从 cold-launch want.uri 提取，待 NavPathStack 就绪后跳转
  *   4) Lifecycle：onForeground / onBackground 触发 reading session 暂停/恢复
- *   5) onMemoryLevel：低内存时清运行时缓存（route history、recent books AppStorage 引用）
+ *   5) onMemoryLevel：委托 MemoryGuard 分级清理内存
+ *
+ * W20-C3 启动任务优先级分配：
+ *   CRITICAL（< 430ms 目标）：
+ *     prefs_db_init → stores_init → theme_init → first_launch_flag → deeplink_parse
+ *   HIGH（首屏后立即）：
+ *     crash_monitor_init（AGC/Sentry/CrashHandler） → sa_analytics_init → memory_guard_start
+ *   NORMAL（100ms 延迟，空闲期）：
+ *     font_register → sync_engine_init → device_manager → remote_config → hms_push → notification_channel
+ *   LOW（1000ms 延迟，懒加载）：
+ *     agc_crash_queue_flush → sa_queue_replay → distributed_clipboard_subscribe
  */
 export default class EntryAbility extends UIAbility {
   private pendingDeepLink: string = '';
   private isFirstLaunch: boolean = false;
 
   async onCreate(want: Want, _launchParam: AbilityConstant.LaunchParam): Promise<void> {
-    try {
+    // W20-C3：性能监控最先初始化，记录 app_start 起点
+    const monitor = PerformanceMonitor.getInstance();
+    monitor.init();
+
+    const optimizer = StartupOptimizer.getInstance();
+    // 保存 want 引用，供 CRITICAL 任务内访问
+    const capturedWant = want;
+
+    // ========== CRITICAL：首屏渲染前必须完成 ==========
+
+    // Preferences + RDB 必须最先，其它所有初始化依赖此二者
+    optimizer.registerTask('prefs_db_init', TaskPriority.CRITICAL, async () => {
       await PreferencesManager.init(this.context);
       await DatabaseManager.init(this.context);
+    });
 
-      // W18-C2 / C3：崩溃监控必须最早初始化，确保后续 init 异常也能被拦截
+    // 三个 Store 回灌 AppStorage（依赖 prefs_db_init，串行调度保证顺序）
+    optimizer.registerTask('stores_init', TaskPriority.CRITICAL, async () => {
+      await UserStore.init();
+      await ReadingStore.init();
+      await SettingsStore.init();
+    });
+
+    // 主题必须在 SettingsStore 之后，首帧渲染需要正确主题色
+    optimizer.registerTask('theme_init', TaskPriority.CRITICAL, () => {
+      ThemeService.init(this.context);
+    });
+
+    // 首次启动标记（影响首页路由决策）
+    optimizer.registerTask('first_launch_flag', TaskPriority.CRITICAL, async () => {
+      const seen = await PreferencesManager.getBool(StoreKeys.APP_FIRST_LAUNCH, false);
+      this.isFirstLaunch = !seen;
+      if (this.isFirstLaunch) {
+        await PreferencesManager.setBool(StoreKeys.APP_FIRST_LAUNCH, true);
+      }
+    });
+
+    // Deep link 解析（cold launch want.uri，首帧后 RouterService 消费）
+    optimizer.registerTask('deeplink_parse', TaskPriority.CRITICAL, () => {
+      if (capturedWant && capturedWant.uri) {
+        this.pendingDeepLink = capturedWant.uri;
+        AppStorage.SetOrCreate<string>(StoreKeys.APP_PENDING_DEEP_LINK, capturedWant.uri);
+      }
+    });
+
+    // ========== HIGH：首屏渲染后立即调度 ==========
+
+    // 崩溃监控必须早于业务代码执行（仅次于 CRITICAL，确保 CRITICAL 异常也能被拦截）
+    optimizer.registerTask('crash_monitor_init', TaskPriority.HIGH, () => {
       AgcCrashReporter.init(AGC_APP_ID);
       SentryClient.init(SENTRY_DSN, SENTRY_ENV);
       CrashHandler.init();
+    });
 
-      // W18-C1：神策埋点（HTTP 上报，独立于业务初始化失败）
+    // 神策埋点：CRITICAL 完成后立即初始化，确保后续用户行为不丢失
+    optimizer.registerTask('sa_analytics_init', TaskPriority.HIGH, async () => {
       const sa = SensorsAnalytics.getInstance();
       await sa.init(SA_SERVER_URL, SA_PROJECT_NAME);
       sa.registerSuperProperties({
@@ -76,13 +136,7 @@ export default class EntryAbility extends UIAbility {
         'app_channel': 'cn',
       });
       Analytics.register(sa);
-
-      // 三个 Store 顺序回灌（彼此独立，可并行；保持简单串行更易排错）
-      await UserStore.init();
-      await ReadingStore.init();
-      await SettingsStore.init();
-
-      // 已登录态 → 把 userId 关联到崩溃 + 埋点
+      // 已登录态 → 关联 userId 到崩溃监控 + 埋点
       if (UserStore.isAuthenticated()) {
         const profile = UserStore.getProfile();
         if (profile && profile.id) {
@@ -91,88 +145,90 @@ export default class EntryAbility extends UIAbility {
           Analytics.identify(profile.id);
         }
       }
+    });
 
-      // 上次启动若崩溃 → toast + 重发
-      CrashHandler.checkPendingCrashOnLaunch().catch(() => {});
+    // W20-C3：内存守卫启动（HIGH 级，尽早开始轮询）
+    optimizer.registerTask('memory_guard_start', TaskPriority.HIGH, () => {
+      MemoryGuard.getInstance().start();
+    });
 
-      // W5-C4 主题：必须在 SettingsStore 之后
-      ThemeService.init(this.context);
-      // W5-C5 字体：缺文件容错，不阻塞启动
-      FontRegistry.registerFonts(this.context).catch((err: Error) => {
-        console.warn(`${TAG} font registration failed: ${err.message}`);
-      });
+    // ========== NORMAL：100ms 延迟，空闲期执行 ==========
 
-      // W7-C6：恢复进度同步队列（崩溃续传）
-      ProgressSync.init().catch((err: Error) => {
-        console.warn(`${TAG} ProgressSync init failed: ${err.message}`);
-      });
+    // 字体注册：缺文件容错，不影响首屏文字渲染（系统字体兜底）
+    optimizer.registerTask('font_register', TaskPriority.NORMAL, async () => {
+      await FontRegistry.registerFonts(this.context);
+    });
 
-      // W13-C1：初始化分布式设备管理器（bundleName 必须与 module.json5 一致）
-      DeviceManager.init('cn.readmigo.app').catch((err: Error) => {
-        console.warn(`${TAG} DeviceManager init failed: ${err.message}`);
-      });
+    // W7-C6：进度同步队列恢复（崩溃续传，非首屏必需）
+    optimizer.registerTask('sync_engine_init', TaskPriority.NORMAL, async () => {
+      await ProgressSync.init();
+    });
 
-      // W13-C4：多端通知协调器（订阅跨端 broadcast，决定本机是否 publish）
-      MultiDeviceNotifier.init().catch((err: Error) => {
-        console.warn(`${TAG} MultiDeviceNotifier init failed: ${err.message}`);
-      });
+    // W13-C1：分布式设备管理器（bundleName 与 module.json5 一致）
+    optimizer.registerTask('device_manager_init', TaskPriority.NORMAL, async () => {
+      await DeviceManager.init('cn.readmigo.app');
+    });
 
-      // W18-C7：远程配置 + A/B 实验。先于 push 初始化，保证 push topic / channel 决策能拿到最新配置
-      RemoteConfig.init().catch((err: Error) => {
-        console.warn(`${TAG} RemoteConfig init failed: ${err.message}`);
-      });
+    // W18-C7：远程配置 + A/B 实验（先于 push，保证 push topic 决策用最新配置）
+    optimizer.registerTask('remote_config_init', TaskPriority.NORMAL, async () => {
+      await RemoteConfig.init();
+    });
 
-      // W18-C4：HMS Push Kit 初始化（拿 token + 订阅默认 topic）
-      HmsPushService.init()
-        .then(() => {
-          // 已登录态 → 立即上报 token 绑定 userId
-          if (UserStore.isAuthenticated()) {
-            const profile = UserStore.getProfile();
-            if (profile && profile.id) {
-              HmsPushService.reportToken(profile.id).catch(() => {});
-            }
-          }
-        })
-        .catch((err: Error) => {
-          console.warn(`${TAG} HmsPushService init failed: ${err.message}`);
-        });
+    // W18-C4：HMS Push Kit（远程配置之后）
+    optimizer.registerTask('hms_push_init', TaskPriority.NORMAL, async () => {
+      await HmsPushService.init();
+      // 已登录态 → 上报 token 绑定 userId
+      if (UserStore.isAuthenticated()) {
+        const profile = UserStore.getProfile();
+        if (profile && profile.id) {
+          HmsPushService.reportToken(profile.id).catch(() => {});
+        }
+      }
+    });
 
-      // W18-C5：通知通道（6 类）+ 落档到 NotificationCenter
-      NotificationChannel.init().catch((err: Error) => {
-        console.warn(`${TAG} NotificationChannel init failed: ${err.message}`);
-      });
+    // W18-C5：通知通道（6 类）
+    optimizer.registerTask('notification_channel_init', TaskPriority.NORMAL, async () => {
+      await NotificationChannel.init();
+    });
 
-      // W13-C2：监听 pasteboard 变化，收到其它设备的 vocab/highlight 时把 entry
-      // 写入 AppStorage，由当前活跃页（Reader / Vocab / Index）渲染 PasteFromOtherDeviceSheet
+    // W13-C4：多端通知协调器
+    optimizer.registerTask('multi_device_notifier_init', TaskPriority.NORMAL, async () => {
+      await MultiDeviceNotifier.init();
+    });
+
+    // ========== LOW：1000ms 延迟，懒加载 ==========
+
+    // AGC 崩溃队列 flush（上次崩溃补发，无时效性要求）
+    optimizer.registerTask('agc_crash_queue_flush', TaskPriority.LOW, async () => {
+      await CrashHandler.checkPendingCrashOnLaunch();
+    });
+
+    // 神策失败队列 replay（上次 flush 失败的事件重发）
+    optimizer.registerTask('sa_queue_replay', TaskPriority.LOW, async () => {
+      await Analytics.flush();
+    });
+
+    // W13-C2：跨端剪贴板订阅（用户操作触发，不影响启动）
+    optimizer.registerTask('distributed_clipboard_subscribe', TaskPriority.LOW, () => {
       DistributedClipboard.subscribeIncoming((entry: IncomingEntry) => {
         if (entry.kind === 'vocab' || entry.kind === 'highlight') {
           AppStorage.SetOrCreate<IncomingEntry>('paste_incoming_entry', entry);
           AppStorage.SetOrCreate<boolean>('paste_incoming_visible', true);
         }
       });
+    });
 
-      // 首次启动判定：APP_FIRST_LAUNCH 默认 true，初始化后写 false
-      const seen = await PreferencesManager.getBool(StoreKeys.APP_FIRST_LAUNCH, false);
-      this.isFirstLaunch = !seen;
-      if (this.isFirstLaunch) {
-        await PreferencesManager.setBool(StoreKeys.APP_FIRST_LAUNCH, true);
-      }
-
-      // Token 有效性检查（占位）：Phase 4 接入 /auth/refresh
-      // 当前策略：本地有 token 即认为已登录，HttpClient 401 时再走 UserStore.clear()
-      if (UserStore.isAuthenticated()) {
-        // TODO(Phase 4): try refresh-token if expired
-      }
-
-      // Cold launch deep link：want.uri 形如 readmigo://book/:slug
-      if (want && want.uri) {
-        this.pendingDeepLink = want.uri;
-        AppStorage.SetOrCreate<string>(StoreKeys.APP_PENDING_DEEP_LINK, want.uri);
-      }
+    // 执行所有已注册任务（CRITICAL 任务串行等待，其余异步调度）
+    try {
+      await optimizer.run();
     } catch (err) {
       const e = err as Error;
-      console.error(`${TAG} init failed: ${e.message}`);
+      console.error(`${TAG} startup optimizer failed: ${e.message}`);
     }
+
+    // CRITICAL 阶段完成后上报启动耗时到 W18 仪表板
+    monitor.markEnd('app_start');
+    monitor.reportToAnalytics();
   }
 
   /**
@@ -243,10 +299,13 @@ export default class EntryAbility extends UIAbility {
 
   /**
    * 系统内存压力回调。level 0=MODERATE 1=LOW 2=CRITICAL（依 SDK 文档）。
-   * 这里只清运行时引用，持久层不动。
+   * W20-C3：委托 MemoryGuard 执行分级清理策略。
+   * 保留 RouterService.clearHistory() 作为额外兜底。
    */
   onMemoryLevel(level: AbilityConstant.MemoryLevel): void {
     console.info(`${TAG} onMemoryLevel ${level}`);
+    // W20-C3：交由 MemoryGuard 执行排版缓存 / CacheManager / 图片 LRU 清理
+    MemoryGuard.getInstance().handleSystemMemoryLevel(level);
     if (level >= AbilityConstant.MemoryLevel.MEMORY_LEVEL_LOW) {
       RouterService.clearHistory();
     }

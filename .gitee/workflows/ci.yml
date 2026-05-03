@@ -163,6 +163,112 @@ jobs:
           echo "Planned for W2 — see comment in ci.yml for details."
           echo "Affected path: apps/harmony-app/entry/src/main/ets/**/*.ets"
 
+  # ── Hypium ohosTest: harmony-app ──────────────────────────────────────────
+  #
+  # W10-C7 — Phase 2 e2e 集成测试套件入口。
+  # Hypium 同样依赖 DevEco Studio CLI（hvigorw test）；当前 CI runner 无 SDK，
+  # 因此 job 只做「测试源代码语法 lint + 报告占位」，等 W12 自托管 runner 准备好
+  # 后改为真实运行：`hvigorw test --module entry --debug`。
+  ohos-test:
+    name: Hypium Test / harmony-app (placeholder)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify ohosTest sources are discoverable
+        run: |
+          set -eu
+          cd apps/harmony-app/entry/src/ohosTest/ets/test
+          # List 必须 import 全部 e2e 套件，否则 hvigorw test 会跳过。
+          required=(
+            "e2e/HappyPath.test.ets"
+            "e2e/SettingsFlow.test.ets"
+            "e2e/OfflineMode.test.ets"
+            "e2e/ErrorRecovery.test.ets"
+            "utils/MockSetup.ets"
+          )
+          for f in "${required[@]}"; do
+            if [[ ! -f "$f" ]]; then
+              echo "::error::missing test file: $f"
+              exit 1
+            fi
+          done
+          # 校验 List.test.ets 注册了所有 suite
+          for s in happyPathE2ETest settingsFlowE2ETest offlineModeE2ETest errorRecoveryE2ETest; do
+            grep -q "$s" List.test.ets || {
+              echo "::error::List.test.ets missing $s registration"
+              exit 1
+            }
+          done
+          echo "All e2e suites are registered."
+
+      - name: Run hvigorw test (skipped — SDK unavailable)
+        run: |
+          echo "::warning::Hypium tests not executed — DevEco Studio CLI not in CI runner."
+          echo "Planned in W12 once the OHOS-enabled self-hosted runner is online."
+          echo "Manual run on dev machine:"
+          echo "  cd apps/harmony-app && hvigorw test --module entry --debug"
+
+      - name: Coverage report (placeholder)
+        run: |
+          echo "::notice::Coverage report deferred to W12 (hypium 1.0.19 lacks lcov export)."
+          echo "Track: apps/harmony-app/AUDIOBOOK_IMPLEMENTATION.md"
+
+  # ── ohos-e2e: FullFlow 22-week 集成验收（W20-C5 占位 / W22 启用） ──────────
+  #
+  # 目的：W20-C5 引入了 FullFlow.test.ets，覆盖 W1~W22 每周关键验收点。
+  # 当前 CI runner 无 DevEco SDK，无法跑真 hvigorw test，本 job 仅做：
+  #   1. 校验 FullFlow.test.ets 文件存在并被 List.test.ets 注册
+  #   2. 校验 utils/E2eHelper.ets 与 service/dynamic/ModuleLoader.ets 已就位
+  #   3. 输出 W22 启用所需的 hvigorw 命令（届时只要把下方 echo 换成真实命令）
+  #
+  # W22 启用步骤（self-hosted OHOS runner 上线后）：
+  #   - 把 `echo "::warning::..."` 换成 `cd apps/harmony-app && hvigorw test --module entry --debug`
+  #   - 在 PR 模板里勾选「e2e green」即可合并
+  ohos-e2e:
+    name: OHOS E2E / harmony-app FullFlow (placeholder)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify FullFlow + supporting files
+        run: |
+          set -eu
+          base=apps/harmony-app/entry/src
+          required=(
+            "$base/main/ets/service/dynamic/ModuleLoader.ets"
+            "$base/ohosTest/ets/test/utils/E2eHelper.ets"
+            "$base/ohosTest/ets/test/e2e/FullFlow.test.ets"
+          )
+          for f in "${required[@]}"; do
+            if [[ ! -f "$f" ]]; then
+              echo "::error::missing file required for W20-C5: $f"
+              exit 1
+            fi
+          done
+          # FullFlow 必须在 List.test.ets 注册，否则 hvigorw 不会执行
+          grep -q "fullFlowE2ETest" "$base/ohosTest/ets/test/List.test.ets" || {
+            echo "::error::List.test.ets missing fullFlowE2ETest registration"
+            exit 1
+          }
+          # 应包含 22 个 it（W1~W22）
+          it_count=$(grep -c "    it(" "$base/ohosTest/ets/test/e2e/FullFlow.test.ets" || true)
+          if [[ "$it_count" -lt 22 ]]; then
+            echo "::error::FullFlow.test.ets has $it_count it() blocks, expected >= 22"
+            exit 1
+          fi
+          echo "FullFlow registration looks good ($it_count it blocks)."
+
+      - name: Run hvigorw test (skipped — SDK unavailable)
+        run: |
+          echo "::warning::ohos-e2e not executed — DevEco Studio CLI absent in CI."
+          echo "Planned for W22 (self-hosted OHOS runner). Manual command:"
+          echo "  cd apps/harmony-app && hvigorw test --module entry --debug"
+
   # ── Native C++ build: libreadmigo_native.so ───────────────────────────────
   #
   # BEST-EFFORT JOB — continue-on-error: true
