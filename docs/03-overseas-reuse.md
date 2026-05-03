@@ -1,5 +1,7 @@
 # 海外版 Readmigo 复用清单（37 repo 逐个决策）
 
+> **W23 拆分后状态**（2026-05-03）：server-cn / infra-cn / llm-adapter 已迁出为独立 Gitee 仓。详见 [docs/architecture/01-repo-split-decision.md](architecture/01-repo-split-decision.md)
+>
 > 数据来源：cloc 真实统计于 2026-04-26
 > 总量：1,316,920 行 / 8,094 文件 / 37 repos
 >
@@ -13,7 +15,7 @@
 
 | 海外 repo | 行数 | 主语言 | 国内目标位置 | 国内化动作 | 复用度 | 工作量 |
 |---------|------|------|----------|---------|-------|------|
-| `api` | 118,855 | TypeScript | `server-cn/api/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/api/)) | 重写 LLM provider + 接 GaussDB + 国行登录 | 70% | 3-4 周 |
+| `api` | 118,855 | TypeScript | `server-cn/api/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/modules/ai/)) | 重写 LLM provider + 接 GaussDB + 国行登录 | 70% | 3-4 周 |
 | `gutenberg` | 35,314 | JSON | `server-cn/content/gutenberg-cn/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/content/gutenberg-cn/)) | 白名单过滤 + 内容审核 | 60% | 1 周 |
 | `tts-data` | 9,712 | JSON | `server-cn/tts-data-cn/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/tts-data-cn/)) | 重新用讯飞 TTS 生成 | 50% | 1 周 |
 | `tts` | 17,635 | JSON | `server-cn/tts/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/tts/)) | 接讯飞 TTS API | 70% | 1 周 |

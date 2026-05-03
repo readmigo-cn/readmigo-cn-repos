@@ -1,5 +1,7 @@
 # DevEco Studio 与国内开发环境基线
 
+> **W23 拆分后状态**（2026-05-03）：server-cn / infra-cn / llm-adapter 已迁出为独立 Gitee 仓。详见 [docs/architecture/01-repo-split-decision.md](architecture/01-repo-split-decision.md)
+
 本文件用于把鸿蒙开发环境和国内服务接起来，避免后续在 IDE、账号、配置文件上反复试错。
 
 ## 目标基线

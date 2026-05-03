@@ -7,6 +7,8 @@ oh_modules/
 *.iml
 local.properties
 keystore/
+.hvigor/
+.appanalyzer/
 
 # 依赖
 node_modules/

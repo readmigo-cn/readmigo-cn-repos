@@ -12,7 +12,16 @@ W23 拆分完成 3 个独立仓:
 
 ---
 
+## W24-W26 计划拆分
 
+🟡 **进行中**：
+- `napi-bridge` (HarmonyOS 专属，独立拆) - W24 计划
+- `typesetting` (mirror from GitHub) - W25-W26 计划
+- `badge-engine` (mirror from GitHub) - W25-W26 计划
+
+详见 [docs/architecture/04-native-engine-sync-strategy.md](architecture/04-native-engine-sync-strategy.md)（待创建）
+
+---
 
 本文档定义米果智读（Readmigo 国内本地化版）在 Gitee `readmigo` 企业（`gitee.com/readmigo`）下的多 repo 组织方式，参考 GitHub `readmigo` 组织的 28+ repo 模式。
 
@@ -31,30 +40,30 @@ graph LR
 | `readmigo/compliance-cn` | **Private** | 公司营业执照、法人/个人身份证、软著申请材料 | 本次新建，承接 GitHub `readmigo/harmony` 历史敏感材料 |
 | `readmigo/sample_repository` | Internal | Gitee 占位 | 可清理 |
 
-## 未来拆分蓝图（不在本次范围）
+## 拆分进度（W23 已完成 / W24-W26 计划中）
 
 参考 GitHub `readmigo` 组织的拆分模式，按职责切分：
 
 ```mermaid
 graph LR
   Mono["readmigo-cn-repos<br/>当前 monorepo"] --> Harmony["harmony-app<br/>HarmonyOS App"]
-  Mono --> Server["server-cn<br/>国内后端"]
-  Mono --> LLM["llm-adapter-cn<br/>国产 LLM"]
-  Mono --> Bridge["napi-bridge<br/>C++ ↔ ArkTS"]
+  Mono --> Server["✅ server-cn<br/>国内后端"]
+  Mono --> LLM["✅ llm-adapter<br/>国产 LLM"]
+  Mono --> Bridge["🟡 napi-bridge<br/>C++ ↔ ArkTS"]
   Mono --> Docs["docs-cn<br/>中文文档"]
-  Mono --> Infra["infra-cn<br/>Private · Terraform"]
+  Mono --> Infra["✅ infra-cn<br/>Private · Terraform"]
 ```
 
-| 计划 Repo | 来源（readmigo-cn-repos/） | 可见性 | 拆分时机 |
-|---|---|---|---|
-| `harmony-app` | `apps/harmony-app/` + 紧耦合的 `napi-bridge/` `native/` | Internal | 阶段 1（apps 体量超过 monorepo 容量阈值） |
-| `server-cn` | `server-cn/` | Internal | 阶段 1（独立部署需要） |
-| `llm-adapter-cn` | `packages/llm-adapter/` | Internal | 阶段 2（被多个项目引用时） |
-| `napi-bridge` | `napi-bridge/` | Internal | 阶段 2（仅当独立发布时） |
-| `typesetting` | 镜像 GitHub `readmigo/typesetting` | Internal | 阶段 1（国内 dev 链路需要） |
-| `badge-engine` | 镜像 GitHub `readmigo/badge-engine` | Internal | 阶段 2 |
-| `infra-cn` | `infra/` | **Private** | 阶段 1（含华为云敏感配置） |
-| `docs-cn` | `docs/`（本目录） | Internal | 阶段 3（独立发布站点时） |
+| Repo | 来源 | 可见性 | 状态 | 拆分时机 |
+|---|---|---|---|---|
+| `server-cn` | `server-cn/` | Internal | **✅ W23 完成** | 阶段 1（独立部署需要） |
+| `infra-cn` | `infra/` | **Private** | **✅ W23 完成** | 阶段 1（含华为云敏感配置） |
+| `llm-adapter` | `packages/llm-adapter/` | Internal | **✅ W23 完成** | 阶段 2（被多个项目引用时） |
+| `napi-bridge` | `napi-bridge/` | Internal | **🟡 W24 进行中** | 仅当独立发布时 |
+| `typesetting` | 镜像 GitHub `readmigo/typesetting` | Internal | **🟡 W25-W26** | 国内 dev 链路需要 |
+| `badge-engine` | 镜像 GitHub `readmigo/badge-engine` | Internal | **🟡 W25-W26** | 后续 |
+| `harmony-app` | `apps/harmony-app/` + 紧耦合的 `napi-bridge/` `native/` | Internal | ⚪ 规划中 | apps 体量超过阈值 |
+| `docs-cn` | `docs/`（本目录） | Internal | ⚪ 规划中 | 独立发布站点时 |
 
 ## 可见性规则
 

@@ -1,5 +1,7 @@
 # 4-Track Initiation Summary
 
+> **W23 拆分后状态**（2026-05-03）：server-cn / infra-cn / llm-adapter 已迁出为独立 Gitee 仓。详见 [docs/architecture/01-repo-split-decision.md](architecture/01-repo-split-decision.md)
+>
 > 2026-04-26 工作汇总：4 个并行轨道启动
 > 创建时间：2026-04-26
 

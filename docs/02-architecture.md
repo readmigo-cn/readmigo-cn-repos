@@ -1,12 +1,14 @@
 # 架构基线
 
+> **W23 拆分后状态**（2026-05-03）：server-cn / infra-cn / llm-adapter 已迁出为独立 Gitee 仓。详见 [docs/architecture/01-repo-split-decision.md](architecture/01-repo-split-decision.md)
+
 ## 总体结构
 
 ```text
 Harmony App (ArkTS / ArkUI)
   -> AGC Auth / Analytics / Crash / Remote Config / IAP
-  -> server-cn
-      -> llm-adapter
+  -> server-cn ([gitee](https://gitee.com/readmigo/server-cn))
+      -> llm-adapter ([gitee](https://gitee.com/readmigo/llm-adapter))
           -> DeepSeek
       -> GaussDB / Redis / OBS
 ```
@@ -19,8 +21,8 @@ Harmony App (ArkTS / ArkUI)
 
 ## 服务端
 
-- `server-cn/`：国内后端
-- `packages/llm-adapter/`：模型抽象层
+- `server-cn` ([gitee](https://gitee.com/readmigo/server-cn))：国内后端
+- `llm-adapter` ([gitee](https://gitee.com/readmigo/llm-adapter))：模型抽象层
 - `DeepSeek`：主 LLM
 - `GaussDB`：主库
 - `DCS/Redis`：缓存

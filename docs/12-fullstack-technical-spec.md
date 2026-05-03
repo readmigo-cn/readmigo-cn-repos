@@ -1,6 +1,8 @@
 # 全栈技术方案明细（Readmigo 国内版）
 
-本文是 `readmigo-cn-repos` 的正式全栈技术方案。目标不是罗列“可选技术”，而是明确每一层的主方案、同步边界、落地位置和下一步动作。
+> **W23 拆分后状态**（2026-05-03）：server-cn / infra-cn / llm-adapter 已迁出为独立 Gitee 仓。详见 [docs/architecture/01-repo-split-decision.md](architecture/01-repo-split-decision.md)
+
+本文是 `readmigo-cn-repos` 的正式全栈技术方案。目标不是罗列”可选技术”，而是明确每一层的主方案、同步边界、落地位置和下一步动作。
 
 适用前提：
 
@@ -78,7 +80,7 @@
 
 ### 当前落地位置
 
-- [server-cn](/Users/HONGBGU/Documents/readmigo-cn-repos/server-cn)
+- `server-cn` ([gitee](https://gitee.com/readmigo/server-cn))
 
 ### 当前已落地骨架
 
@@ -126,7 +128,7 @@
 
 ### 当前落地位置
 
-- 当前仍在 [server-cn/.env.example](/Users/HONGBGU/Documents/readmigo-cn-repos/server-cn/.env.example) 里做资源占位
+- 当前仍在 `server-cn/.env.example` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/.env.example)) 里做资源占位
 
 ### 下一步
 
@@ -161,8 +163,8 @@
 
 ### 当前落地位置
 
-- [packages/llm-adapter](/Users/HONGBGU/Documents/readmigo-cn-repos/packages/llm-adapter)
-- [server-cn/src/modules/ai](/Users/HONGBGU/Documents/readmigo-cn-repos/server-cn/src/modules/ai)
+- `llm-adapter` ([gitee](https://gitee.com/readmigo/llm-adapter))
+- `server-cn/src/modules/ai` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/modules/ai))
 
 ### 下一步
 
@@ -187,9 +189,9 @@
 
 ### 当前落地位置
 
-- [QWEN.md](/Users/HONGBGU/Documents/readmigo-cn-repos/QWEN.md)
-- [tools/ai-coding/terminal/README.md](/Users/HONGBGU/Documents/readmigo-cn-repos/tools/ai-coding/terminal/README.md)
-- [tools/ai-coding/terminal/qwen-settings.example.json](/Users/HONGBGU/Documents/readmigo-cn-repos/tools/ai-coding/terminal/qwen-settings.example.json)
+- `QWEN.md`
+- `tools/ai-coding/terminal/README.md`
+- `tools/ai-coding/terminal/qwen-settings.example.json`
 
 ### 下一步
 
@@ -222,8 +224,8 @@
 
 ### 当前落地位置
 
-- [server-cn/src/modules/auth](/Users/HONGBGU/Documents/readmigo-cn-repos/server-cn/src/modules/auth)
-- [apps/harmony-app/entry/src/main/ets/pages/Login.ets](/Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app/entry/src/main/ets/pages/Login.ets)
+- `server-cn/src/modules/auth` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/modules/auth))
+- `apps/harmony-app/entry/src/main/ets/pages/Login.ets`
 
 ### 下一步
 
@@ -352,11 +354,11 @@
 
 ## 11. 当前仓库与方案映射
 
-| 目录 | 角色 | 状态 |
+| 目录/仓库 | 角色 | 状态 |
 |------|------|------|
 | `apps/harmony-app/` | 鸿蒙客户端 | 已起骨架 |
-| `server-cn/` | 国内后端 | 已起骨架 |
-| `packages/llm-adapter/` | 模型抽象层 | 已起骨架 |
+| `server-cn` ([gitee](https://gitee.com/readmigo/server-cn)) | 国内后端 | 已起骨架 |
+| `llm-adapter` ([gitee](https://gitee.com/readmigo/llm-adapter)) | 模型抽象层 | 已起骨架 |
 | `native/` | 原生引擎同步区 | 待同步 |
 | `tools/ai-coding/` | AI coding 规则与模板 | 已起骨架 |
 | `docs/` | 方案、路线图、同步规则 | 已建立 |

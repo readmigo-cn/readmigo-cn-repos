@@ -1,5 +1,7 @@
 # 实施路线图（22 周 / 5.5 月）
 
+> **W23 拆分后状态**（2026-05-03）：server-cn / infra-cn / llm-adapter 已迁出为独立 Gitee 仓。详见 [docs/architecture/01-repo-split-decision.md](architecture/01-repo-split-decision.md)
+> 
 > 详细 82 个动作的精简版见求职目录的 `harmony-100pct-roadmap.md`，本文件聚焦"国内独立项目"视角的关键动作。
 
 ---
