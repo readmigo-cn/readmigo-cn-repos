@@ -22,6 +22,14 @@
     "pages/Vocab",
     "pages/FlashcardSession",
     "pages/atomic/LookupPage",
-    "pages/atomic/ShareCardPage"
+    "pages/atomic/ShareCardPage",
+    "pages/car/CarHome",
+    "pages/car/CarPlayer",
+    "pages/tv/SmartScreenHome",
+    "pages/tv/SmartScreenReader",
+    "pages/tv/SmartScreenAudiobook",
+    "pages/watch/WatchHome",
+    "pages/watch/WatchVocab",
+    "pages/watch/WatchStats"
   ]
 }

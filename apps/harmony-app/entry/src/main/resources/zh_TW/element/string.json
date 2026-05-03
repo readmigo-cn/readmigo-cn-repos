@@ -67,6 +67,17 @@
     { "name": "onboarding_start", "value": "開始" },
 
     { "name": "widget_daily_word_label", "value": "今日一詞" },
-    { "name": "widget_daily_word_desc", "value": "每日一個英語單詞" }
+    { "name": "widget_daily_word_desc", "value": "每日一個英語單詞" },
+
+    { "name": "ability_watch_label", "value": "閱可手錶版" },
+    { "name": "ability_watch_desc", "value": "手錶 App：生詞複習、閱讀統計、聽書" },
+    { "name": "widget_watch_vocab_label", "value": "生詞卡" },
+    { "name": "widget_watch_vocab_desc", "value": "錶盤卡片：今日一詞" },
+    { "name": "watch_today_minutes", "value": "今日" },
+    { "name": "watch_quick_vocab", "value": "今日一詞" },
+    { "name": "watch_quick_stats", "value": "閱讀統計" },
+    { "name": "watch_quick_audio", "value": "繼續聽書" },
+    { "name": "watch_grade_known", "value": "知道" },
+    { "name": "watch_grade_unknown", "value": "不會" }
   ]
 }

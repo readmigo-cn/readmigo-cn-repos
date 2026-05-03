@@ -21,6 +21,7 @@ import { AppSpacing, AppRadius } from '../theme/AppSpacing';
 import { AiApi, ExplainWordPayload } from '../service/api/AiApi';
 import { ExplainData, ExplainExample, parseExplainData } from '../model/ExplainData';
 import { SettingsStore } from '../store/SettingsStore';
+import { AiContentBadge } from './AiContentBadge';
 
 /** 旧 StructuredExplain 兼容（WordExplainSheet 仍在用 parseExplainJson） */
 export interface StructuredExplain {
@@ -494,6 +495,10 @@ export struct ExplainCard {
 
   build() {
     Column({ space: AppSpacing.base }) {
+      // W16-C2 合规：标题区顶部插入「AI 生成」徽章（compact 模式不渲染，避免破坏嵌入式布局）
+      if (this.variant !== 'compact') {
+        AiContentBadge({ mode: 'prefix', label: '词义解释', showLearnMore: false });
+      }
       // Header（compact 模式 / legacy 模式不显示 header）
       if (this.variant !== 'compact' && !this.isLegacyMode) {
         this.header();

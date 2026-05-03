@@ -243,6 +243,46 @@
     {
       "name": "widget_ai_tip_desc",
       "value": "Daily learning tips and AI interaction"
+    },
+    {
+      "name": "ability_watch_label",
+      "value": "Readmigo Watch"
+    },
+    {
+      "name": "ability_watch_desc",
+      "value": "Watch app: vocab review, reading stats, audiobook"
+    },
+    {
+      "name": "widget_watch_vocab_label",
+      "value": "Vocab"
+    },
+    {
+      "name": "widget_watch_vocab_desc",
+      "value": "Watch face card: today's vocab"
+    },
+    {
+      "name": "watch_today_minutes",
+      "value": "Today"
+    },
+    {
+      "name": "watch_quick_vocab",
+      "value": "Vocab"
+    },
+    {
+      "name": "watch_quick_stats",
+      "value": "Stats"
+    },
+    {
+      "name": "watch_quick_audio",
+      "value": "Listen"
+    },
+    {
+      "name": "watch_grade_known",
+      "value": "Know"
+    },
+    {
+      "name": "watch_grade_unknown",
+      "value": "Don't"
     }
   ]
 }

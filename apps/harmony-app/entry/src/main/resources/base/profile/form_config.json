@@ -59,6 +59,26 @@
       "formConfigAbility": "ability://AiTipExtensionAbility",
       "formVisibleNotify": true,
       "dataProxyEnabled": false
+    },
+    {
+      "name": "WatchVocabCard",
+      "description": "$string:widget_watch_vocab_desc",
+      "src": "./ets/widget/pages/WatchVocabCard.ets",
+      "uiSyntax": "arkts",
+      "window": {
+        "designWidth": 466,
+        "autoDesignWidth": true
+      },
+      "colorMode": "dark",
+      "isDefault": true,
+      "updateEnabled": true,
+      "scheduledUpdateTime": "08:00",
+      "updateDuration": 4,
+      "defaultDimension": "1*1",
+      "supportDimensions": ["1*1"],
+      "formConfigAbility": "ability://WatchVocabCardExtensionAbility",
+      "formVisibleNotify": true,
+      "dataProxyEnabled": false
     }
   ]
 }

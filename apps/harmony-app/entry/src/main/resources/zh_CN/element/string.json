@@ -243,6 +243,46 @@
     {
       "name": "widget_ai_tip_desc",
       "value": "每日学习贴士与 AI 互动"
+    },
+    {
+      "name": "ability_watch_label",
+      "value": "米果智读手表版"
+    },
+    {
+      "name": "ability_watch_desc",
+      "value": "手表 App：生词复习、阅读统计、听书"
+    },
+    {
+      "name": "widget_watch_vocab_label",
+      "value": "生词卡"
+    },
+    {
+      "name": "widget_watch_vocab_desc",
+      "value": "表盘卡片：今日一词"
+    },
+    {
+      "name": "watch_today_minutes",
+      "value": "今日"
+    },
+    {
+      "name": "watch_quick_vocab",
+      "value": "今日一词"
+    },
+    {
+      "name": "watch_quick_stats",
+      "value": "阅读统计"
+    },
+    {
+      "name": "watch_quick_audio",
+      "value": "继续听书"
+    },
+    {
+      "name": "watch_grade_known",
+      "value": "知道"
+    },
+    {
+      "name": "watch_grade_unknown",
+      "value": "不会"
     }
   ]
 }
