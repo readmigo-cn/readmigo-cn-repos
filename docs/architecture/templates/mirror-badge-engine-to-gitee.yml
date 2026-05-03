@@ -1,0 +1,34 @@
+# ============================================================
+# 用法（GitHub mirror workflow 模板）
+# ------------------------------------------------------------
+# 1. 复制本文件到 https://github.com/readmigo/badge-engine
+#    路径：.github/workflows/mirror-to-gitee.yml
+# 2. 在 GitHub repo Settings → Secrets and variables → Actions
+#    添加 secret：GITEE_TOKEN（值为 Gitee PAT，scope 至少 projects）
+# 3. push 到 main 后自动触发，或在 Actions 页面手动 dispatch
+# 4. 不要直接放 gitee 这边的仓库（Gitee 不执行 GitHub Actions）
+# ============================================================
+
+name: Mirror to Gitee
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to Gitee mirror
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          git remote add gitee https://oauth2:${GITEE_TOKEN}@gitee.com/readmigo/badge-engine.git
+          git push --force --all gitee
+          git push --force --tags gitee

@@ -2,8 +2,8 @@
  * Badge Engine native bridge wrapper.
  *
  * 与 native 侧绑定关系：
- *   - C++ 静态库          native/badge-engine/         (badge_engine.h / types.h)
- *   - NAPI 桥接            napi-bridge/src/badge_engine_napi.cpp
+ *   - C++ 静态库          https://gitee.com/readmigo/readmigo-badge-engine  (badge_engine.h / types.h)
+ *   - NAPI 桥接            https://gitee.com/readmigo/readmigo-napi-bridge  (src/badge_engine_napi.cpp)
  *   - 链接产物             entry/libs/arm64-v8a/libreadmigo_native.so
  *
  * NAPI 暴露在 `libreadmigo_native.so` 上的子命名空间 `badge_engine`。
@@ -96,7 +96,7 @@ export type BadgeEventCallback = (event: BadgeEvent) => void;
 // Native 模块加载
 // ---------------------------------------------------------------------------
 
-/** 与 napi-bridge/src/badge_engine_napi.cpp 暴露的 C-side 函数对应。 */
+/** 与 https://gitee.com/readmigo/readmigo-napi-bridge (src/badge_engine_napi.cpp) 暴露的 C-side 函数对应。 */
 interface NativeBadgeModule {
   create(config: BadgeEngineConfig): object;
   destroy(handle: object): void;

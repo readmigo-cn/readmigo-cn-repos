@@ -2,8 +2,8 @@
  * Typesetting native bridge wrapper.
  *
  * 与 native 侧绑定关系：
- *   - C++ 静态库          native/typesetting/        (engine.h / page.h / interaction.h)
- *   - NAPI 桥接            napi-bridge/src/typesetting_napi.cpp
+ *   - C++ 静态库          https://gitee.com/readmigo/readmigo-typesetting  (engine.h / page.h / interaction.h)
+ *   - NAPI 桥接            https://gitee.com/readmigo/readmigo-napi-bridge  (src/typesetting_napi.cpp)
  *   - 链接产物             entry/libs/arm64-v8a/libreadmigo_native.so
  *
  * NAPI 暴露在 `libreadmigo_native.so` 上的子命名空间 `typesetting`，本文件提供
@@ -160,7 +160,7 @@ export interface LayoutProfile {
 // Native 模块加载 —— libreadmigo_native.so 的 typesetting 子命名空间
 // ---------------------------------------------------------------------------
 
-/** 与 napi-bridge/src/typesetting_napi.cpp 暴露的 C-side 函数对应。 */
+/** 与 https://gitee.com/readmigo/readmigo-napi-bridge (src/typesetting_napi.cpp) 暴露的 C-side 函数对应。 */
 interface NativeTypesettingModule {
   createTypesettingEngine(config?: EngineConfig): object;
   destroyTypesettingEngine(handle: object): void;
