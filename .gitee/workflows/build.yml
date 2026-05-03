@@ -1,144 +1,40 @@
-name: Build
+# .gitee/workflows/build.yml
+# server-cn 已拆分到独立 repo gitee.com/readmigo/server-cn
+# 这里只保留 llm-adapter / harmony-app 的 placeholder build job
+# server-cn 的 Docker build 移到 server-cn 仓的 .gitee/workflows/
 
-# Triggers: push to main (for any path that affects a buildable artifact)
-# and manual workflow dispatch for on-demand builds.
+name: Build artifacts
+
 on:
   push:
-    branches: [main]
+    branches:
+      - main
     paths:
-      - "server-cn/**"
       - "packages/llm-adapter/**"
-      - "Dockerfile"
-      - "server-cn/Dockerfile"
-      - ".gitee/workflows/build.yml"
+      - "apps/harmony-app/**"
   workflow_dispatch:
 
-env:
-  PNPM_VERSION: "10.11.0"
-  NODE_VERSION: "22"
-
-  # ── Huawei SWR registry config ─────────────────────────────────────────────
-  # Override these in Gitee repository secrets (Settings → Secrets).
-  # SWR_REGISTRY  — e.g. swr.cn-north-4.myhuaweicloud.com
-  # SWR_USERNAME  — AK or IAM user (长期 AK/SK 推荐用 IAM 委托)
-  # SWR_PASSWORD  — SK or login token
-  SWR_NAMESPACE: readmigo
-  IMAGE_NAME: server-cn
-
 jobs:
-  # ── Build & push Docker image for server-cn ────────────────────────────────
-  build-server:
-    name: Build Docker image / server-cn
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    outputs:
-      image_tag: ${{ steps.meta.outputs.tag }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      # Compute image tags: commit-sha (immutable) + branch-latest (mutable)
-      - name: Compute image tags
-        id: meta
-        run: |
-          SHA_SHORT="${GITHUB_SHA::8}"
-          REGISTRY="${{ secrets.SWR_REGISTRY }}"
-          NS="${{ env.SWR_NAMESPACE }}"
-          IMG="${{ env.IMAGE_NAME }}"
-          echo "tag=${REGISTRY}/${NS}/${IMG}:${SHA_SHORT}" >> "$GITHUB_OUTPUT"
-          echo "tag_latest=${REGISTRY}/${NS}/${IMG}:main-latest" >> "$GITHUB_OUTPUT"
-
-      - name: Login to Huawei SWR
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ secrets.SWR_REGISTRY }}
-          username: ${{ secrets.SWR_USERNAME }}
-          password: ${{ secrets.SWR_PASSWORD }}
-
-      # Build context is the monorepo root so COPY instructions inside the
-      # Dockerfile can reach pnpm-workspace.yaml and packages/ in one pass.
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: server-cn/Dockerfile
-          push: true
-          # Cache layers in the SWR registry to speed up subsequent builds.
-          cache-from: type=registry,ref=${{ secrets.SWR_REGISTRY }}/${{ env.SWR_NAMESPACE }}/${{ env.IMAGE_NAME }}:buildcache
-          cache-to: type=registry,ref=${{ secrets.SWR_REGISTRY }}/${{ env.SWR_NAMESPACE }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
-          tags: |
-            ${{ steps.meta.outputs.tag }}
-            ${{ steps.meta.outputs.tag_latest }}
-
-  # ── Build llm-adapter TypeScript package ──────────────────────────────────
   build-llm-adapter:
     name: Build / llm-adapter
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    if: contains(github.event.head_commit.modified, 'packages/llm-adapter')
     steps:
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v3
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-
-      - name: Install workspace dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build llm-adapter (tsc)
-        working-directory: packages/llm-adapter
-        run: pnpm build
-
-      # Package the compiled output as a versioned archive for downstream use.
-      - name: Archive build artifact
-        run: |
-          tar -czf llm-adapter-${{ github.sha }}.tar.gz \
-            packages/llm-adapter/dist \
-            packages/llm-adapter/package.json
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+          node-version: 22
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @readmigo-cn/llm-adapter build
+      - uses: actions/upload-artifact@v4
         with:
-          name: llm-adapter-${{ github.sha }}
-          path: llm-adapter-${{ github.sha }}.tar.gz
-          retention-days: 14
+          name: llm-adapter-dist
+          path: packages/llm-adapter/dist/
 
-  # ── HAP build placeholder ──────────────────────────────────────────────────
   build-hap-placeholder:
-    name: Build HAP / harmony-app (placeholder)
+    name: Build HAP (placeholder)
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    if: false
     steps:
-      - uses: actions/checkout@v4
-
-      # TODO(W2): Replace this entire job with a real HAP build.
-      #
-      # LIMITATION: Building a HarmonyOS NEXT HAP package requires:
-      #   1. DevEco Studio CLI (hvigorw) — Huawei has not yet published an
-      #      official headless CI image for standard Linux runners.
-      #   2. ohpm (OpenHarmony Package Manager) for dependency resolution.
-      #   3. A valid HarmonyOS signing certificate + profile from AppGallery Connect.
-      #
-      # Planned W2 approach:
-      #   Option A — Self-hosted Gitee Go runner on a macOS/Linux host that has
-      #              DevEco Studio pre-installed.
-      #   Option B — Build a custom Docker image containing hvigorw + ohpm and
-      #              register it as a Gitee custom runner.
-      #
-      # Once the runner is available, replace the echo below with:
-      #   cd apps/harmony-app
-      #   ohpm install
-      #   hvigorw assembleHap --mode release
-      #   # Then sign and upload to AppGallery Connect via agconnect-cli
-      - name: Print HAP build notice
-        run: |
-          echo "::notice::HAP build is a placeholder — DevEco Studio CLI not available in CI runners."
-          echo "Tracking issue: apps/harmony-app HAP build — planned for W2."
-          exit 0
+      - run: echo "TODO: HAP build requires DevEco Studio CLI on self-hosted runner"

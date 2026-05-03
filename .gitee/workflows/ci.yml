@@ -13,30 +13,6 @@ env:
   NODE_VERSION: "22"
 
 jobs:
-  # ── TypeScript type-check: server-cn ─────────────────────────────────────
-  typecheck-server:
-    name: Typecheck / server-cn
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v3
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-
-      - name: Install workspace dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run typecheck
-        working-directory: server-cn
-        run: pnpm typecheck
-
   # ── TypeScript type-check: llm-adapter ────────────────────────────────────
   typecheck-llm-adapter:
     name: Typecheck / llm-adapter
@@ -60,56 +36,6 @@ jobs:
       - name: Run typecheck (also compiles via tsc)
         working-directory: packages/llm-adapter
         run: pnpm typecheck
-
-  # ── ESLint: server-cn ─────────────────────────────────────────────────────
-  lint-server:
-    name: Lint / server-cn
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v3
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-
-      - name: Install workspace dependencies
-        run: pnpm install --frozen-lockfile
-
-      # If no ESLint config exists yet the script will not be present in
-      # package.json; the || true prevents a hard failure until lint is wired up.
-      - name: Run ESLint
-        working-directory: server-cn
-        run: pnpm lint || echo "::warning::lint script not yet configured — skipping"
-
-  # ── Jest tests: server-cn ─────────────────────────────────────────────────
-  test-server:
-    name: Test / server-cn
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v3
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: pnpm
-
-      - name: Install workspace dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run Jest tests
-        working-directory: server-cn
-        run: pnpm test || echo "::warning::test script not yet configured — skipping"
 
   # ── Jest tests: llm-adapter ───────────────────────────────────────────────
   test-llm-adapter:
