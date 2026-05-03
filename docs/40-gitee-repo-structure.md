@@ -1,5 +1,19 @@
 # Gitee 多 Repo 结构与迁移蓝图
 
+## 2026-05-03 状态更新
+
+W23 拆分完成 3 个独立仓:
+- ✅ [server-cn](https://gitee.com/readmigo/server-cn) (Private)
+- ✅ [infra-cn](https://gitee.com/readmigo/infra-cn) (Private)
+- ✅ [llm-adapter](https://gitee.com/readmigo/llm-adapter) (Private)
+
+详见拆分决策 [docs/architecture/01-repo-split-decision.md](architecture/01-repo-split-decision.md)
+和 SOP [docs/architecture/02-server-cn-split-sop.md](architecture/02-server-cn-split-sop.md)。
+
+---
+
+
+
 本文档定义米果智读（Readmigo 国内本地化版）在 Gitee `readmigo` 企业（`gitee.com/readmigo`）下的多 repo 组织方式，参考 GitHub `readmigo` 组织的 28+ repo 模式。
 
 ## 现状

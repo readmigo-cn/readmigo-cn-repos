@@ -1,7 +1,0 @@
-region     = "cn-north-4"
-env        = "staging"
-ecs_count  = 1
-
-# 实际值从华为云控制台 -> 我的凭证 -> 访问密钥 拿
-access_key = "REPLACE_ME"
-secret_key = "REPLACE_ME"

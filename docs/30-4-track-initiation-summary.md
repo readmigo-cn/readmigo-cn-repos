@@ -24,15 +24,15 @@
 
 | 文件 | 说明 | 状态 |
 |------|------|------|
-| `packages/llm-adapter/src/types.ts` | 核心类型定义 | ✅ 已更新 |
-| `packages/llm-adapter/src/provider.ts` | Provider 接口 | ✅ 已更新 |
-| `packages/llm-adapter/src/providers/deepseek.ts` | DeepSeek 实现 | ✅ 已扩展 |
-| `packages/llm-adapter/src/providers/qwen.ts` | Qwen (阿里云) 实现 | ✅ 新建 |
-| `packages/llm-adapter/src/providers/zhipu.ts` | Zhipu (智谱) 实现 | ✅ 新建 |
-| `packages/llm-adapter/src/providers/wenxin.ts` | Wenxin (百度) 实现 | ✅ 新建 |
-| `packages/llm-adapter/src/index.ts` | 工厂函数 + 导出 | ✅ 已更新 |
-| `packages/llm-adapter/README.md` | 使用文档 | ✅ 已更新 |
-| `server-cn/.env.example` | 环境变量模板 | ✅ 新建 |
+| `packages/llm-adapter/src/types.ts` ([gitee](https://gitee.com/readmigo/llm-adapter/blob/main/src/types.ts)) | 核心类型定义 | ✅ 已更新 |
+| `packages/llm-adapter/src/provider.ts` ([gitee](https://gitee.com/readmigo/llm-adapter/blob/main/src/provider.ts)) | Provider 接口 | ✅ 已更新 |
+| `packages/llm-adapter/src/providers/deepseek.ts` ([gitee](https://gitee.com/readmigo/llm-adapter/blob/main/src/providers/deepseek.ts)) | DeepSeek 实现 | ✅ 已扩展 |
+| `packages/llm-adapter/src/providers/qwen.ts` ([gitee](https://gitee.com/readmigo/llm-adapter/blob/main/src/providers/qwen.ts)) | Qwen (阿里云) 实现 | ✅ 新建 |
+| `packages/llm-adapter/src/providers/zhipu.ts` ([gitee](https://gitee.com/readmigo/llm-adapter/blob/main/src/providers/zhipu.ts)) | Zhipu (智谱) 实现 | ✅ 新建 |
+| `packages/llm-adapter/src/providers/wenxin.ts` ([gitee](https://gitee.com/readmigo/llm-adapter/blob/main/src/providers/wenxin.ts)) | Wenxin (百度) 实现 | ✅ 新建 |
+| `packages/llm-adapter/src/index.ts` ([gitee](https://gitee.com/readmigo/llm-adapter/blob/main/src/index.ts)) | 工厂函数 + 导出 | ✅ 已更新 |
+| `packages/llm-adapter/README.md` ([gitee](https://gitee.com/readmigo/llm-adapter/blob/main/README.md)) | 使用文档 | ✅ 已更新 |
+| `server-cn/.env.example` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/.env.example)) | 环境变量模板 | ✅ 新建 |
 
 ### 核心功能
 

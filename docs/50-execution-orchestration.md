@@ -236,8 +236,8 @@ graph TD
 | W1-C1 | Gitee Actions CI 模板（PR / build / typecheck / lint） | `.gitee/workflows/ci.yml` | 80 |
 | W1-C2 | Gitee Actions 构建产物上传（HAP / Server image） | `.gitee/workflows/build.yml` | 100 |
 | W1-C3 | DevEco 项目骨架完善（hvigor / oh-package 修订） | `apps/harmony-app/{build-profile,oh-package}.json5` | 30 |
-| W1-C4 | server-cn Dockerfile + docker-compose 完整化 | `server-cn/{Dockerfile,docker-compose.yml}` | 80 |
-| W1-C5 | 极狐 GitLab CE IaC（docker-compose / Helm） | `infra/gitlab-ce/docker-compose.yml` + README | 200 |
+| W1-C4 | server-cn Dockerfile + docker-compose 完整化 | `server-cn/{Dockerfile,docker-compose.yml}` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/{Dockerfile,docker-compose.yml})) | 80 |
+| W1-C5 | 极狐 GitLab CE IaC（docker-compose / Helm） | `infra/gitlab-ce/docker-compose.yml` ([gitee](https://gitee.com/readmigo/infra-cn/blob/main/gitlab-ce/docker-compose.yml)) + README | 200 |
 | W1-C6 | 测试框架接入（jest 给 server-cn / hypium 给 ArkTS） | 各项目 test config | 120 |
 
 ##### 🟡 PREP 任务（Claude 起草）
@@ -324,15 +324,15 @@ graph TD
 
 | ID | 任务（每个 module 完整化） | 文件 | LOC |
 |---|---|---|---|
-| W3-C1 | auth module（JWT / 短信 / 华为账号 ID） | `server-cn/src/modules/auth/` | 500 |
-| W3-C2 | books module（CRUD / 搜索 / 推荐） | `server-cn/src/modules/books/` | 600 |
-| W3-C3 | reading module（进度 / 章节 / 高亮） | `server-cn/src/modules/reading/` | 500 |
-| W3-C4 | notes module（生词 / 闪卡 SRS） | `server-cn/src/modules/notes/` | 500 |
-| W3-C5 | ai module（划词 / 翻译 / 解释 SSE） | `server-cn/src/modules/ai/` | 600 |
-| W3-C6 | subscription module（Mock IAP） | `server-cn/src/modules/subscription/` | 400 |
+| W3-C1 | auth module（JWT / 短信 / 华为账号 ID） | `server-cn/src/modules/auth/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/modules/auth/)) | 500 |
+| W3-C2 | books module（CRUD / 搜索 / 推荐） | `server-cn/src/modules/books/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/modules/books/)) | 600 |
+| W3-C3 | reading module（进度 / 章节 / 高亮） | `server-cn/src/modules/reading/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/modules/reading/)) | 500 |
+| W3-C4 | notes module（生词 / 闪卡 SRS） | `server-cn/src/modules/notes/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/modules/notes/)) | 500 |
+| W3-C5 | ai module（划词 / 翻译 / 解释 SSE） | `server-cn/src/modules/ai/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/modules/ai/)) | 600 |
+| W3-C6 | subscription module（Mock IAP） | `server-cn/src/modules/subscription/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/modules/subscription/)) | 400 |
 | W3-C7 | bookshelf / sync / widget 三个模块 | 各 module 目录 | 600 |
-| W3-C8 | TypeORM → GaussDB 迁移脚本 | `server-cn/src/database/migrations/*` | 800 |
-| W3-C9 | OpenAPI / Swagger 文档自动生成 | `server-cn/src/main.ts` | 50 |
+| W3-C8 | TypeORM → GaussDB 迁移脚本 | `server-cn/src/database/migrations/*` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/database/migrations/*)) | 800 |
+| W3-C9 | OpenAPI / Swagger 文档自动生成 | `server-cn/src/main.ts` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/main.ts)) | 50 |
 
 ##### 🟡 PREP
 

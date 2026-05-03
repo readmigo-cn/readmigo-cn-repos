@@ -52,7 +52,7 @@ Phase 5 上架                         ▓▓
 - [ ] XComponent 接入
 
 ### Week 3：海外代码拷贝 + 国内化（先做最容易的）
-- [ ] 拷贝 `api` → `server-cn/api/`
+- [ ] 拷贝 `api` → `server-cn/api/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/api/))
 - [ ] 重写 LLM provider 层（接 DeepSeek + 文心）
 - [ ] 拷贝 `gutenberg`、`badge-content`、`badge-assets`、`badge-cli`、`shipkit`、`tts-data`
 - [ ] 数据库迁移：PostgreSQL → GaussDB

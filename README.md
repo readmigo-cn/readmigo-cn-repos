@@ -1,7 +1,10 @@
 # 米果智读（Readmigo 国内本地化版 · HarmonyOS NEXT）
 
 > **项目代号**：`readmigo-cn-repos`
-> **架构演进**：`server-cn` 已拆分至独立仓 [gitee.com/readmigo/server-cn](https://gitee.com/readmigo/server-cn)（2026-05-03）
+> **架构演进**：W23 拆出 3 个独立仓（2026-05-03）
+> - 后端：[server-cn](https://gitee.com/readmigo/server-cn) (Private, NestJS)
+> - 基础设施：[infra-cn](https://gitee.com/readmigo/infra-cn) (Private, Terraform)
+> - LLM 适配：[llm-adapter](https://gitee.com/readmigo/llm-adapter) (Private, npm 包)
 > **官网**：https://readmigo.cn
 > **平台**：HarmonyOS NEXT 5.0+（纯血鸿蒙）
 > **位置**：`/Users/HONGBGU/Documents/readmigo-cn-repos/`（与 `readmigo-repos/` 平级目录）
