@@ -92,7 +92,31 @@ export struct Me {
       .borderRadius(AppRadius.md)
       .backgroundColor(AppColors.bgElevated)
       .onClick(() => {
-        if (!this.sub?.isPro) this.openPaywall();
+        if (this.sub?.isPro) {
+          router.pushUrl({ url: RoutePath.SUBSCRIPTIONS_URL })
+            .catch((_e: Error) => {});
+        } else {
+          this.openPaywall();
+        }
+      })
+
+      // 订阅管理（W17-C5）
+      Row() {
+        Text('订阅管理')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textPrimary)
+          .layoutWeight(1)
+        Text('>')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => {
+        router.pushUrl({ url: RoutePath.SUBSCRIPTIONS_URL })
+          .catch((_e: Error) => {});
       })
 
       // 我的笔记
@@ -171,6 +195,104 @@ export struct Me {
       .backgroundColor(AppColors.bgElevated)
       .onClick(() => {
         router.pushUrl({ url: RoutePath.STUDY_PLAN_URL })
+          .catch((_e: Error) => {});
+      })
+
+      // 通知中心（W18-C6）
+      Row() {
+        Text('通知中心')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textPrimary)
+          .layoutWeight(1)
+        Text('>')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => {
+        router.pushUrl({ url: RoutePath.NOTIFICATION_CENTER_URL })
+          .catch((_e: Error) => { /* main_pages.json 未注册时吞掉 */ });
+      })
+
+      // 反馈与帮助（W19-C1+C2 入口）
+      Row() {
+        Text('反馈与帮助')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textPrimary)
+          .layoutWeight(1)
+        Text('>')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => {
+        if (UserStore.isLoggedIn()) {
+          RouterService.push(RoutePath.TICKET_LIST);
+        } else {
+          RouterService.push(RoutePath.FEEDBACK);
+        }
+      })
+
+      // 常见问题 FAQ（W19-C3）
+      Row() {
+        Text('常见问题')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textPrimary)
+          .layoutWeight(1)
+        Text('>')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => {
+        router.pushUrl({ url: RoutePath.FAQ_URL })
+          .catch((_e: Error) => {});
+      })
+
+      // 联系我们（W19-C5）
+      Row() {
+        Text('联系我们')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textPrimary)
+          .layoutWeight(1)
+        Text('>')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => {
+        router.pushUrl({ url: RoutePath.CONTACT_URL })
+          .catch((_e: Error) => {});
+      })
+
+      // 关于（W19-C4）
+      Row() {
+        Text('关于')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textPrimary)
+          .layoutWeight(1)
+        Text('>')
+          .fontSize(AppFontSize.md)
+          .fontColor(AppColors.textSecondary)
+      }
+      .width('90%')
+      .padding(AppSpacing.base)
+      .borderRadius(AppRadius.md)
+      .backgroundColor(AppColors.bgElevated)
+      .onClick(() => {
+        router.pushUrl({ url: RoutePath.ABOUT_URL })
           .catch((_e: Error) => {});
       })
 

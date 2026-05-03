@@ -23,8 +23,25 @@ import { ContinuationManager } from '../service/atomic/ContinuationManager';
 import { DistributedClipboard, IncomingEntry } from '../service/distributed/DistributedClipboard';
 // W13-C4：多端通知协调器
 import { MultiDeviceNotifier } from '../service/notification/MultiDeviceNotifier';
+// W18-C1 / C2 / C3：埋点 + 双轨崩溃监控
+import { Analytics } from '../service/analytics/AnalyticsProvider';
+import { SensorsAnalytics, SaEvents } from '../service/analytics/SensorsAnalytics';
+import { AgcCrashReporter } from '../service/monitoring/AgcCrashReporter';
+import { SentryClient } from '../service/monitoring/SentryClient';
+import { CrashHandler } from '../service/monitoring/CrashHandler';
+// W18-C4 / C5 / C7：HMS Push + 通知通道 + 远程配置 / A/B
+import { HmsPushService } from '../service/push/HmsPushService';
+import { NotificationChannel } from '../service/push/NotificationChannel';
+import { RemoteConfig } from '../service/experiments/RemoteConfig';
 
 const TAG = 'EntryAbility';
+
+// 神策 / AGC / Sentry 接入参数（生产环境从远端配置中心拉取）
+const SA_SERVER_URL = 'https://sa.readmigo.cn/sa';
+const SA_PROJECT_NAME = 'readmigo_harmony';
+const AGC_APP_ID = '_PLACEHOLDER_AGC_APP_ID_';
+const SENTRY_DSN = 'https://_placeholder_@sentry.io/_placeholder_';
+const SENTRY_ENV = 'production';
 
 /**
  * EntryAbility：app 进程入口。
@@ -45,10 +62,38 @@ export default class EntryAbility extends UIAbility {
       await PreferencesManager.init(this.context);
       await DatabaseManager.init(this.context);
 
+      // W18-C2 / C3：崩溃监控必须最早初始化，确保后续 init 异常也能被拦截
+      AgcCrashReporter.init(AGC_APP_ID);
+      SentryClient.init(SENTRY_DSN, SENTRY_ENV);
+      CrashHandler.init();
+
+      // W18-C1：神策埋点（HTTP 上报，独立于业务初始化失败）
+      const sa = SensorsAnalytics.getInstance();
+      await sa.init(SA_SERVER_URL, SA_PROJECT_NAME);
+      sa.registerSuperProperties({
+        '$os': 'HarmonyOS',
+        '$lib': 'harmony',
+        'app_channel': 'cn',
+      });
+      Analytics.register(sa);
+
       // 三个 Store 顺序回灌（彼此独立，可并行；保持简单串行更易排错）
       await UserStore.init();
       await ReadingStore.init();
       await SettingsStore.init();
+
+      // 已登录态 → 把 userId 关联到崩溃 + 埋点
+      if (UserStore.isAuthenticated()) {
+        const profile = UserStore.getProfile();
+        if (profile && profile.id) {
+          AgcCrashReporter.setUserId(profile.id);
+          SentryClient.setUser({ id: profile.id, email: profile.email });
+          Analytics.identify(profile.id);
+        }
+      }
+
+      // 上次启动若崩溃 → toast + 重发
+      CrashHandler.checkPendingCrashOnLaunch().catch(() => {});
 
       // W5-C4 主题：必须在 SettingsStore 之后
       ThemeService.init(this.context);
@@ -70,6 +115,31 @@ export default class EntryAbility extends UIAbility {
       // W13-C4：多端通知协调器（订阅跨端 broadcast，决定本机是否 publish）
       MultiDeviceNotifier.init().catch((err: Error) => {
         console.warn(`${TAG} MultiDeviceNotifier init failed: ${err.message}`);
+      });
+
+      // W18-C7：远程配置 + A/B 实验。先于 push 初始化，保证 push topic / channel 决策能拿到最新配置
+      RemoteConfig.init().catch((err: Error) => {
+        console.warn(`${TAG} RemoteConfig init failed: ${err.message}`);
+      });
+
+      // W18-C4：HMS Push Kit 初始化（拿 token + 订阅默认 topic）
+      HmsPushService.init()
+        .then(() => {
+          // 已登录态 → 立即上报 token 绑定 userId
+          if (UserStore.isAuthenticated()) {
+            const profile = UserStore.getProfile();
+            if (profile && profile.id) {
+              HmsPushService.reportToken(profile.id).catch(() => {});
+            }
+          }
+        })
+        .catch((err: Error) => {
+          console.warn(`${TAG} HmsPushService init failed: ${err.message}`);
+        });
+
+      // W18-C5：通知通道（6 类）+ 落档到 NotificationCenter
+      NotificationChannel.init().catch((err: Error) => {
+        console.warn(`${TAG} NotificationChannel init failed: ${err.message}`);
       });
 
       // W13-C2：监听 pasteboard 变化，收到其它设备的 vocab/highlight 时把 entry
@@ -165,6 +235,9 @@ export default class EntryAbility extends UIAbility {
     ProgressSync.flush().catch(() => {});
     // W13-C3：暂停设备 polling 节省电量
     ContinuationManager.onAppBackground();
+    // W18-C1：埋点队列立即 flush，避免系统挂起丢事件
+    Analytics.track(SaEvents.APP_BACKGROUNDED, {});
+    Analytics.flush().catch(() => {});
     console.info(`${TAG} onBackground`);
   }
 

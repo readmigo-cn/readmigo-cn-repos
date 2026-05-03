@@ -51,6 +51,9 @@ import {
   STORAGE_KEY_FOLD_STATUS,
 } from '../theme/Breakpoints';
 import { ReaderTabletLayout } from './tablet/ReaderTabletLayout';
+// W18-C1：Reader 页面曝光埋点
+import { Analytics } from '../service/analytics/AnalyticsProvider';
+import { SaEvents } from '../service/analytics/SensorsAnalytics';
 
 const FALLBACK_HTML = `
 <h1>Chapter 1 — Sample</h1>
@@ -207,6 +210,7 @@ export struct Reader {
     // W7-C6：从 background 切回前台（替代旧 startSessionFireAndForget）
     ReadingSession.onForeground(this.bookId);
     this.startSessionTickTimer();
+    Analytics.track(SaEvents.PAGE_VIEW, { page: 'reader', book_id: this.bookId });
     // 主动 pull 一次拿云端最新进度
     ProgressSync.pull(this.bookId).then((server) => {
       if (!server) return;

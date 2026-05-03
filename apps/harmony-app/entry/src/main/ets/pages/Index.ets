@@ -18,6 +18,9 @@ import { AudiobookPlayer } from './AudiobookPlayer';
 import { Notes } from './Notes';
 import { StudyPlanPage } from './StudyPlan';
 import { ReadingComprehensionPage } from './ReadingComprehension';
+import { FeedbackPage } from './Feedback';
+import { TicketListPage } from './TicketList';
+import { TicketDetailPage } from './TicketDetail';
 
 @Entry
 @Component
@@ -60,6 +63,12 @@ struct Index {
       StudyPlanPage();
     } else if (name === RoutePath.READING_COMPREHENSION) {
       ReadingComprehensionPage();
+    } else if (name === RoutePath.FEEDBACK) {
+      FeedbackPage();
+    } else if (name === RoutePath.TICKET_LIST) {
+      TicketListPage();
+    } else if (name === RoutePath.TICKET_DETAIL) {
+      TicketDetailPage();
     }
   }
 

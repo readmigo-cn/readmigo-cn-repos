@@ -47,6 +47,9 @@ import { TtsService } from '../service/tts/TtsService';
 import { DistributedClipboard, VocabPayload } from '../service/distributed/DistributedClipboard';
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
+// W18-C1：Vocab 页面曝光埋点
+import { Analytics } from '../service/analytics/AnalyticsProvider';
+import { SaEvents } from '../service/analytics/SensorsAnalytics';
 
 type FilterTab = 'all' | 'due' | 'known';
 type SortKind = 'createdAt' | 'lastReviewedAt' | 'difficulty';
@@ -86,6 +89,7 @@ struct Vocab {
 
   aboutToAppear(): void {
     this.refresh();
+    Analytics.track(SaEvents.PAGE_VIEW, { page: 'vocab' });
   }
 
   // ─── 数据加载 ───────────────────────────────────────────────

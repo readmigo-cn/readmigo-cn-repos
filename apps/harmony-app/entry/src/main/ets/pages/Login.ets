@@ -8,6 +8,9 @@ import { AuthApi, LoginResult } from '../service/api/AuthApi';
 import { ApiError } from '../service/HttpClient';
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
+// W18-C1：Login 入口曝光埋点
+import { Analytics } from '../service/analytics/AnalyticsProvider';
+import { SaEvents } from '../service/analytics/SensorsAnalytics';
 
 /**
  * Login —— 登录页（W4-C1）。
@@ -49,6 +52,7 @@ export struct Login {
     if (last && PHONE_REGEX.test(last)) {
       this.phone = last;
     }
+    Analytics.track(SaEvents.PAGE_VIEW, { page: 'login' });
   }
 
   aboutToDisappear(): void {

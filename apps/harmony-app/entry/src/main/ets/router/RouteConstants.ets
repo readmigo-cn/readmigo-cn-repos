@@ -87,6 +87,66 @@ export class RoutePath {
    */
   static readonly FLASHCARD_SESSION: string = 'flashcard-session';
   static readonly FLASHCARD_SESSION_URL: string = 'pages/FlashcardSession';
+
+  /**
+   * W18-C6：通知中心页（历史通知列表 + 筛选 + 操作）。
+   */
+  static readonly NOTIFICATION_CENTER: string = 'notification-center';
+  static readonly NOTIFICATION_CENTER_URL: string = 'pages/NotificationCenter';
+
+  /**
+   * W19-C1：反馈表单页（提交后跳 TicketDetail）。
+   */
+  static readonly FEEDBACK: string = 'Feedback';
+  static readonly FEEDBACK_URL: string = 'pages/Feedback';
+
+  /**
+   * W19-C2：工单列表页（auth required）。
+   */
+  static readonly TICKET_LIST: string = 'TicketList';
+  static readonly TICKET_LIST_URL: string = 'pages/TicketList';
+
+  /**
+   * W19-C2：工单详情页（聊天时间线 + 追问 + 关闭 + 评分）。
+   */
+  static readonly TICKET_DETAIL: string = 'TicketDetail';
+  static readonly TICKET_DETAIL_URL: string = 'pages/TicketDetail';
+
+  /**
+   * W17-C5：订阅管理页（auth required）。
+   */
+  static readonly SUBSCRIPTIONS: string = 'Subscriptions';
+  static readonly SUBSCRIPTIONS_URL: string = 'pages/Subscriptions';
+
+  /**
+   * W17-C6：退款申请流程页（auth required）。
+   */
+  static readonly REFUND_FLOW: string = 'RefundFlow';
+  static readonly REFUND_FLOW_URL: string = 'pages/RefundFlow';
+
+  /**
+   * W19-C3：常见问题（FAQ）页。
+   */
+  static readonly FAQ: string = 'Faq';
+  static readonly FAQ_URL: string = 'pages/Faq';
+
+  /**
+   * W19-C4：关于页（版本号、公司、ICP）。
+   */
+  static readonly ABOUT: string = 'About';
+  static readonly ABOUT_URL: string = 'pages/About';
+
+  /**
+   * W19-C5：用户协议 / 隐私政策 / 第三方开源声明 / 联系我们。
+   */
+  static readonly USER_AGREEMENT: string = 'UserAgreement';
+  static readonly USER_AGREEMENT_URL: string = 'pages/UserAgreement';
+  static readonly PRIVACY_POLICY: string = 'PrivacyPolicy';
+  static readonly PRIVACY_POLICY_URL: string = 'pages/PrivacyPolicy';
+  static readonly OSS_LICENSES: string = 'OssLicenses';
+  static readonly OSS_LICENSES_URL: string = 'pages/OssLicenses';
+  static readonly CONTACT: string = 'Contact';
+  static readonly CONTACT_URL: string = 'pages/Contact';
 }
 
 /**
@@ -112,6 +172,18 @@ export class PagePath {
   static readonly READING_COMPREHENSION: string = 'pages/ReadingComprehension';
   static readonly VOCAB: string = 'pages/Vocab';
   static readonly FLASHCARD_SESSION: string = 'pages/FlashcardSession';
+  static readonly FEEDBACK: string = 'pages/Feedback';
+  static readonly TICKET_LIST: string = 'pages/TicketList';
+  static readonly TICKET_DETAIL: string = 'pages/TicketDetail';
+  static readonly NOTIFICATION_CENTER: string = 'pages/NotificationCenter';
+  static readonly SUBSCRIPTIONS: string = 'pages/Subscriptions';
+  static readonly REFUND_FLOW: string = 'pages/RefundFlow';
+  static readonly FAQ: string = 'pages/Faq';
+  static readonly ABOUT: string = 'pages/About';
+  static readonly USER_AGREEMENT: string = 'pages/UserAgreement';
+  static readonly PRIVACY_POLICY: string = 'pages/PrivacyPolicy';
+  static readonly OSS_LICENSES: string = 'pages/OssLicenses';
+  static readonly CONTACT: string = 'pages/Contact';
 }
 
 /** 需要登录态才能进的路由（router auth-guard 使用）。 */
@@ -123,6 +195,10 @@ export const AUTH_REQUIRED_ROUTES: ReadonlySet<string> = new Set<string>([
   RoutePath.AUDIOBOOK_PLAYER,
   RoutePath.VOCAB,
   RoutePath.FLASHCARD_SESSION,
+  RoutePath.TICKET_LIST,
+  RoutePath.TICKET_DETAIL,
+  RoutePath.SUBSCRIPTIONS,
+  RoutePath.REFUND_FLOW,
 ]);
 
 // ---- Route param 类型 ----
@@ -171,4 +247,19 @@ export interface NativeDemoRouteParams {}
 export interface DeepLinkTarget {
   route: string;
   params: object | null;
+}
+
+// ---- W19-C1+C2 反馈 / 工单 ----
+
+export interface FeedbackRouteParams {
+  /** 预填类别（从 paywall / reader 等触发时可指定） */
+  category?: string;
+  /** 触发反馈时所在路由（自动附加，用户可勾去） */
+  fromRoute?: string;
+}
+
+export interface TicketListRouteParams {}
+
+export interface TicketDetailRouteParams {
+  ticketId: string;
 }
