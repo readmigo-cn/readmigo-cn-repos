@@ -1,27 +1,28 @@
-# Native Engines
+# Native Engines（已迁出）
 
-这里存放从 `readmigo-repos` 同步过来的原生核心引擎源码。
+> W23 拆分：本目录下的所有原生引擎已迁出到独立 Gitee 仓。
+> Monorepo 留此 README 作为指针，便于历史 grep 与新成员定位。
 
-## 同步原则
+## 已迁出仓库
 
-- 只同步可复用的 `C/C++` 核心
-- 不同步 `.git`、构建产物、Apple 平台桥接、iOS 构建脚本
-- 同步完成不代表已经可在鸿蒙端直接编译运行
+| 子目录（已删除） | 独立仓 | 镜像策略 |
+|---|---|---|
+| `typesetting/` | https://gitee.com/readmigo/typesetting | GitHub `readmigo/typesetting` 单向 mirror |
+| `badge-engine/` | https://gitee.com/readmigo/badge-engine | GitHub `readmigo/badge-engine` 单向 mirror |
 
-## 当前目录
+NAPI 桥接层同样已独立：
 
-- `typesetting/`
-- `badge-engine/`
+| 旧路径（已删除） | 独立仓 |
+|---|---|
+| `napi-bridge/` | https://gitee.com/readmigo/napi-bridge |
 
-## 当前状态
+## 引用方式（未来）
 
-- 核心源码已同步
-- Harmony 平台适配未完成
-- NAPI / C API 桥接未完成
-- DevEco / hvigor 构建集成未完成
+`apps/harmony-app` 通过 `oh-package.json5` 或 hvigor 配置引用 `napi-bridge`，
+`napi-bridge` 通过 CMake `FetchContent` / submodule 拉取 `typesetting` / `badge-engine`。
 
-## 下一步
+详见 [`docs/architecture/04-native-engine-sync-strategy.md`](../docs/architecture/04-native-engine-sync-strategy.md)。
 
-1. 为 `typesetting` 增加 Harmony 平台适配
-2. 为 `badge-engine` 明确 Harmony 渲染集成路径
-3. 在 `napi-bridge/` 建立 ArkTS 到 C/C++ 的调用桥
+## 历史快照
+
+`pre-typesetting-split` / `pre-badge-engine-split` / `pre-napi-bridge-split` 三个 tag 保留拆分前的完整树。

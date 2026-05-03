@@ -1,9 +1,0 @@
-{
-  "rarity": "COMMON",
-  "base_color": [0.45, 0.36, 0.15],
-  "metalness": 0.95,
-  "roughness": 0.38,
-  "emissive": [0.0, 0.0, 0.0],
-  "reflectance": 0.5,
-  "comment": "Deep dark gold, verified against QQ badge design reference"
-}
