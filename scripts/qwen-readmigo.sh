@@ -2,5 +2,5 @@
 
 set -euo pipefail
 
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 exec qwen

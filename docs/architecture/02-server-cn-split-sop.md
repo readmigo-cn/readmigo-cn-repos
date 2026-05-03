@@ -54,7 +54,7 @@ git config --global credential.helper store
 
 ```bash
 # 在 monorepo 中创建 pre-split 标签
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 git tag -a pre-split-server-cn -m "Backup before server-cn split ($(date -u +%Y-%m-%d))"
 git push origin pre-split-server-cn
 
@@ -85,7 +85,7 @@ mkdir -p /tmp/readmigo-cn-repos-split-work
 cd /tmp/readmigo-cn-repos-split-work
 
 # 从 monorepo 克隆（shallow clone，加快速度）
-git clone --depth=1 /Users/HONGBGU/Documents/readmigo-cn-repos .
+git clone --depth=1 /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos .
 
 # 验证结构
 ls -la | grep server-cn
@@ -198,10 +198,10 @@ gitee api repos/readmigo/server-cn --query 'name, default_branch, full_name'
 
 ```bash
 # 在 readmigo-repos 平级创建新目录
-mkdir -p /Users/HONGBGU/Documents/readmigo-cn-repos-server-cn
+mkdir -p /Users/HONGBGU/Documents/readmigo-cn/server-cn
 
 # 克隆新仓
-cd /Users/HONGBGU/Documents/readmigo-cn-repos-server-cn
+cd /Users/HONGBGU/Documents/readmigo-cn/server-cn
 git clone https://gitee.com/readmigo/server-cn.git .
 
 # 验证
@@ -212,7 +212,7 @@ git remote -v
 ### 4.2 验证独立编译与 typecheck
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos-server-cn
+cd /Users/HONGBGU/Documents/readmigo-cn/server-cn
 
 # 安装依赖
 pnpm install
@@ -240,8 +240,8 @@ pnpm run test
 
 ```bash
 # 添加到 ~/.zshrc 或 ~/.bashrc
-alias cdserver='cd /Users/HONGBGU/Documents/readmigo-cn-repos-server-cn'
-alias cdmonorepo='cd /Users/HONGBGU/Documents/readmigo-cn-repos'
+alias cdserver='cd /Users/HONGBGU/Documents/readmigo-cn/server-cn'
+alias cdmonorepo='cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos'
 
 # 重载
 source ~/.zshrc
@@ -254,7 +254,7 @@ source ~/.zshrc
 ### 5.1 删除 server-cn 目录
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 
 # 移除 server-cn 子目录
 git rm -r server-cn/
@@ -267,7 +267,7 @@ git status
 ### 5.2 更新 pnpm-workspace.yaml
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 
 # 编辑 pnpm-workspace.yaml
 # 移除 "server-cn" 行
@@ -382,7 +382,7 @@ jobs:
 ### 5.7 提交变更
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 
 # 检查状态
 git status
@@ -532,7 +532,7 @@ CMD ["node", "dist/main"]
 ### 6.3 验证 CI 通过
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos-server-cn
+cd /Users/HONGBGU/Documents/readmigo-cn/server-cn
 
 # 推送测试分支，触发 CI
 git checkout -b test/ci-verification
@@ -554,7 +554,7 @@ git push origin :test/ci-verification
 ### 7.1 验证老 monorepo 仍可编译
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 
 # 移除旧的 node_modules（清洁环境）
 rm -rf node_modules pnpm-lock.yaml
@@ -609,7 +609,7 @@ cat apps/harmony-app/package.json | jq '.dependencies' | grep server
 
 ```bash
 # 模拟本地部署（开发环境）
-cd /Users/HONGBGU/Documents/readmigo-cn-repos-server-cn
+cd /Users/HONGBGU/Documents/readmigo-cn/server-cn
 
 # 启动 server-cn
 pnpm run start:dev
@@ -630,7 +630,7 @@ curl http://localhost:3000/api/health
 
 ```bash
 # 1. 在 monorepo 中恢复 server-cn
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 git checkout pre-split-server-cn^:server-cn -b restore-server-cn
 git merge --squash restore-server-cn
 git add server-cn/
@@ -640,7 +640,7 @@ git commit -m "rollback: restore server-cn from pre-split backup"
 # 在 Gitee 网页上：Settings → Danger Zone → Delete Repository
 
 # 3. 删除本地克隆
-rm -rf /Users/HONGBGU/Documents/readmigo-cn-repos-server-cn /tmp/readmigo-cn-repos-split-work
+rm -rf /Users/HONGBGU/Documents/readmigo-cn/server-cn /tmp/readmigo-cn-repos-split-work
 ```
 
 ---

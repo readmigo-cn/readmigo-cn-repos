@@ -185,7 +185,7 @@ keytool -genkey -v -keystore readmigo.keystore -alias readmigo -keyalg RSA -keys
 
 ```bash
 # 1. 进入项目根目录
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 
 # 2. 安装根依赖
 pnpm install
@@ -219,7 +219,7 @@ pnpm --version
 ### 7.2 在 DevEco Studio 中验证
 
 1. 打开 DevEco Studio
-2. `File` → `Open` → 选择 `/Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app`
+2. `File` → `Open` → 选择 `/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app`
 3. 等待项目索引完成
 4. 点击 `Build` → `Build Hap(s) / APP(s)` → `Build Hap(s)`
 5. 如果构建成功，环境配置完成 ✅

@@ -240,7 +240,7 @@ graph TB
 - 在 Gitee 创建 `readmigo/server-cn`（Internal）
 - 迁移：Nest.js 应用 / 数据库迁移 / Docker Compose / API 设计文档
 - 保留：llm-adapter 在 monorepo（客户端读取），暂不拆
-- 本地目录：`/Users/HONGBGU/Documents/readmigo-cn-repos-server-cn/`
+- 本地目录：`/Users/HONGBGU/Documents/readmigo-cn/server-cn/`
 - CI 配置：建立独立的 typecheck / test / build / Docker push workflow
 - **影响最大**：harmony-app CI 改为引用 server-cn 的 API mock / stubbed server（或远程调用）
 - **完整 SOP**：见 `02-server-cn-split-sop.md`
@@ -248,7 +248,7 @@ graph TB
 #### 3️⃣ **llm-adapter** 拆分
 - 在 Gitee 创建 `readmigo/llm-adapter`（Internal）
 - 迁移：LLM provider 抽象 / prompt 模板 / 模型路由配置
-- 本地目录：`/Users/HONGBGU/Documents/readmigo-cn-repos-llm-adapter/`
+- 本地目录：`/Users/HONGBGU/Documents/readmigo-cn/llm-adapter/`
 - 供应方：server-cn 和 harmony-app（batch 处理）都可引用
 - 方法论：同 server-cn 拆分 SOP
 

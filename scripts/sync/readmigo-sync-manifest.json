@@ -1,6 +1,6 @@
 {
   "source_root": "/Users/HONGBGU/Documents/readmigo-repos",
-  "target_root": "/Users/HONGBGU/Documents/readmigo-cn-repos",
+  "target_root": "/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos",
   "principle": "sync only when compatible with HarmonyOS NEXT and domestic full-stack requirements; otherwise redevelop",
   "entries": [
     {

@@ -84,7 +84,7 @@
 
 运行：
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app/
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app/
 ./brand/sync-from-brand.sh
 ```
 
@@ -97,7 +97,7 @@ cd /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app/
 ```bash
 # 从 brand repo 手动复制通用图标
 cp /Users/HONGBGU/Documents/readmigo-repos/brand/assets/app-icon/app-icon.png \
-   /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app/AppScope/resources/base/media/app_icon.png
+   /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app/AppScope/resources/base/media/app_icon.png
 ```
 
 ## AppScope 配置验证

@@ -169,7 +169,7 @@ hdc -t <Device ID> install readmigo.hap
 ### 4.1 打开项目
 
 ```
-File → Open → /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app
+File → Open → /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
 ```
 
 DevEco 会自动加载项目配置。

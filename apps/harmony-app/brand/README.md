@@ -110,9 +110,9 @@ brand/dist/harmony/
 
 | 路径 | 说明 |
 |------|------|
-| `/Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app/entry/src/main/resources/base/media/` | Entry module 媒体资源 |
-| `/Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app/AppScope/resources/base/media/` | App-level 图标和资源 |
-| `/Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app/brand/` | 本项目品牌文档和脚本 |
+| `/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app/entry/src/main/resources/base/media/` | Entry module 媒体资源 |
+| `/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app/AppScope/resources/base/media/` | App-level 图标和资源 |
+| `/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app/brand/` | 本项目品牌文档和脚本 |
 
 ## 相关文档
 

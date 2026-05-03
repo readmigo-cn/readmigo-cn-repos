@@ -33,7 +33,7 @@
 2. **清理缓存**（重要！）
    ```
    在终端运行:
-   cd /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app
+   cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
    rm -rf .hvigor/cache/*
    ```
 
@@ -59,7 +59,7 @@
 ### 方式 B: 命令行
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
 
 # 清理缓存
 rm -rf .hvigor/cache/*

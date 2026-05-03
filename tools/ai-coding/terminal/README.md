@@ -28,7 +28,7 @@ bash -c "$(curl -fsSL https://qwen-code-assets.oss-cn-hangzhou.aliyuncs.com/inst
 - 启动：
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 qwen
 ```
 
@@ -83,7 +83,7 @@ qwen
 启动终端 AI coding 时，务必在仓库根目录执行：
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 qwen
 ```
 

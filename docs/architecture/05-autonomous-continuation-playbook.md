@@ -12,7 +12,7 @@
 
 ```bash
 # 1. 终端开新窗口
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 
 # 2. 启动 Claude Code
 claude
@@ -31,7 +31,7 @@ claude
 |---|---|---|
 | Gitee PAT | `~/.gitee_token`（chmod 600） | `curl -s "https://gitee.com/api/v5/user?access_token=$(cat ~/.gitee_token)" \| python3 -c "import json,sys;print(json.load(sys.stdin).get('login'))"` |
 | Gitee SSH alias | `~/.ssh/config` 内 `Host gitee-readmigo-cn` | `ssh -T git@gitee-readmigo-cn` 应返回 "successfully authenticated" |
-| Monorepo | `/Users/HONGBGU/Documents/readmigo-cn-repos` | HEAD = `5a35265`（W24 收官） |
+| Monorepo | `/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos` | HEAD = `5a35265`（W24 收官） |
 | Sibling 仓 | `~/Documents/readmigo-{server-cn,infra-cn,llm-adapter,napi-bridge,typesetting,badge-engine}` | `ls -d ~/Documents/readmigo-*` 应见 7 个 |
 | Gitee 仓状态 | 8 个仓全 default_branch=main | 见 §四 |
 
@@ -51,7 +51,7 @@ agent team — 全自动收尾 W24+ 剩余任务，不再询问 1/2 确认
 - ~/.gitee_token 已配置（admin scope on enterprise）
 - SSH alias gitee-readmigo-cn 已配置
 
-完整背景：阅读 /Users/HONGBGU/Documents/readmigo-cn-repos/docs/architecture/05-autonomous-continuation-playbook.md 第 §四 §五 节。
+完整背景：阅读 /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/docs/architecture/05-autonomous-continuation-playbook.md 第 §四 §五 节。
 
 ## 自动模式硬规则（覆盖默认行为）
 
@@ -112,7 +112,7 @@ agent team — 全自动收尾 W24+ 剩余任务，不再询问 1/2 确认
 **目标**：commit + push docs 改动到 monorepo
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 git add docs/
 git status --short  # 应只见 M docs/...
 git commit -m "$(cat <<'EOF'
@@ -138,7 +138,7 @@ git push origin main
 **任务**：
 1. `grep -rE "napi-bridge|native/typesetting|native/badge-engine" apps/harmony-app/ --include="*.json5" --include="*.json" --include="*.ets" --include="*.ts" --include="*.gn"`
 2. 每条匹配判断：
-   - oh-package.json5 / build-profile.json5 内的 `file:../../napi-bridge` 类引用 → 改 `file:../../../readmigo-napi-bridge`（指 sibling）
+   - oh-package.json5 / build-profile.json5 内的 `file:../../napi-bridge` 类引用 → 改 `file:../../../napi-bridge`（指 sibling）
    - 注释 / 文档字符串内 → 路径改对应 Gitee URL
 3. 改完跑 `cd apps/harmony-app && pnpm install --frozen-lockfile=false 2>&1 | tail -20`，确认无 ENOENT
 4. commit 信息：`refactor(harmony-app): 引用迁移 napi-bridge → sibling 仓`
@@ -166,7 +166,7 @@ git push origin main
 **目标**：最终汇总 + push
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 git status --short  # D1+D2 的改动
 git add -A
 git commit -m "..." # 见 D1/D2 各自描述
@@ -244,7 +244,7 @@ graph LR
 
 ```bash
 # 找最近一个 W24 收官的好 commit
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 git log --oneline | grep "W24 收官"
 # git reset --hard <好 commit>   # 谨慎，会丢未 push 的本地改动
 # 或针对单文件回退

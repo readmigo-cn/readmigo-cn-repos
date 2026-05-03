@@ -7,7 +7,7 @@
 > - LLM 适配：[llm-adapter](https://gitee.com/readmigo/llm-adapter) (Private, npm 包)
 > **官网**：https://readmigo.cn
 > **平台**：HarmonyOS NEXT 5.0+（纯血鸿蒙）
-> **位置**：`/Users/HONGBGU/Documents/readmigo-cn-repos/`（与 `readmigo-repos/` 平级目录）
+> **位置**：`/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/`（与 `readmigo-repos/` 平级目录）
 >
 > 米果智读 = **Readmigo 海外版的国内本地化分支**（中文 + HarmonyOS NEXT），**同一款产品**，同一公司主体（北京瑞光科技有限公司）。技术栈、托管、合规独立，是**工程考量**（国内开发链路 + 数据合规），**不是产品独立**。
 

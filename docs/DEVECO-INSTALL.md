@@ -46,7 +46,7 @@
 
 ```bash
 # 运行自动下载脚本
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 ./scripts/download-deveco.sh
 ```
 
@@ -73,7 +73,7 @@ cd /Users/HONGBGU/Documents/readmigo-cn-repos
 
 1. 启动 `Deveco Studio`
 2. `File` → `Open...`
-3. 选择路径：`/Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app`
+3. 选择路径：`/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app`
 4. 点击 `OK`
 5. 等待项目索引完成（首次需要几分钟）
 
@@ -81,7 +81,7 @@ cd /Users/HONGBGU/Documents/readmigo-cn-repos
 
 ```bash
 # 如果 DevEco Studio 已安装
-open -a "Deveco Studio" /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app
+open -a "Deveco Studio" /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
 ```
 
 ---
@@ -93,7 +93,7 @@ open -a "Deveco Studio" /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-
 在 DevEco Studio 终端中运行：
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
 ohpm install
 ```
 

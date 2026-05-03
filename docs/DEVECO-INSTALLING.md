@@ -73,7 +73,7 @@ open -a "Deveco Studio"
 # File → Open → 选择 apps/harmony-app
 
 # 方式 B: 命令行（DevEco Studio 启动后）
-open -a "Deveco Studio" /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app
+open -a "Deveco Studio" /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
 ```
 
 ---
@@ -108,7 +108,7 @@ echo "2. SDK 安装:"
 ls -d ~/Library/Huawei/Sdk 2>/dev/null && echo "   ✅ 已安装" || echo "   ❌ 未安装"
 echo ""
 echo "3. 项目目录:"
-ls -d /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app 2>/dev/null && echo "   ✅ 存在" || echo "   ❌ 不存在"
+ls -d /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app 2>/dev/null && echo "   ✅ 存在" || echo "   ❌ 不存在"
 ```
 
 ---

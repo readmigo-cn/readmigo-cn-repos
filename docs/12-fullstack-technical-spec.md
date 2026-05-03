@@ -38,7 +38,7 @@
 
 ### 当前落地位置
 
-- [apps/harmony-app](/Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app)
+- [apps/harmony-app](/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app)
 
 ### 当前已落地骨架
 
@@ -341,8 +341,8 @@
 
 ### 当前落地位置
 
-- [docs/11-readmigo-sync-matrix.md](/Users/HONGBGU/Documents/readmigo-cn-repos/docs/11-readmigo-sync-matrix.md)
-- [scripts/sync/readmigo-sync-manifest.json](/Users/HONGBGU/Documents/readmigo-cn-repos/scripts/sync/readmigo-sync-manifest.json)
+- [docs/11-readmigo-sync-matrix.md](/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/docs/11-readmigo-sync-matrix.md)
+- [scripts/sync/readmigo-sync-manifest.json](/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/scripts/sync/readmigo-sync-manifest.json)
 
 ### 执行规则
 

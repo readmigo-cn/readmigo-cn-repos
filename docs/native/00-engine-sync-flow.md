@@ -126,7 +126,7 @@ git log -1 --pretty=format:"%H %ai %s" > /tmp/upstream-version.txt
 # sync-typesetting.sh - 同步脚本
 
 SOURCE_DIR="/tmp/sync-workspace/typesetting-upstream"
-TARGET_DIR="/Users/HONGBGU/Documents/readmigo-cn-repos/native/typesetting"
+TARGET_DIR="/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/native/typesetting"
 
 # rsync 选项：
 # -a: 存档模式（保留权限、时间戳）
@@ -160,7 +160,7 @@ chmod +x sync-typesetting.sh
 
 ```bash
 # 进入国内版项目目录
-cd /Users/HONGBGU/Documents/readmigo-cn-repos/native/typesetting
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/native/typesetting
 
 # 列出同步后的文件
 ls -la
@@ -215,7 +215,7 @@ echo "All patches applied successfully!"
 编译 typesetting 以确保同步后没有破坏编译：
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos/native/typesetting
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/native/typesetting
 
 # 清理旧的编译产物
 rm -rf build
@@ -250,7 +250,7 @@ ctest --verbose
 ### 3.7 提交并记录同步
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn-repos
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 
 # 记录同步信息到版本文件
 cat > native/typesetting/VERSION << EOF

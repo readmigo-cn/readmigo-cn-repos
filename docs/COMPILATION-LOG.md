@@ -23,7 +23,7 @@
 **错误信息**:
 ```
 hvigor ERROR: 00303038 Configuration Error
-Error Message: Schema validate failed, at file: /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app/build-profile.json5
+Error Message: Schema validate failed, at file: /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app/build-profile.json5
 
 {
   instancePath: 'modules[0]',
@@ -87,7 +87,7 @@ Error Message: Schema validate failed, at file: /Users/HONGBGU/Documents/readmig
 
 2. **清理缓存**（重要！）
    ```bash
-   cd /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app
+   cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
    rm -rf .hvigor/cache/*
    ```
 

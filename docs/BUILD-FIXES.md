@@ -7,7 +7,7 @@
 **错误信息**:
 ```
 hvigor ERROR: 00303148 Configuration Error
-Error Message: Hvigorfile not found. At file: /Users/HONGBGU/Documents/readmigo-cn-repos/apps/harmony-app/entry/hvigorfile.ts
+Error Message: Hvigorfile not found. At file: /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app/entry/hvigorfile.ts
 ```
 
 **原因**: 缺少模块级别的 hvigorfile.ts

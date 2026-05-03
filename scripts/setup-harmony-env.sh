@@ -141,7 +141,7 @@ EOF
 setup_project_config() {
     log_info "配置项目..."
     
-    local PROJECT_DIR="/Users/HONGBGU/Documents/readmigo-cn-repos"
+    local PROJECT_DIR="/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos"
     local HARMONY_APP_DIR="$PROJECT_DIR/apps/harmony-app"
     
     # 检查项目目录
@@ -184,7 +184,7 @@ setup_project_config() {
 setup_signing() {
     log_info "创建签名配置..."
     
-    local PROJECT_DIR="/Users/HONGBGU/Documents/readmigo-cn-repos"
+    local PROJECT_DIR="/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos"
     local HARMONY_APP_DIR="$PROJECT_DIR/apps/harmony-app"
     local SIGNING_DIR="$HARMONY_APP_DIR/signing"
     
