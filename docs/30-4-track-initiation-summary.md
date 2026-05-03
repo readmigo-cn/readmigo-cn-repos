@@ -124,12 +124,12 @@ Harmony Platform Adapter (platform_harmony.cpp)
 | `napi-bridge/src/typesetting_bridge.cpp` | 扩展 C API | P0 |
 | `napi-bridge/src/typesetting_napi.cpp` | NAPI 模块 | P0 |
 | `napi-bridge/src/platform_harmony.cpp` | Harmony 适配器 | P0 |
-| `napi-bridge/typesetting/` | Git submodule | P0 |
+| `native/typesetting/` | Git submodule 独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) | P0 |
 | `entry/src/main/ets/typesetting/TypesettingService.ts` | ArkTS 封装 | P0 |
 
 ### 下一步
 
-- [ ] **Week 1**: 拷贝海外版 `typesetting/` submodule
+- [ ] **Week 1**: 配置 git submodule 指向独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting)
 - [ ] **Week 1**: 扩展 C API (添加交互查询函数)
 - [ ] **Week 2**: 实现 `platform_harmony.cpp` 基础版
 - [ ] **Week 2**: 实现 `typesetting_napi.cpp` 基础版

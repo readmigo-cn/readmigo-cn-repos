@@ -189,7 +189,7 @@ graph TD
 | 周 | 推荐 subagent 数 | 编排模式 |
 |---|---|---|
 | W1 | 6 | 4 PREP 文档（主体决策/AI备案/内容审核/招聘JD）+ 2 CODE（CI/IaC） |
-| W2 | 4 | 4 CODE：NAPI 桥框架 / typesetting bridge / badge-engine bridge / XComponent demo |
+| W2 | 4 | 4 CODE：NAPI 桥框架 / typesetting bridge（独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting)） / badge-engine bridge（独立仓 [`badge-engine`](https://gitee.com/readmigo/badge-engine)） / XComponent demo |
 | W3 | 8 | 8 CODE：server-cn 拷贝 8 个模块（auth/books/reading/notes/ai/subscription/widget/sync） |
 | W4 | 5 | 5 CODE：HMS Account Mock / Login UX / 书库列表 / Reader 翻页 / e2e 联调 |
 | W5-W6 | 6 | UIAbility / 设计系统 / 暗色模式 / 通用组件库 / Token 映射 / 字体策略 |
@@ -276,7 +276,7 @@ graph TD
 
 #### **W2：C++ NAPI 桥接框架完整化**
 
-**目标**：typesetting + badge-engine 双 native 桥接跑通，HAP 真机部署。
+**目标**：独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) + [`badge-engine`](https://gitee.com/readmigo/badge-engine) 双 native 桥接跑通，HAP 真机部署。
 
 ##### 🟢 CODE 任务
 
@@ -297,14 +297,14 @@ graph TD
 |---|---|---|
 | W2-P1 | 鸿蒙签名证书申请 SOP | `docs/deployment/01-harmonyos-signing.md` |
 | W2-P2 | DevEco 真机部署 SOP | `docs/deployment/02-real-device-deploy.md` |
-| W2-P3 | C++ 引擎升级流程文档（同步海外版） | `docs/native/00-engine-sync-flow.md` |
+| W2-P3 | C++ 引擎升级流程文档（同步独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) / [`badge-engine`](https://gitee.com/readmigo/badge-engine)） | `docs/native/00-engine-sync-flow.md` |
 
 ##### 🟠 真机依赖
 
 | ID | 任务 | 你做 |
 |---|---|---|
 | W2-X1 | 申请鸿蒙签名证书（依赖 W1 华为开发者账号通过） | ✅ |
-| W2-X2 | 真机部署测试 typesetting demo | ✅ |
+| W2-X2 | 真机部署测试 typesetting demo（来自独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting)） | ✅ |
 
 ##### 🔴 EXTERNAL
 
@@ -312,8 +312,8 @@ graph TD
 
 ##### 验收标准
 
-- [ ] HAP 真机运行，看到 typesetting 渲染的样例文字
-- [ ] badge-engine 在真机上能 init 并返回测试 badge
+- [ ] HAP 真机运行，看到独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) 渲染的样例文字
+- [ ] 独立仓 [`badge-engine`](https://gitee.com/readmigo/badge-engine) 在真机上能 init 并返回测试 badge
 
 ---
 

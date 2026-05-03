@@ -188,7 +188,7 @@ export interface LLMProvider {
 | 包管理（鸿蒙） | **ohpm** | 鸿蒙原生 |
 | 包管理（共享 TS） | **pnpm**（阿里 npm 镜像） | monorepo |
 | 构建（鸿蒙） | **hvigor** | 鸿蒙原生 |
-| 构建（C++） | **CMake + NDK** | typesetting / badge-engine 共用 |
+| 构建（C++） | **CMake + NDK** | 独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) / [`badge-engine`](https://gitee.com/readmigo/badge-engine) 共用 |
 
 ### 配置要点
 

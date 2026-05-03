@@ -35,8 +35,8 @@
 
 | 海外 repo | 行数 | 国内位置 | 共享方式 | 双向同步策略 |
 |---------|------|--------|---------|----------|
-| `typesetting` | 114,763（C++） | `native/typesetting/` | git submodule | 海外为主 + 国内 PR 提修复 |
-| `badge-engine` | ~42,000（C/C++） | `native/badge-engine/` | git submodule | 海外为主 + 国内 PR 提修复 |
+| `typesetting` | 114,763（C++） | 独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) | git submodule | 海外为主 + 国内 PR 提修复 |
+| `badge-engine` | ~42,000（C/C++） | 独立仓 [`badge-engine`](https://gitee.com/readmigo/badge-engine) | git submodule | 海外为主 + 国内 PR 提修复 |
 | **小计** | **156,763** | | | **0 改动 / 双向同步** |
 
 ⭐ **关键工程红利**：
@@ -135,8 +135,8 @@ cp -r ../badge-assets apps/harmony-app/.../badge-assets
 ### 3.3 添加 git submodule（C++ 引擎）
 
 ```bash
-git submodule add ../typesetting native/typesetting
-git submodule add ../badge-engine native/badge-engine
+git submodule add https://gitee.com/readmigo/typesetting native/typesetting
+git submodule add https://gitee.com/readmigo/badge-engine native/badge-engine
 git submodule update --init --recursive
 ```
 
@@ -198,7 +198,7 @@ git push origin fix/some-issue
 
 ### 5.1 C++ 引擎（共享）
 
-- 海外团队 own typesetting / badge-engine 主分支
+- 海外团队 own 独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) / [`badge-engine`](https://gitee.com/readmigo/badge-engine) 主分支
 - 国内团队修复 bug → 在 fork 上改 → 提 PR 到海外主分支
 - 国内不直接 push 海外主分支
 - 海外审核合并后 → 国内 `git submodule update --remote`

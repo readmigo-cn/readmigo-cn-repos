@@ -44,7 +44,7 @@ Phase 5 上架                         ▓▓
 - [ ] DevEco 项目初始化（Stage 模型 + ArkTS）
 - [ ] Gitee 仓库初始化 + push
 - [ ] CI 配置（Gitee Actions）
-- [ ] git submodule 添加 typesetting + badge-engine
+- [ ] git submodule 添加 独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) + [`badge-engine`](https://gitee.com/readmigo/badge-engine)
 
 ### Week 2：C++ NAPI 桥接框架
 - [ ] CMake + arm64-v8a NDK 配置
@@ -63,7 +63,7 @@ Phase 5 上架                         ▓▓
 ### Week 4：PoC happy path
 - [ ] 鸿蒙端登录 + token 持久化（接华为账号 SDK）
 - [ ] 鸿蒙端书库列表（LazyForEach）
-- [ ] 鸿蒙端单本书阅读（C++ typesetting 渲染）
+- [ ] 鸿蒙端单本书阅读（独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) 渲染）
 - [ ] **里程碑**：跑通"登录 → 书库 → 打开一本书 → 翻页"
 
 ## Phase 2：客户端核心（6 周）

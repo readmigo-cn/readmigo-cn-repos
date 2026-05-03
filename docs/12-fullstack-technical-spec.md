@@ -304,8 +304,8 @@
 
 ### 主方案
 
-- `typesetting`
-- `badge-engine`
+- 独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting)
+- 独立仓 [`badge-engine`](https://gitee.com/readmigo/badge-engine)
 
 ### 为什么这样定
 
@@ -314,22 +314,22 @@
 
 ### 对齐 readmigo 的来源
 
-- `readmigo-repos/typesetting`
-- `readmigo-repos/badge-engine`
+- 独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting)
+- 独立仓 [`badge-engine`](https://gitee.com/readmigo/badge-engine)
 
 ### 同步策略
 
-- `同步`：C/C++ 核心源码
+- `同步`：C/C++ 核心源码（git submodule 方式）
 - `重写`：Apple 桥接、iOS 构建脚本、平台接口实现
 
 ### 当前状态
 
-- 还未真正同步到 `native/`
+- W23 已完成：独立仓已拆出，git submodule 配置就位
 
 ### 下一步
 
-- 先同步核心源码
-- 再设计 Harmony NAPI / C API 桥接层
+- 设计 Harmony NAPI / C API 桥接层
+- 在国内版 readmigo-cn-repos 中通过 git submodule 引用
 
 ---
 
@@ -359,7 +359,7 @@
 | `apps/harmony-app/` | 鸿蒙客户端 | 已起骨架 |
 | `server-cn` ([gitee](https://gitee.com/readmigo/server-cn)) | 国内后端 | 已起骨架 |
 | `llm-adapter` ([gitee](https://gitee.com/readmigo/llm-adapter)) | 模型抽象层 | 已起骨架 |
-| `native/` | 原生引擎同步区 | 待同步 |
+| `native/` | 原生引擎（git submodule） | W23 已完成 |
 | `tools/ai-coding/` | AI coding 规则与模板 | 已起骨架 |
 | `docs/` | 方案、路线图、同步规则 | 已建立 |
 
@@ -367,7 +367,7 @@
 
 ## 12. 下一步实施顺序
 
-1. 同步 `typesetting` 与 `badge-engine` 的核心源码到 `native/`
+1. 设计 `native/` 下的 NAPI 桥接框架（typesetting + badge-engine）
 2. 继续把 `server-cn` 细化成可运行国内版基础后端
 3. 把 `harmony-app` 做成真正的 `auth + tabs + reader` 主链路
 4. 开始接 `AGC / Huawei Account / HMS IAP`

@@ -1,25 +1,19 @@
 # Gitee 多 Repo 结构与迁移蓝图
 
-## 2026-05-03 状态更新
+## 2026-05-03 W24 拆分完成（同日内推进）
 
 W23 拆分完成 3 个独立仓:
 - ✅ [server-cn](https://gitee.com/readmigo/server-cn) (Private)
 - ✅ [infra-cn](https://gitee.com/readmigo/infra-cn) (Private)
 - ✅ [llm-adapter](https://gitee.com/readmigo/llm-adapter) (Private)
 
+W24 拆分完成：
+- ✅ [napi-bridge](https://gitee.com/readmigo/napi-bridge) (Private)
+- ✅ [typesetting](https://gitee.com/readmigo/typesetting) (Private, 待 GitHub mirror)
+- ✅ [badge-engine](https://gitee.com/readmigo/badge-engine) (Private, 待 GitHub mirror)
+
 详见拆分决策 [docs/architecture/01-repo-split-decision.md](architecture/01-repo-split-decision.md)
 和 SOP [docs/architecture/02-server-cn-split-sop.md](architecture/02-server-cn-split-sop.md)。
-
----
-
-## W24-W26 计划拆分
-
-🟡 **进行中**：
-- `napi-bridge` (HarmonyOS 专属，独立拆) - W24 计划
-- `typesetting` (mirror from GitHub) - W25-W26 计划
-- `badge-engine` (mirror from GitHub) - W25-W26 计划
-
-详见 [docs/architecture/04-native-engine-sync-strategy.md](architecture/04-native-engine-sync-strategy.md)（待创建）
 
 ---
 
@@ -40,18 +34,20 @@ graph LR
 | `readmigo/compliance-cn` | **Private** | 公司营业执照、法人/个人身份证、软著申请材料 | 本次新建，承接 GitHub `readmigo/harmony` 历史敏感材料 |
 | `readmigo/sample_repository` | Internal | Gitee 占位 | 可清理 |
 
-## 拆分进度（W23 已完成 / W24-W26 计划中）
+## 拆分进度（W23-W24 已完成）
 
 参考 GitHub `readmigo` 组织的拆分模式，按职责切分：
 
 ```mermaid
 graph LR
-  Mono["readmigo-cn-repos<br/>当前 monorepo"] --> Harmony["harmony-app<br/>HarmonyOS App"]
-  Mono --> Server["✅ server-cn<br/>国内后端"]
-  Mono --> LLM["✅ llm-adapter<br/>国产 LLM"]
-  Mono --> Bridge["🟡 napi-bridge<br/>C++ ↔ ArkTS"]
-  Mono --> Docs["docs-cn<br/>中文文档"]
-  Mono --> Infra["✅ infra-cn<br/>Private · Terraform"]
+  Ent["gitee.com/readmigo<br/>Enterprise"] --> Mono["readmigo-cn-repos<br/>Internal · monorepo 瘦身后"]
+  Ent --> Comp["compliance-cn<br/>Internal · 敏感材料"]
+  Ent --> Server["server-cn<br/>Private · NestJS"]
+  Ent --> Infra["infra-cn<br/>Private · Terraform"]
+  Ent --> LLM["llm-adapter<br/>Private · npm 包"]
+  Ent --> Napi["napi-bridge<br/>Private · C++↔ArkTS"]
+  Ent --> TS["typesetting<br/>Private · 待 GitHub mirror"]
+  Ent --> BE["badge-engine<br/>Private · 待 GitHub mirror"]
 ```
 
 | Repo | 来源 | 可见性 | 状态 | 拆分时机 |
@@ -59,9 +55,9 @@ graph LR
 | `server-cn` | `server-cn/` | Internal | **✅ W23 完成** | 阶段 1（独立部署需要） |
 | `infra-cn` | `infra/` | **Private** | **✅ W23 完成** | 阶段 1（含华为云敏感配置） |
 | `llm-adapter` | `packages/llm-adapter/` | Internal | **✅ W23 完成** | 阶段 2（被多个项目引用时） |
-| `napi-bridge` | `napi-bridge/` | Internal | **🟡 W24 进行中** | 仅当独立发布时 |
-| `typesetting` | 镜像 GitHub `readmigo/typesetting` | Internal | **🟡 W25-W26** | 国内 dev 链路需要 |
-| `badge-engine` | 镜像 GitHub `readmigo/badge-engine` | Internal | **🟡 W25-W26** | 后续 |
+| `napi-bridge` | `napi-bridge/` | **Private** | **✅ W24 完成** | 仅当独立发布时 |
+| `typesetting` | 镜像 GitHub `readmigo/typesetting` | **Private** | **✅ W24 完成（待 GitHub mirror）** | 国内 dev 链路需要 |
+| `badge-engine` | 镜像 GitHub `readmigo/badge-engine` | **Private** | **✅ W24 完成（待 GitHub mirror）** | 后续 |
 | `harmony-app` | `apps/harmony-app/` + 紧耦合的 `napi-bridge/` `native/` | Internal | ⚪ 规划中 | apps 体量超过阈值 |
 | `docs-cn` | `docs/`（本目录） | Internal | ⚪ 规划中 | 独立发布站点时 |
 
@@ -74,6 +70,8 @@ graph LR
 | 基础设施配置（Terraform、Nginx、k8s） | **Private** | 含服务 IP、域名 SSL、资源 ID |
 | 业务代码、文档、政策模板 | Internal | 企业成员可见 |
 | 开源参考、品牌物料 | Public | 可公开 |
+
+> **现状校准（2026-05-03）**：基础设施 + 业务代码仓 (`server-cn`/`infra-cn`/`llm-adapter`/`napi-bridge`/`typesetting`/`badge-engine`) 当前 Gitee API 创建后均为 **Private**。Gitee Enterprise API 不支持设 Internal，需 web UI 手动改。docs 此前标的 Internal 是规划目标，未与实际状态对齐 → 本次校准后表示真实状态。
 
 ## Gitee Enterprise 概念对照 GitHub Org
 
