@@ -58,7 +58,7 @@ graph LR
 | `napi-bridge` | `napi-bridge/` | **Private** | **✅ W24 完成** | 仅当独立发布时 |
 | `typesetting` | 镜像 GitHub `readmigo/typesetting` | **Private** | **✅ W24 完成（待 GitHub mirror）** | 国内 dev 链路需要 |
 | `badge-engine` | 镜像 GitHub `readmigo/badge-engine` | **Private** | **✅ W24 完成（待 GitHub mirror）** | 后续 |
-| `harmony-app` | `apps/harmony-app/` + 紧耦合的 `napi-bridge/` `native/` | Internal | ⚪ 规划中 | apps 体量超过阈值 |
+| `harmony-app` | `harmony-app/` + 紧耦合的 `napi-bridge/` `native/` | Internal | ⚪ 规划中 | apps 体量超过阈值 |
 | `docs-cn` | `docs/`（本目录） | Internal | ⚪ 规划中 | 独立发布站点时 |
 
 ## 可见性规则

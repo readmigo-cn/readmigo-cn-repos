@@ -96,14 +96,14 @@ registry=https://registry.npmmirror.com/
 
 后续真正开工时，先补齐：
 
-- `apps/harmony-app/`
+- `harmony-app/`
 - `server-cn/`
 - `packages/llm-adapter/`
 - `tools/ai-coding/`
 
 其中：
 
-- `apps/harmony-app/` 存放 ArkTS / ArkUI 主应用
+- `harmony-app/` 存放 ArkTS / ArkUI 主应用
 - `server-cn/` 存放国内后端
 - `packages/llm-adapter/` 做国产模型抽象层
 - `tools/ai-coding/` 放企业知识库、AI 使用规则、脚手架说明

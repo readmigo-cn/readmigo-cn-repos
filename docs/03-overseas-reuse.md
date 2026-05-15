@@ -26,8 +26,8 @@
 | `book-translator` | 1,177 | TypeScript | `server-cn/book-translator/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/book-translator/)) | 接百度翻译 | 80% | 0.5 周 |
 | `reader-engine` | 7,047 | TypeScript | `packages/shared-arkts/reader-engine/` | TS → ArkTS 重写 | 70% | 1 周 |
 | `shipkit` | 13,280 | TypeScript | `tools/shipkit-cn/` | npm 镜像配置 | 90% | 0.5 周 |
-| `badge-content` | 1,349 | YAML | `apps/harmony-app/.../badge-content/` | 直接拷贝 | 100% | 0.1 周 |
-| `badge-assets` | 423 | JSON | `apps/harmony-app/.../badge-assets/` | 直接拷贝 | 100% | 0.1 周 |
+| `badge-content` | 1,349 | YAML | `harmony-app/.../badge-content/` | 直接拷贝 | 100% | 0.1 周 |
+| `badge-assets` | 423 | JSON | `harmony-app/.../badge-assets/` | 直接拷贝 | 100% | 0.1 周 |
 | `badge-cli` | 1,110 | Python | `tools/badge-cli/` | 直接拷贝 | 100% | 0.1 周 |
 | **小计** | **214,462** | | | | **平均 ~75%** | **~12 周** |
 
@@ -128,8 +128,8 @@ cp -r ../reader-engine packages/shared-arkts/reader-engine
 # ... 然后做 TS → ArkTS 转换
 
 # 资源直接拷贝
-cp -r ../badge-content apps/harmony-app/.../badge-content
-cp -r ../badge-assets apps/harmony-app/.../badge-assets
+cp -r ../badge-content harmony-app/.../badge-content
+cp -r ../badge-assets harmony-app/.../badge-assets
 ```
 
 ### 3.3 添加 git submodule（C++ 引擎）
@@ -187,7 +187,7 @@ git push origin fix/some-issue
 - [ ] React Hooks 心智 → ArkUI @State / @Prop / @Watch
 - [ ] 测试：用 Hypium 写单测
 
-### 4.5 `apps/harmony-app/.../badge-content` 和 `badge-assets`
+### 4.5 `harmony-app/.../badge-content` 和 `badge-assets`
 
 - [ ] 中文勋章名翻译
 - [ ] 鸿蒙特有勋章（"鸿蒙先锋"、"多端协同达人"）

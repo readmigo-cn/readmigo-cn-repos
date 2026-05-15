@@ -38,7 +38,7 @@
 
 ### 当前落地位置
 
-- [apps/harmony-app](/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app)
+- [harmony-app](/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/harmony-app)
 
 ### 当前已落地骨架
 
@@ -225,7 +225,7 @@
 ### 当前落地位置
 
 - `server-cn/src/modules/auth` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/modules/auth))
-- `apps/harmony-app/entry/src/main/ets/pages/Login.ets`
+- `harmony-app/entry/src/main/ets/pages/Login.ets`
 
 ### 下一步
 
@@ -356,7 +356,7 @@
 
 | 目录/仓库 | 角色 | 状态 |
 |------|------|------|
-| `apps/harmony-app/` | 鸿蒙客户端 | 已起骨架 |
+| `harmony-app/` | 鸿蒙客户端 | 已起骨架 |
 | `server-cn` ([gitee](https://gitee.com/readmigo/server-cn)) | 国内后端 | 已起骨架 |
 | `llm-adapter` ([gitee](https://gitee.com/readmigo/llm-adapter)) | 模型抽象层 | 已起骨架 |
 | `native/` | 原生引擎（git submodule） | W23 已完成 |

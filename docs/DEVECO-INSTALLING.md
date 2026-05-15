@@ -70,10 +70,10 @@ open -a "Deveco Studio"
 
 ```bash
 # 方式 A: 从 DevEco Studio 菜单
-# File → Open → 选择 apps/harmony-app
+# File → Open → 选择 harmony-app
 
 # 方式 B: 命令行（DevEco Studio 启动后）
-open -a "Deveco Studio" /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
+open -a "Deveco Studio" /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/harmony-app
 ```
 
 ---
@@ -108,7 +108,7 @@ echo "2. SDK 安装:"
 ls -d ~/Library/Huawei/Sdk 2>/dev/null && echo "   ✅ 已安装" || echo "   ❌ 未安装"
 echo ""
 echo "3. 项目目录:"
-ls -d /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app 2>/dev/null && echo "   ✅ 存在" || echo "   ❌ 不存在"
+ls -d /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/harmony-app 2>/dev/null && echo "   ✅ 存在" || echo "   ❌ 不存在"
 ```
 
 ---
@@ -120,7 +120,7 @@ ls -d /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app 2>
 - [ ] DevEco Studio 可正常启动
 - [ ] HarmonyOS SDK 已下载完成
 - [ ] ohpm 命令可用
-- [ ] 项目可打开（`apps/harmony-app`）
+- [ ] 项目可打开（`harmony-app`）
 - [ ] 构建无错误（Build → Build Hap(s)）
 
 ---

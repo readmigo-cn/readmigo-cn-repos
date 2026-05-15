@@ -47,7 +47,7 @@ URL: https://developer.huawei.com/consumer/cn/
 ### 1.4 下载配置文件
 1. 进入应用管理页面
 2. 下载 `agconnect-services.json`
-3. 将文件放置到：`apps/harmony-app/entry/agconnect-services.json`
+3. 将文件放置到：`harmony-app/entry/agconnect-services.json`
 
 ---
 
@@ -156,7 +156,7 @@ ohpm config get registry
 keytool -genkey -v -keystore readmigo.keystore -alias readmigo -keyalg RSA -keysize 2048 -validity 10000
 
 # 2. 放置到项目目录
-# apps/harmony-app/entry/readmigo.keystore
+# harmony-app/entry/readmigo.keystore
 ```
 
 ### 5.3 配置 build-profile.json5
@@ -191,7 +191,7 @@ cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 pnpm install
 
 # 3. 进入 harmony-app 目录
-cd apps/harmony-app
+cd harmony-app
 
 # 4. 安装鸿蒙应用依赖
 ohpm install
@@ -219,7 +219,7 @@ pnpm --version
 ### 7.2 在 DevEco Studio 中验证
 
 1. 打开 DevEco Studio
-2. `File` → `Open` → 选择 `/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app`
+2. `File` → `Open` → 选择 `/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/harmony-app`
 3. 等待项目索引完成
 4. 点击 `Build` → `Build Hap(s) / APP(s)` → `Build Hap(s)`
 5. 如果构建成功，环境配置完成 ✅

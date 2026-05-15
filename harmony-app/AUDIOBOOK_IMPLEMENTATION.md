@@ -291,7 +291,7 @@ Tab Theme (Light):
 ## File Structure
 
 ```
-apps/harmony-app/entry/src/main/ets/
+harmony-app/entry/src/main/ets/
 ├── model/
 │   ├── Audiobook.ts           # NEW - Audiobook data models
 │   └── Book.ts                # Existing - Book models

@@ -166,7 +166,7 @@ compliance-cn  -      -        -        -      -       -      -     ⋯       �
 graph LR
   push["Git Push"] --> dispatch{"变更检测"}
   
-  dispatch -->|apps/**| build_app["harmony-app<br/>CI<br/>15 min"]
+  dispatch -->|harmony-app/**| build_app["harmony-app<br/>CI<br/>15 min"]
   dispatch -->|packages/**| build_sdk["harmony-sdk<br/>CI<br/>5 min"]
   dispatch -->|typesetting/| build_ts["typesetting<br/>CI<br/>10 min<br/>C++ build"]
   dispatch -->|badge-engine/| build_bg["badge-engine<br/>CI<br/>8 min"]
@@ -504,7 +504,7 @@ graph TB
 
 ```
 readmigo-cn-repos (monorepo)
-├── apps/harmony-app
+├── harmony-app
 ├── packages/llm-adapter ← 拆分为 server-cn 内子目录
 ├── server-cn ← 拆分为独立仓
 ├── infra/ ← 拆分为独立仓

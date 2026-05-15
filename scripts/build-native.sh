@@ -17,7 +17,7 @@
 #                        Defaults to ~/Library/Huawei/Sdk on macOS.
 #
 # Output:
-#   apps/harmony-app/entry/libs/arm64-v8a/libreadmigo_native.so
+#   harmony-app/entry/libs/arm64-v8a/libreadmigo_native.so
 # =============================================================================
 
 set -euo pipefail
@@ -156,8 +156,8 @@ success "Toolchain: ${TOOLCHAIN_FILE}"
 # ---------------------------------------------------------------------------
 TYPESETTING_DIR="${REPO_ROOT}/native/typesetting"
 BADGE_ENGINE_DIR="${REPO_ROOT}/native/badge-engine"
-ENTRY_CPP_DIR="${REPO_ROOT}/apps/harmony-app/entry/src/main/cpp"
-OUTPUT_DIR="${REPO_ROOT}/apps/harmony-app/entry/libs/arm64-v8a"
+ENTRY_CPP_DIR="${REPO_ROOT}/harmony-app/entry/src/main/cpp"
+OUTPUT_DIR="${REPO_ROOT}/harmony-app/entry/libs/arm64-v8a"
 
 # Separate build directories per library step + configuration.
 BUILD_BASE="${REPO_ROOT}/.build-native/${BUILD_TYPE}"
@@ -333,4 +333,4 @@ info   "  Output : ${OUTPUT_DIR}/libreadmigo_native.so"
 info   "  Size   : $(du -sh "${OUTPUT_DIR}/libreadmigo_native.so" | cut -f1)"
 bold "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
-info "Next step: open apps/harmony-app in DevEco Studio and run Build → Build Hap(s)"
+info "Next step: open harmony-app in DevEco Studio and run Build → Build Hap(s)"

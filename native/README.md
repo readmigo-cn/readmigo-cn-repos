@@ -18,7 +18,7 @@ NAPI 桥接层同样已独立：
 
 ## 引用方式（未来）
 
-`apps/harmony-app` 通过 `oh-package.json5` 或 hvigor 配置引用 `napi-bridge`，
+`harmony-app` 通过 `oh-package.json5` 或 hvigor 配置引用 `napi-bridge`，
 `napi-bridge` 通过 CMake `FetchContent` / submodule 拉取 `typesetting` / `badge-engine`。
 
 详见 [`docs/architecture/04-native-engine-sync-strategy.md`](../docs/architecture/04-native-engine-sync-strategy.md)。

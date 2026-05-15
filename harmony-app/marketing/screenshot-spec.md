@@ -2,7 +2,7 @@
 
 > 版本：v1.0
 > 适用范围：HarmonyOS NEXT 应用市场 / iOS App Store 中国区
-> 输出脚本：`apps/harmony-app/scripts/screenshots/generate-screenshots.sh`
+> 输出脚本：`harmony-app/scripts/screenshots/generate-screenshots.sh`
 
 ---
 

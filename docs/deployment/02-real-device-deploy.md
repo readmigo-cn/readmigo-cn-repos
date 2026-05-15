@@ -169,7 +169,7 @@ hdc -t <Device ID> install readmigo.hap
 ### 4.1 打开项目
 
 ```
-File → Open → /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
+File → Open → /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/harmony-app
 ```
 
 DevEco 会自动加载项目配置。
@@ -518,7 +518,7 @@ devices=$(hdc list targets | grep "Online" | awk '{print $1}')
 
 for device in $devices; do
     echo "Deploying to $device..."
-    hdc -t $device install apps/harmony-app/build/outputs/default/readmigo.hap
+    hdc -t $device install harmony-app/build/outputs/default/readmigo.hap
     hdc -t $device shell am start com.readmigo.harmony.cn/.MainActivity
     echo "Deployed to $device ✓"
 done
@@ -736,7 +736,7 @@ Error: Failed to load native module 'typesetting'
 
 1. **确认编译产物**：
    ```bash
-   find apps/harmony-app -name "libtypesetting.so"
+   find harmony-app -name "libtypesetting.so"
    ```
 
 2. **检查 NAPI 绑定**：
@@ -745,7 +745,7 @@ Error: Failed to load native module 'typesetting'
 3. **验证 HAP 打包**：
    ```bash
    # 解开 HAP 包（HAP 本质是 ZIP）
-   unzip -l apps/harmony-app/build/outputs/default/readmigo.hap | grep libtypesetting.so
+   unzip -l harmony-app/build/outputs/default/readmigo.hap | grep libtypesetting.so
    ```
 
 4. **查看加载错误日志**：
@@ -798,8 +798,8 @@ Error: Failed to load native module 'typesetting'
 
 1. **确认 native 模块已编译**：
    ```bash
-   ls -la apps/harmony-app/build/intermediates/libs/*/libtypesetting.so
-   ls -la apps/harmony-app/build/intermediates/libs/*/libbadge_engine.so
+   ls -la harmony-app/build/intermediates/libs/*/libtypesetting.so
+   ls -la harmony-app/build/intermediates/libs/*/libbadge_engine.so
    ```
 
 2. **确认 NAPI bridge 可用**：

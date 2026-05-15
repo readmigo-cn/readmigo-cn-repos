@@ -84,7 +84,7 @@ SimpleIcon({ name: 'search', size: 24, color: '#1a1a1a' })
 
 1. **打开项目**
    ```
-   File → Open → apps/harmony-app
+   File → Open → harmony-app
    ```
 
 2. **等待索引完成**
@@ -105,7 +105,7 @@ SimpleIcon({ name: 'search', size: 24, color: '#1a1a1a' })
 ### 命令行验证（需要 DevEco Studio CLI）
 
 ```bash
-cd apps/harmony-app
+cd harmony-app
 hvigorw assembleHap --debug
 ```
 
@@ -166,7 +166,7 @@ Run → Run 'entry' (Shift + F10)
 ### Q1: "Module not found" 错误
 **解决**: 
 ```bash
-cd apps/harmony-app
+cd harmony-app
 ohpm install
 ```
 
@@ -186,7 +186,7 @@ ohpm install
 **解决**:
 ```bash
 # 清理构建缓存
-cd apps/harmony-app
+cd harmony-app
 hvigorw clean
 
 # 重新构建

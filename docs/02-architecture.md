@@ -15,7 +15,7 @@ Harmony App (ArkTS / ArkUI)
 
 ## 客户端
 
-- `apps/harmony-app/`：鸿蒙主应用
+- `harmony-app/`：鸿蒙主应用
 - `ArkTS / ArkUI`：页面、阅读器、词卡、AI 入口
 - `AGC`：认证、远程配置、分析、崩溃、分发
 

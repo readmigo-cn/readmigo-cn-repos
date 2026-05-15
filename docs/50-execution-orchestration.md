@@ -236,7 +236,7 @@ graph TD
 |---|---|---|---|
 | W1-C1 | Gitee Actions CI 模板（PR / build / typecheck / lint） | `.gitee/workflows/ci.yml` | 80 |
 | W1-C2 | Gitee Actions 构建产物上传（HAP / Server image） | `.gitee/workflows/build.yml` | 100 |
-| W1-C3 | DevEco 项目骨架完善（hvigor / oh-package 修订） | `apps/harmony-app/{build-profile,oh-package}.json5` | 30 |
+| W1-C3 | DevEco 项目骨架完善（hvigor / oh-package 修订） | `harmony-app/{build-profile,oh-package}.json5` | 30 |
 | W1-C4 | server-cn Dockerfile + docker-compose 完整化 | `server-cn/{Dockerfile,docker-compose.yml}` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/)) | 80 |
 | W1-C5 | 极狐 GitLab CE IaC（docker-compose / Helm） | `infra-cn/gitlab-ce/docker-compose.yml` ([gitee](https://gitee.com/readmigo/infra-cn/blob/main/)) + README | 200 |
 | W1-C6 | 测试框架接入（jest 给 server-cn / hypium 给 ArkTS） | 各项目 test config | 120 |
@@ -285,11 +285,11 @@ graph TD
 | W2-C1 | NAPI 桥接框架（统一错误处理、类型转换） | `napi-bridge/src/common/{error,convert}.cpp` | 400 |
 | W2-C2 | typesetting NAPI 完整接口（doc/page/render/measure） | `napi-bridge/src/typesetting_napi.cpp` | 600 |
 | W2-C3 | badge-engine NAPI 接口（init/eval/render） | `napi-bridge/src/badge_engine_napi.cpp` | 500 |
-| W2-C4 | CMake + arm64-v8a NDK 配置 | `apps/harmony-app/entry/src/main/cpp/CMakeLists.txt` | 80 |
-| W2-C5 | XComponent 集成示例（带交互） | `apps/harmony-app/entry/src/main/ets/native/XComponentDemo.ets` | 200 |
+| W2-C4 | CMake + arm64-v8a NDK 配置 | `harmony-app/entry/src/main/cpp/CMakeLists.txt` | 80 |
+| W2-C5 | XComponent 集成示例（带交互） | `harmony-app/entry/src/main/ets/native/XComponentDemo.ets` | 200 |
 | W2-C6 | typesetting.so / badge_engine.so 编译脚本 | `scripts/build-native.sh` + CI 集成 | 100 |
-| W2-C7 | ArkTS 端 typesetting 完整 binding | `apps/harmony-app/entry/src/main/ets/native/typesetting.ets` | 250 |
-| W2-C8 | ArkTS 端 badge-engine binding | `apps/harmony-app/entry/src/main/ets/native/badge-engine.ets` | 200 |
+| W2-C7 | ArkTS 端 typesetting 完整 binding | `harmony-app/entry/src/main/ets/native/typesetting.ets` | 250 |
+| W2-C8 | ArkTS 端 badge-engine binding | `harmony-app/entry/src/main/ets/native/badge-engine.ets` | 200 |
 
 ##### 🟡 PREP 任务
 

@@ -142,7 +142,7 @@ setup_project_config() {
     log_info "配置项目..."
     
     local PROJECT_DIR="/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos"
-    local HARMONY_APP_DIR="$PROJECT_DIR/apps/harmony-app"
+    local HARMONY_APP_DIR="$PROJECT_DIR/harmony-app"
     
     # 检查项目目录
     if [ ! -d "$HARMONY_APP_DIR" ]; then
@@ -185,7 +185,7 @@ setup_signing() {
     log_info "创建签名配置..."
     
     local PROJECT_DIR="/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos"
-    local HARMONY_APP_DIR="$PROJECT_DIR/apps/harmony-app"
+    local HARMONY_APP_DIR="$PROJECT_DIR/harmony-app"
     local SIGNING_DIR="$HARMONY_APP_DIR/signing"
     
     mkdir -p "$SIGNING_DIR"
@@ -227,7 +227,7 @@ print_next_steps() {
     echo "   - 或运行：open -a 'Deveco Studio'"
     echo ""
     echo "2. 打开项目"
-    echo "   - File → Open → 选择 apps/harmony-app"
+    echo "   - File → Open → 选择 harmony-app"
     echo ""
     echo "3. 配置 SDK"
     echo "   - Settings → HarmonyOS SDK"

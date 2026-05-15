@@ -11,7 +11,7 @@ on:
       - main
     paths:
       - "packages/llm-adapter/**"
-      - "apps/harmony-app/**"
+      - "harmony-app/**"
   workflow_dispatch:
 
 jobs:

@@ -133,14 +133,14 @@ git push origin main
 ### Phase D（并行启动）— 同时跑两个 agent
 
 **D1: legacy-modernizer**
-**目标**：apps/harmony-app 内残留的 `napi-bridge/` 路径引用迁移到 sibling
+**目标**：harmony-app 内残留的 `napi-bridge/` 路径引用迁移到 sibling
 
 **任务**：
-1. `grep -rE "napi-bridge|native/typesetting|native/badge-engine" apps/harmony-app/ --include="*.json5" --include="*.json" --include="*.ets" --include="*.ts" --include="*.gn"`
+1. `grep -rE "napi-bridge|native/typesetting|native/badge-engine" harmony-app/ --include="*.json5" --include="*.json" --include="*.ets" --include="*.ts" --include="*.gn"`
 2. 每条匹配判断：
    - oh-package.json5 / build-profile.json5 内的 `file:../../napi-bridge` 类引用 → 改 `file:../../../napi-bridge`（指 sibling）
    - 注释 / 文档字符串内 → 路径改对应 Gitee URL
-3. 改完跑 `cd apps/harmony-app && pnpm install --frozen-lockfile=false 2>&1 | tail -20`，确认无 ENOENT
+3. 改完跑 `cd harmony-app && pnpm install --frozen-lockfile=false 2>&1 | tail -20`，确认无 ENOENT
 4. commit 信息：`refactor(harmony-app): 引用迁移 napi-bridge → sibling 仓`
 
 如果 grep 命中 0 条 → 跳过，输出 "no migration needed"。
@@ -216,7 +216,7 @@ graph LR
 
 | Repo | Visibility（API 实测） | 用途 |
 |---|---|---|
-| readmigo-cn-repos | Internal | apps/harmony-app + compliance + docs + scripts + tools |
+| readmigo-cn-repos | Internal | harmony-app + compliance + docs + scripts + tools |
 | compliance-cn | Internal | 公司资质 + 敏感材料 |
 | server-cn | Private | 后端 NestJS |
 | infra-cn | Private | Terraform + 华为云 |

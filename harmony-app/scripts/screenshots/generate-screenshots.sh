@@ -4,7 +4,7 @@
 # 用 hdc shell screencap 在真机/模拟器抓取 10 张应用截图。
 # 流程：列出设备 → 选择目标 → 启动 demo mode → 走 happy path → 逐页截图保存。
 #
-# 输出目录：apps/harmony-app/marketing/screenshots/{harmony,ios-cn}/{1-10}.png
+# 输出目录：harmony-app/marketing/screenshots/{harmony,ios-cn}/{1-10}.png
 # 中英双语：先以 zh-Hans 跑一遍，再切换到 en-US 重跑一遍。
 #
 # 用法：

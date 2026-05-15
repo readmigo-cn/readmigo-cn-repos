@@ -140,7 +140,7 @@ if [ -d "/Applications/Deveco Studio.app" ]; then
     echo ""
     echo "  3. 打开项目"
     echo "     - File → Open"
-    echo "     - 选择 apps/harmony-app"
+    echo "     - 选择 harmony-app"
     echo ""
     echo "  4. 配置签名"
     echo "     - 右键 entry → Open Module Settings → Signatures"

@@ -81,13 +81,13 @@ jobs:
       #   1. Investigate `hvigorw` headless mode in a custom runner image.
       #   2. Or use a self-hosted Gitee Go runner on a machine with DevEco Studio.
       #   3. Replace the echo below with:
-      #        cd apps/harmony-app && ohpm install && hvigorw assembleHap
+      #        cd harmony-app && ohpm install && hvigorw assembleHap
       - name: ArkTS syntax check (placeholder)
         run: |
           echo "::warning::ArkTS syntax check is a placeholder."
           echo "DevEco Studio CLI (hvigorw/ohpm) is not available in standard CI runners."
           echo "Planned for W2 — see comment in ci.yml for details."
-          echo "Affected path: apps/harmony-app/entry/src/main/ets/**/*.ets"
+          echo "Affected path: harmony-app/entry/src/main/ets/**/*.ets"
 
   # ── Hypium ohosTest: harmony-app ──────────────────────────────────────────
   #
@@ -106,7 +106,7 @@ jobs:
       - name: Verify ohosTest sources are discoverable
         run: |
           set -eu
-          cd apps/harmony-app/entry/src/ohosTest/ets/test
+          cd harmony-app/entry/src/ohosTest/ets/test
           # List 必须 import 全部 e2e 套件，否则 hvigorw test 会跳过。
           required=(
             "e2e/HappyPath.test.ets"
@@ -135,12 +135,12 @@ jobs:
           echo "::warning::Hypium tests not executed — DevEco Studio CLI not in CI runner."
           echo "Planned in W12 once the OHOS-enabled self-hosted runner is online."
           echo "Manual run on dev machine:"
-          echo "  cd apps/harmony-app && hvigorw test --module entry --debug"
+          echo "  cd harmony-app && hvigorw test --module entry --debug"
 
       - name: Coverage report (placeholder)
         run: |
           echo "::notice::Coverage report deferred to W12 (hypium 1.0.19 lacks lcov export)."
-          echo "Track: apps/harmony-app/AUDIOBOOK_IMPLEMENTATION.md"
+          echo "Track: harmony-app/AUDIOBOOK_IMPLEMENTATION.md"
 
   # ── ohos-e2e: FullFlow 22-week 集成验收（W20-C5 占位 / W22 启用） ──────────
   #
@@ -151,7 +151,7 @@ jobs:
   #   3. 输出 W22 启用所需的 hvigorw 命令（届时只要把下方 echo 换成真实命令）
   #
   # W22 启用步骤（self-hosted OHOS runner 上线后）：
-  #   - 把 `echo "::warning::..."` 换成 `cd apps/harmony-app && hvigorw test --module entry --debug`
+  #   - 把 `echo "::warning::..."` 换成 `cd harmony-app && hvigorw test --module entry --debug`
   #   - 在 PR 模板里勾选「e2e green」即可合并
   ohos-e2e:
     name: OHOS E2E / harmony-app FullFlow (placeholder)
@@ -164,7 +164,7 @@ jobs:
       - name: Verify FullFlow + supporting files
         run: |
           set -eu
-          base=apps/harmony-app/entry/src
+          base=harmony-app/entry/src
           required=(
             "$base/main/ets/service/dynamic/ModuleLoader.ets"
             "$base/ohosTest/ets/test/utils/E2eHelper.ets"
@@ -193,7 +193,7 @@ jobs:
         run: |
           echo "::warning::ohos-e2e not executed — DevEco Studio CLI absent in CI."
           echo "Planned for W22 (self-hosted OHOS runner). Manual command:"
-          echo "  cd apps/harmony-app && hvigorw test --module entry --debug"
+          echo "  cd harmony-app && hvigorw test --module entry --debug"
 
   # ── Native C++ build: libreadmigo_native.so ───────────────────────────────
   #
@@ -209,8 +209,8 @@ jobs:
   # Local build path (developer machine):
   #   1. Install DevEco Studio and let it download the HarmonyOS SDK.
   #   2. Run:  ./scripts/build-native.sh --release
-  #   3. The .so lands in apps/harmony-app/entry/libs/arm64-v8a/
-  #   4. Open apps/harmony-app in DevEco Studio → Build → Build Hap(s)
+  #   3. The .so lands in harmony-app/entry/libs/arm64-v8a/
+  #   4. Open harmony-app in DevEco Studio → Build → Build Hap(s)
   #
   # When an OHOS CI runner becomes available, replace the echo steps with:
   #   - run: ./scripts/build-native.sh --release --verbose
@@ -268,24 +268,24 @@ jobs:
           echo "  ./scripts/build-native.sh --release"
           echo ""
           echo "Output location:"
-          echo "  apps/harmony-app/entry/libs/arm64-v8a/libreadmigo_native.so"
+          echo "  harmony-app/entry/libs/arm64-v8a/libreadmigo_native.so"
 
       # Upload placeholder artefact so the artefact slot exists in the CI run.
       # When the SDK is available the real .so will be uploaded instead.
       - name: Prepare artefact
         run: |
-          mkdir -p apps/harmony-app/entry/libs/arm64-v8a
+          mkdir -p harmony-app/entry/libs/arm64-v8a
           # If the real .so was not built, write a placeholder file so the
           # upload-artifact step always has something to attach.
-          if [[ ! -f apps/harmony-app/entry/libs/arm64-v8a/libreadmigo_native.so ]]; then
+          if [[ ! -f harmony-app/entry/libs/arm64-v8a/libreadmigo_native.so ]]; then
             echo "placeholder — SDK unavailable in CI; build locally with ./scripts/build-native.sh" \
-              > apps/harmony-app/entry/libs/arm64-v8a/BUILD_PLACEHOLDER.txt
+              > harmony-app/entry/libs/arm64-v8a/BUILD_PLACEHOLDER.txt
           fi
 
       - name: Upload native library artefact
         uses: actions/upload-artifact@v4
         with:
           name: libreadmigo_native-arm64-v8a
-          path: apps/harmony-app/entry/libs/arm64-v8a/
+          path: harmony-app/entry/libs/arm64-v8a/
           # Retain for 7 days; production releases should be tagged releases.
           retention-days: 7

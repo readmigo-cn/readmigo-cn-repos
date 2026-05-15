@@ -91,7 +91,7 @@
 
 **实际 LOC 分布**:
 - 后端: 18.2K (server-cn/src)
-- 客户端: 42.1K (apps/harmony-app)
+- 客户端: 42.1K (harmony-app)
 - NAPI Bridge: 3.8K (napi-bridge/src)
 - 测试: ~0.3K (极度不足)
 - **总计**: 64.2K
@@ -121,7 +121,7 @@
 
 ### 3.1 6 大子系统架构质量
 
-#### 3.1.1 客户端 ArkTS (apps/harmony-app)
+#### 3.1.1 客户端 ArkTS (harmony-app)
 
 **架构**: UIAbility (导航层) → Pages (UI 层) → Services (业务层) → Stores (状态管理)
 
@@ -246,7 +246,7 @@
 
 **检查结果**:
 - server-cn: ✓ 全部使用 `.ts` (Nest 环境，编译为 `.js`)
-- apps/harmony-app: ✓ 全部使用 `.ets`
+- harmony-app: ✓ 全部使用 `.ets`
 - napi-bridge: ✓ 混合使用 `.ts` (TS bindings) + `.cpp` (native)
 
 **评分**: 9/10 (无问题)
@@ -255,7 +255,7 @@
 
 **检查**:
 ```bash
-grep -r "use strict" apps/harmony-app/entry/src || echo "未找到显式 use strict"
+grep -r "use strict" harmony-app/entry/src || echo "未找到显式 use strict"
 ```
 
 **结果**: ⚠️ 无显式 `use strict` 声明（HarmonyOS ArkTS 默认严格）
@@ -923,8 +923,8 @@ W24 Week 2:
 | 后端主应用 | server-cn/src/main.ts | 1-50 |
 | AI 服务 (Critical) | server-cn/src/modules/ai/ai.service.ts | 72-86 (竞态问题) |
 | 认证中间件 | server-cn/src/middleware/auth.middleware.ts | 1-80 |
-| 客户端导航 | apps/harmony-app/entry/src/main/ets/UIAbility.ts | 1-100 |
-| Reader (膨胀问题) | apps/harmony-app/entry/src/main/ets/pages/Reader.ets | 1-1144 |
+| 客户端导航 | harmony-app/entry/src/main/ets/UIAbility.ts | 1-100 |
+| Reader (膨胀问题) | harmony-app/entry/src/main/ets/pages/Reader.ets | 1-1144 |
 | 合规备案 | docs/04-compliance.md | 1-269 |
 | 执行计划 | docs/50-execution-orchestration.md | 1-500+ |
 

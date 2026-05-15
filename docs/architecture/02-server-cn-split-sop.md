@@ -275,14 +275,14 @@ cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 # 之前：
 # packages:
 #   - "."
-#   - "apps/*"
+#   - "harmony-app"
 #   - "server-cn"
 #   - "packages/*"
 
 # 之后：
 # packages:
 #   - "."
-#   - "apps/*"
+#   - "harmony-app"
 #   - "packages/*"
 ```
 
@@ -330,9 +330,9 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
       - name: Typecheck harmony-app
-        run: cd apps/harmony-app && pnpm run typecheck
+        run: cd harmony-app && pnpm run typecheck
       - name: Lint harmony-app
-        run: cd apps/harmony-app && pnpm run lint
+        run: cd harmony-app && pnpm run lint
 
   # ❌ 移除 server-cn job（已独立）
   # - name: Build server-cn
@@ -348,14 +348,14 @@ jobs:
 # "compilerOptions": {
 #   "paths": {
 #     "@server/*": ["./server-cn/src/*"],
-#     "@harmony/*": ["./apps/harmony-app/src/*"]
+#     "@harmony/*": ["./harmony-app/src/*"]
 #   }
 # }
 
 # 之后：
 # "compilerOptions": {
 #   "paths": {
-#     "@harmony/*": ["./apps/harmony-app/src/*"]
+#     "@harmony/*": ["./harmony-app/src/*"]
 #   }
 # }
 ```
@@ -368,11 +368,11 @@ jobs:
 # 之前：
 # ## 仓库结构
 # - `server-cn/` — 后端 API 服务
-# - `apps/harmony-app/` — HarmonyOS 应用
+# - `harmony-app/` — HarmonyOS 应用
 
 # 之后：
 # ## 仓库结构
-# - `apps/harmony-app/` — HarmonyOS 应用
+# - `harmony-app/` — HarmonyOS 应用
 # - 后端 API：[server-cn](https://gitee.com/readmigo/server-cn)（独立仓）
 
 # 编辑 docs/architecture/01-repo-split-decision.md
@@ -566,7 +566,7 @@ pnpm install
 pnpm -r run typecheck
 
 # 验证 harmony-app 可独立编译
-cd apps/harmony-app
+cd harmony-app
 pnpm run typecheck
 # ✓ 成功
 ```
@@ -577,7 +577,7 @@ pnpm run typecheck
 # 检查 harmony-app 中的 API 配置是否正确指向 server-cn 远程
 
 # 在 harmony-app 中搜索 API endpoint
-grep -r "http://.*server" apps/harmony-app/src/
+grep -r "http://.*server" harmony-app/src/
 
 # 应指向：
 # - 本地：http://localhost:3000（开发时）
@@ -595,7 +595,7 @@ grep -r "http://.*server" apps/harmony-app/src/
 # 或者，通过环境变量/配置文件引入 server-cn 的 OpenAPI schema
 
 # 验证 package.json
-cat apps/harmony-app/package.json | jq '.dependencies' | grep server
+cat harmony-app/package.json | jq '.dependencies' | grep server
 # 如无共享包，应输出：空
 
 # 如有共享代码（如 API types），应改为：

@@ -10,7 +10,7 @@
     },
     {
       "source": "mobile/app",
-      "target": "apps/harmony-app",
+      "target": "harmony-app",
       "mode": "sync-information-architecture-redevelop-ui"
     },
     {

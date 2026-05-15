@@ -247,5 +247,5 @@ target_link_options(readmigo_native
 # ---------------------------------------------------------------------------
 set_target_properties(readmigo_native PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../../apps/harmony-app/entry/libs/arm64-v8a"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../../../../../../harmony-app/entry/libs/arm64-v8a"
 )

@@ -356,7 +356,7 @@ link .a into harmony app (hap)
 
 **方案**：HarmonyOS app 的 build config 锁定特定版本
 
-**文件**：`apps/harmony-app/hvigor-config.json`
+**文件**：`harmony-app/hvigor-config.json`
 ```json
 {
   "native": {

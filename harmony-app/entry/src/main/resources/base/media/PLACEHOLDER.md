@@ -217,7 +217,7 @@ Rectangle()
 ls -la /Users/HONGBGU/Documents/readmigo-repos/brand/dist/harmony/
 
 # 运行同步脚本
-cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app/
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/harmony-app/
 ./brand/sync-from-brand.sh
 ```
 

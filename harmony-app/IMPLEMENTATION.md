@@ -279,7 +279,7 @@ All four core modules have been implemented for the Readmigo HarmonyOS app, with
 ## Files Modified/Created
 
 ```
-apps/harmony-app/entry/src/main/ets/
+harmony-app/entry/src/main/ets/
 ├── model/
 │   └── Book.ts              # NEW - Data models
 ├── service/

@@ -33,13 +33,13 @@
 2. **清理缓存**（重要！）
    ```
    在终端运行:
-   cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
+   cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/harmony-app
    rm -rf .hvigor/cache/*
    ```
 
 3. **重新打开项目**
    ```
-   File → Open → 选择 apps/harmony-app
+   File → Open → 选择 harmony-app
    ```
 
 4. **等待同步完成**
@@ -59,7 +59,7 @@
 ### 方式 B: 命令行
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/harmony-app
 
 # 清理缓存
 rm -rf .hvigor/cache/*

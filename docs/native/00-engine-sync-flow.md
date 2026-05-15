@@ -594,7 +594,7 @@ jobs:
 在完整的 HarmonyOS 应用编译中验证：
 
 ```bash
-# 在 apps/harmony-app/ 中执行
+# 在 harmony-app/ 中执行
 ./gradlew assembleDebug
 
 # 检查 HAP 中是否包含了正确的 .so 文件

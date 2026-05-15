@@ -12,7 +12,7 @@
 
 ## 工程结构
 
-- `apps/harmony-app/`：鸿蒙客户端
+- `harmony-app/`：鸿蒙客户端
 - `server-cn/`：国内后端，技术形态对齐 `readmigo-repos/api`
 - `packages/llm-adapter/`：国产模型适配层
 - `docs/`：国内版路线图、选型、接入基线
@@ -33,6 +33,6 @@
 ## 当前任务优先级
 
 1. 补齐 `server-cn` 国内业务模块
-2. 补齐 `apps/harmony-app` 的 `auth / discover / library / reader / me`
+2. 补齐 `harmony-app` 的 `auth / discover / library / reader / me`
 3. 接入 AGC 与华为账号
 4. 迁移海外版核心业务到国内版本

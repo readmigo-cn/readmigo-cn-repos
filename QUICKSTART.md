@@ -34,12 +34,12 @@
 3. 创建项目：`Readmigo`
 4. 添加应用：HarmonyOS 应用
 5. 下载 `agconnect-services.json`
-6. 放置到：`apps/harmony-app/entry/agconnect-services.json`
+6. 放置到：`harmony-app/entry/agconnect-services.json`
 
 ### 步骤 3: 打开并构建项目
 
 1. 启动 DevEco Studio
-2. `File` → `Open` → 选择 `apps/harmony-app`
+2. `File` → `Open` → 选择 `harmony-app`
 3. 等待索引完成
 4. `Build` → `Build Hap(s)`
 5. 构建成功后，运行到模拟器
@@ -50,7 +50,7 @@
 
 ```
 readmigo-cn-repos/
-├── apps/harmony-app/          # 鸿蒙主应用
+├── harmony-app/          # 鸿蒙主应用
 │   ├── entry/                 # 主模块
 │   │   ├── src/main/ets/
 │   │   │   ├── pages/         # 页面（Discover, Library, Reader, Me）
@@ -75,7 +75,7 @@ readmigo-cn-repos/
 pnpm install
 
 # 鸿蒙应用依赖（在 DevEco Studio 终端）
-cd apps/harmony-app
+cd harmony-app
 ohpm install
 ```
 
@@ -85,7 +85,7 @@ ohpm install
 # Build → Build Hap(s)
 
 # 或使用命令行（在 DevEco Studio 终端）
-cd apps/harmony-app
+cd harmony-app
 hvigorw assembleHap
 ```
 
@@ -142,7 +142,7 @@ hvigorw assembleHap
 **A**: 
 1. 访问 AGC 控制台创建应用
 2. 下载配置文件
-3. 放置到 `apps/harmony-app/entry/agconnect-services.json`
+3. 放置到 `harmony-app/entry/agconnect-services.json`
 
 ### Q: 签名证书错误
 **A**:

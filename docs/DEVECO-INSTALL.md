@@ -62,7 +62,7 @@ cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 - [ ] **首次启动** 成功并完成初始化
 - [ ] **HarmonyOS SDK** 已下载（SDK API 12+）
 - [ ] **ohpm** 可用（在 DevEco Studio 终端运行 `ohpm --version`）
-- [ ] **项目已打开** (`apps/harmony-app`)
+- [ ] **项目已打开** (`harmony-app`)
 - [ ] **构建成功** (Build → Build Hap(s) 无错误)
 
 ---
@@ -73,7 +73,7 @@ cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 
 1. 启动 `Deveco Studio`
 2. `File` → `Open...`
-3. 选择路径：`/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app`
+3. 选择路径：`/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/harmony-app`
 4. 点击 `OK`
 5. 等待项目索引完成（首次需要几分钟）
 
@@ -81,7 +81,7 @@ cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos
 
 ```bash
 # 如果 DevEco Studio 已安装
-open -a "Deveco Studio" /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
+open -a "Deveco Studio" /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/harmony-app
 ```
 
 ---
@@ -93,7 +93,7 @@ open -a "Deveco Studio" /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/a
 在 DevEco Studio 终端中运行：
 
 ```bash
-cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/apps/harmony-app
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/harmony-app
 ohpm install
 ```
 
@@ -115,7 +115,7 @@ ohpm install
 3. 创建项目 `Readmigo`
 4. 添加应用 → HarmonyOS 应用
 5. 下载 `agconnect-services.json`
-6. 放置到：`apps/harmony-app/entry/agconnect-services.json`
+6. 放置到：`harmony-app/entry/agconnect-services.json`
 
 ---
 
