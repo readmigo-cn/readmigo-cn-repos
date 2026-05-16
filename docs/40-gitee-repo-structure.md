@@ -14,9 +14,10 @@
 - 首次手动 dispatch 成功；GitHub HEAD 与 Gitee HEAD 验证一致
 - 此后每次 push GitHub main，30-60 秒自动同步到 Gitee
 
-**剩余待办（需 web UI 操作）**
-- 清理 `sample_repository`（Gitee 占位仓）
-- 5 个仓可见性 Private → Internal：server-cn / llm-adapter / napi-bridge / typesetting / badge-engine（`infra-cn` 保留 Private，含华为云敏感配置）
+**W25 清理已完成（2026-05-16）**
+- ✅ 删除 `sample_repository`（占位仓，已 404 验证）
+- ✅ 5 个仓可见性 Private → Internal：server-cn / llm-adapter / napi-bridge / typesetting / badge-engine（用户报告，未走 API 二次验证）
+- `infra-cn` 保留 Private（含华为云敏感配置）
 
 ## 2026-05-03 W24 拆分完成
 
@@ -43,26 +44,24 @@ W24 拆分完成：
 graph LR
   Ent["Gitee Enterprise<br/>readmigo"] --> Mono["readmigo-cn-repos<br/>Internal · Monorepo 瘦身后"]
   Ent --> Comp["compliance-cn<br/>Private · 敏感材料"]
-  Ent --> Server["server-cn<br/>Private→Internal · NestJS"]
+  Ent --> Server["server-cn<br/>Internal · NestJS"]
   Ent --> Infra["infra-cn<br/>Private · Terraform"]
-  Ent --> LLM["llm-adapter<br/>Private→Internal · npm 包"]
-  Ent --> Napi["napi-bridge<br/>Private→Internal · C++↔ArkTS"]
-  Ent --> TS["typesetting<br/>Private→Internal · GitHub mirror ✅"]
-  Ent --> BE["badge-engine<br/>Private→Internal · GitHub mirror ✅"]
-  Ent --> Sample["sample_repository<br/>占位 · 待清理"]
+  Ent --> LLM["llm-adapter<br/>Internal · npm 包"]
+  Ent --> Napi["napi-bridge<br/>Internal · C++↔ArkTS"]
+  Ent --> TS["typesetting<br/>Internal · GitHub mirror ✅"]
+  Ent --> BE["badge-engine<br/>Internal · GitHub mirror ✅"]
 ```
 
-| Repo | 当前可见性 | 目标可见性 | 内容 | 状态 |
-|---|---|---|---|---|
-| `readmigo/readmigo-cn-repos` | Internal | Internal | HarmonyOS App + compliance + docs + scripts + tools | 活跃开发 |
-| `readmigo/server-cn` | Private | Internal | NestJS 后端 | ✅ W23 拆出 |
-| `readmigo/infra-cn` | Private | **Private** (含华为云敏感配置) | Terraform | ✅ W23 拆出 |
-| `readmigo/llm-adapter` | Private | Internal | LLM 适配 npm 包 | ✅ W23 拆出 |
-| `readmigo/napi-bridge` | Private | Internal | C++↔ArkTS 桥 | ✅ W24 拆出 |
-| `readmigo/typesetting` | Private | Internal | C++ 排版引擎（GitHub mirror） | ✅ W24 拆出 + W25 mirror 就位 |
-| `readmigo/badge-engine` | Private | Internal | C++ 勋章引擎（GitHub mirror） | ✅ W24 拆出 + W25 mirror 就位 |
-| `readmigo/compliance-cn` | Private | Private | 公司资质、身份证、软著 | 既有 |
-| `readmigo/sample_repository` | Internal | — | Gitee 占位 | ⏳ 待清理 |
+| Repo | 可见性 | 内容 | 状态 |
+|---|---|---|---|
+| `readmigo/readmigo-cn-repos` | Internal | HarmonyOS App + compliance + docs + scripts + tools | 活跃开发 |
+| `readmigo/server-cn` | Internal | NestJS 后端 | ✅ W23 拆出 + W25 Internal |
+| `readmigo/infra-cn` | **Private** | Terraform（含华为云敏感配置） | ✅ W23 拆出 |
+| `readmigo/llm-adapter` | Internal | LLM 适配 npm 包 | ✅ W23 拆出 + W25 Internal |
+| `readmigo/napi-bridge` | Internal | C++↔ArkTS 桥 | ✅ W24 拆出 + W25 Internal |
+| `readmigo/typesetting` | Internal | C++ 排版引擎（GitHub mirror） | ✅ W24 拆出 + W25 mirror + Internal |
+| `readmigo/badge-engine` | Internal | C++ 勋章引擎（GitHub mirror） | ✅ W24 拆出 + W25 mirror + Internal |
+| `readmigo/compliance-cn` | Private | 公司资质、身份证、软著 | 既有 |
 
 ## 后续规划（条件触发，不预设时间）
 
@@ -257,7 +256,7 @@ git push -u origin main
 | 业务代码、文档、政策模板 | Internal | 企业成员可见 |
 | 开源参考、品牌物料 | Public | 可公开 |
 
-> **W25 现状校准**：5 个业务代码仓（server-cn / llm-adapter / napi-bridge / typesetting / badge-engine）目标 Internal 但仍标 Private —— Gitee Enterprise API 不支持设 Internal，需 web UI 手动改（每个 repo settings 改一次）。`infra-cn` 保留 Private。
+> **W25 现状校准（已落地）**：5 个业务代码仓（server-cn / llm-adapter / napi-bridge / typesetting / badge-engine）通过 Gitee web UI 改为 Internal（2026-05-16）。`infra-cn` 保留 Private（含华为云敏感配置）。Gitee Enterprise API 不支持设 Internal，必须 web UI 手动操作。
 
 ## Gitee Enterprise 概念对照 GitHub Org
 
