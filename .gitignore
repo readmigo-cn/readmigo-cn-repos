@@ -80,3 +80,6 @@ HarmonyAppProvision-*
 # 合规材料里的敏感原件
 compliance/icp/原件/
 compliance/*/扫描件/
+
+# Refactor snapshots (regenerated per PR)
+.refactor-snapshots/
