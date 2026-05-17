@@ -12,7 +12,7 @@ import {
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_FOLD_STATUS,
 } from '../../../core/theme/Breakpoints';
-import { DiscoverTabletLayout } from './tablet/DiscoverTabletLayout';
+import { DiscoverTabletLayout } from '../../multi-platform/pages/tablet/DiscoverTabletLayout';
 
 @Component
 export struct Discover {

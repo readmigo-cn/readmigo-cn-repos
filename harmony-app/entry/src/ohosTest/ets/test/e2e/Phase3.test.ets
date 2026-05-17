@@ -29,9 +29,9 @@ import {
 import { FormDataStore, FormKind } from '../../../../main/ets/widget/FormDataStore';
 
 // W13 — distributed
-import { DeviceManager, TrustedDevice } from '../../../../main/ets/service/distributed/DeviceManager';
-import { DistributedClipboard, MIME_VOCAB, VocabPayload } from '../../../../main/ets/service/distributed/DistributedClipboard';
-import { MultiDeviceNotifier } from '../../../../main/ets/service/notification/MultiDeviceNotifier';
+import { DeviceManager, TrustedDevice } from '../../../../main/ets/features/multi-device/service/distributed/DeviceManager';
+import { DistributedClipboard, MIME_VOCAB, VocabPayload } from '../../../../main/ets/features/multi-device/service/distributed/DistributedClipboard';
+import { MultiDeviceNotifier } from '../../../../main/ets/features/notification/service/notification/MultiDeviceNotifier';
 
 // W14 — adaptive
 import {

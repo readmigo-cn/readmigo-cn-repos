@@ -1,0 +1,31 @@
+{
+  "version": "PR-6",
+  "mappings": [
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/Faq(?=['\"])", "to": "$1features/support/pages/Faq" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/Feedback(?=['\"])", "to": "$1features/support/pages/Feedback" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/TicketList(?=['\"])", "to": "$1features/support/pages/TicketList" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/TicketDetail(?=['\"])", "to": "$1features/support/pages/TicketDetail" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/PrivacyPolicy(?=['\"])", "to": "$1features/support/pages/PrivacyPolicy" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/UserAgreement(?=['\"])", "to": "$1features/support/pages/UserAgreement" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/About(?=['\"])", "to": "$1features/support/pages/About" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/OssLicenses(?=['\"])", "to": "$1features/support/pages/OssLicenses" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/admin/", "to": "$1features/admin/pages/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/NotificationCenter(?=['\"])", "to": "$1features/notification/pages/NotificationCenter" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/PasteFromOtherDeviceSheet(?=['\"])", "to": "$1features/multi-device/components/PasteFromOtherDeviceSheet" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/DeviceSelectorSheet(?=['\"])", "to": "$1features/multi-device/components/DeviceSelectorSheet" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/car/", "to": "$1features/multi-platform/pages/car/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/native/", "to": "$1features/multi-platform/pages/native/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/tablet/", "to": "$1features/multi-platform/pages/tablet/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/tv/", "to": "$1features/multi-platform/pages/tv/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/watch/", "to": "$1features/multi-platform/pages/watch/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/atomic/", "to": "$1features/multi-platform/pages/atomic/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/dev/", "to": "$1features/dev/pages/dev/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)service/admin/", "to": "$1features/admin/service/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)service/notification/", "to": "$1features/notification/service/notification/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)service/push/", "to": "$1features/notification/service/push/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)service/distributed/", "to": "$1features/multi-device/service/distributed/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)service/sync/", "to": "$1features/multi-device/service/sync/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)service/car/", "to": "$1features/multi-platform/service/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)service/tv/", "to": "$1features/multi-platform/service/" }
+  ]
+}

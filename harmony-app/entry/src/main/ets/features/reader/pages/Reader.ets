@@ -36,12 +36,12 @@ import { SentenceHighlight, SentenceRect } from '../../../features/reader/compon
 import { ToastManager } from '../../../ui/primitives/Toast';
 // W11-C3 / W13-C3：阅读接续（手机 ↔ 平板 多端协同）+ 设备选择
 import { ContinuationManager } from '../../../core/atomic/ContinuationManager';
-import { DeviceSelectorSheet } from '../../../components/DeviceSelectorSheet';
-import { TrustedDevice } from '../../../service/distributed/DeviceManager';
+import { DeviceSelectorSheet } from '../../../features/multi-device/components/DeviceSelectorSheet';
+import { TrustedDevice } from '../../../features/multi-device/service/distributed/DeviceManager';
 // W11-C2 / W11-C4：单词分享 / 划词查询元服务
 import { AtomicLauncher } from '../../../core/atomic/AtomicLauncher';
 // W13-C2：跨端剪贴板（把选中单词分享到其它设备）
-import { DistributedClipboard, VocabPayload } from '../../../service/distributed/DistributedClipboard';
+import { DistributedClipboard, VocabPayload } from '../../../features/multi-device/service/distributed/DistributedClipboard';
 import common from '@ohos.app.ability.common';
 // W14-C4：平板双页阅读布局
 import {
@@ -50,7 +50,7 @@ import {
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_FOLD_STATUS,
 } from '../../../core/theme/Breakpoints';
-import { ReaderTabletLayout } from './tablet/ReaderTabletLayout';
+import { ReaderTabletLayout } from '../../multi-platform/pages/tablet/ReaderTabletLayout';
 // W18-C1：Reader 页面曝光埋点
 import { Analytics } from '../../../core/analytics/AnalyticsProvider';
 import { SaEvents } from '../../../core/analytics/SensorsAnalytics';

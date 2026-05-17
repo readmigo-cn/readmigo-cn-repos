@@ -58,7 +58,7 @@ struct Contact {
   }
 
   private goFeedback(): void {
-    router.pushUrl({ url: 'pages/Feedback' }).catch((_e: Error) => {});
+    router.pushUrl({ url: 'features/support/pages/Feedback' }).catch((_e: Error) => {});
   }
 
   @Builder

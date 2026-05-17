@@ -18,9 +18,9 @@ import { AudiobookPlayer } from '../../features/audiobook/pages/AudiobookPlayer'
 import { Notes } from '../../features/notes/pages/Notes';
 import { StudyPlanPage } from '../../features/study/pages/StudyPlan';
 import { ReadingComprehensionPage } from '../../features/ai-tools/pages/ReadingComprehension';
-import { FeedbackPage } from '../../pages/Feedback';
-import { TicketListPage } from '../../pages/TicketList';
-import { TicketDetailPage } from '../../pages/TicketDetail';
+import { FeedbackPage } from '../../features/support/pages/Feedback';
+import { TicketListPage } from '../../features/support/pages/TicketList';
+import { TicketDetailPage } from '../../features/support/pages/TicketDetail';
 
 @Entry
 @Component

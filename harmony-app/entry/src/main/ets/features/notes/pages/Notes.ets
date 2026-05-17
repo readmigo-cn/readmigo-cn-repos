@@ -11,7 +11,7 @@ import {
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_FOLD_STATUS,
 } from '../../../core/theme/Breakpoints';
-import { NotesTabletLayout } from './tablet/NotesTabletLayout';
+import { NotesTabletLayout } from '../../multi-platform/pages/tablet/NotesTabletLayout';
 
 @Component
 export struct Notes {

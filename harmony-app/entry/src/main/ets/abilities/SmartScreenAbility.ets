@@ -3,7 +3,7 @@ import AbilityConstant from '@ohos.app.ability.AbilityConstant';
 import Want from '@ohos.app.ability.Want';
 import window from '@ohos.window';
 import { StoreKeys } from '../store/StoreKeys';
-import { RemoteController } from '../service/tv/RemoteController';
+import { RemoteController } from '../features/multi-platform/service/RemoteController';
 
 const TAG = 'SmartScreenAbility';
 

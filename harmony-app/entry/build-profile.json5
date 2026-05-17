@@ -15,6 +15,19 @@
       ]
     }
   },
+  // TODO(PR-7): verify exclude syntax with hvigor docs; current best guess
+  // based on hvigor 4.x source-option spec. The intent is: dev-only screens
+  // under features/dev/ should not be bundled into release builds.
+  "buildOptionSet": [
+    {
+      "name": "release",
+      "sourceOption": {
+        "scan": {
+          "excludePatterns": ["./src/main/ets/features/dev/**"]
+        }
+      }
+    }
+  ],
   "targets": [
     {
       // `default` target maps to root products `default` (debug) and `release`.

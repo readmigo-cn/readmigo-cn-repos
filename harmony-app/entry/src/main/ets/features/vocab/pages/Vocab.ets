@@ -44,7 +44,7 @@ import {
 } from '../../../api/notes/NotesApi';
 import { TtsService } from '../../../features/audiobook/service/TtsService';
 // W13-C2：跨端剪贴板（复制到其它设备）
-import { DistributedClipboard, VocabPayload } from '../../../service/distributed/DistributedClipboard';
+import { DistributedClipboard, VocabPayload } from '../../../features/multi-device/service/distributed/DistributedClipboard';
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
 // W18-C1：Vocab 页面曝光埋点

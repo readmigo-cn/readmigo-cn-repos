@@ -22,7 +22,7 @@ export class RoutePath {
    * 实际页路径：pages/native/XComponentDemo（router.pushUrl 使用）。
    */
   static readonly XCOMPONENT_DEMO: string = 'xcomponent-demo';
-  static readonly XCOMPONENT_DEMO_URL: string = 'pages/native/XComponentDemo';
+  static readonly XCOMPONENT_DEMO_URL: string = 'features/multi-platform/pages/native/XComponentDemo';
   /** 别名：与任务命名对齐。 */
   static readonly NATIVE_DEMO: string = 'xcomponent-demo';
 
@@ -38,7 +38,7 @@ export class RoutePath {
    * 实际页路径：pages/dev/ComponentGallery（router.pushUrl 使用）。
    */
   static readonly COMPONENT_GALLERY: string = 'component-gallery';
-  static readonly COMPONENT_GALLERY_URL: string = 'pages/dev/ComponentGallery';
+  static readonly COMPONENT_GALLERY_URL: string = 'features/dev/pages/dev/ComponentGallery';
 
   /**
    * W9-C5：词汇量统计 dashboard。
@@ -92,25 +92,25 @@ export class RoutePath {
    * W18-C6：通知中心页（历史通知列表 + 筛选 + 操作）。
    */
   static readonly NOTIFICATION_CENTER: string = 'notification-center';
-  static readonly NOTIFICATION_CENTER_URL: string = 'pages/NotificationCenter';
+  static readonly NOTIFICATION_CENTER_URL: string = 'features/notification/pages/NotificationCenter';
 
   /**
    * W19-C1：反馈表单页（提交后跳 TicketDetail）。
    */
   static readonly FEEDBACK: string = 'Feedback';
-  static readonly FEEDBACK_URL: string = 'pages/Feedback';
+  static readonly FEEDBACK_URL: string = 'features/support/pages/Feedback';
 
   /**
    * W19-C2：工单列表页（auth required）。
    */
   static readonly TICKET_LIST: string = 'TicketList';
-  static readonly TICKET_LIST_URL: string = 'pages/TicketList';
+  static readonly TICKET_LIST_URL: string = 'features/support/pages/TicketList';
 
   /**
    * W19-C2：工单详情页（聊天时间线 + 追问 + 关闭 + 评分）。
    */
   static readonly TICKET_DETAIL: string = 'TicketDetail';
-  static readonly TICKET_DETAIL_URL: string = 'pages/TicketDetail';
+  static readonly TICKET_DETAIL_URL: string = 'features/support/pages/TicketDetail';
 
   /**
    * W17-C5：订阅管理页（auth required）。
@@ -128,23 +128,23 @@ export class RoutePath {
    * W19-C3：常见问题（FAQ）页。
    */
   static readonly FAQ: string = 'Faq';
-  static readonly FAQ_URL: string = 'pages/Faq';
+  static readonly FAQ_URL: string = 'features/support/pages/Faq';
 
   /**
    * W19-C4：关于页（版本号、公司、ICP）。
    */
   static readonly ABOUT: string = 'About';
-  static readonly ABOUT_URL: string = 'pages/About';
+  static readonly ABOUT_URL: string = 'features/support/pages/About';
 
   /**
    * W19-C5：用户协议 / 隐私政策 / 第三方开源声明 / 联系我们。
    */
   static readonly USER_AGREEMENT: string = 'UserAgreement';
-  static readonly USER_AGREEMENT_URL: string = 'pages/UserAgreement';
+  static readonly USER_AGREEMENT_URL: string = 'features/support/pages/UserAgreement';
   static readonly PRIVACY_POLICY: string = 'PrivacyPolicy';
-  static readonly PRIVACY_POLICY_URL: string = 'pages/PrivacyPolicy';
+  static readonly PRIVACY_POLICY_URL: string = 'features/support/pages/PrivacyPolicy';
   static readonly OSS_LICENSES: string = 'OssLicenses';
-  static readonly OSS_LICENSES_URL: string = 'pages/OssLicenses';
+  static readonly OSS_LICENSES_URL: string = 'features/support/pages/OssLicenses';
   static readonly CONTACT: string = 'Contact';
   static readonly CONTACT_URL: string = 'features/account/pages/Contact';
 }
@@ -172,17 +172,17 @@ export class PagePath {
   static readonly READING_COMPREHENSION: string = 'features/ai-tools/pages/ReadingComprehension';
   static readonly VOCAB: string = 'features/vocab/pages/Vocab';
   static readonly FLASHCARD_SESSION: string = 'features/vocab/pages/FlashcardSession';
-  static readonly FEEDBACK: string = 'pages/Feedback';
-  static readonly TICKET_LIST: string = 'pages/TicketList';
-  static readonly TICKET_DETAIL: string = 'pages/TicketDetail';
-  static readonly NOTIFICATION_CENTER: string = 'pages/NotificationCenter';
+  static readonly FEEDBACK: string = 'features/support/pages/Feedback';
+  static readonly TICKET_LIST: string = 'features/support/pages/TicketList';
+  static readonly TICKET_DETAIL: string = 'features/support/pages/TicketDetail';
+  static readonly NOTIFICATION_CENTER: string = 'features/notification/pages/NotificationCenter';
   static readonly SUBSCRIPTIONS: string = 'features/account/pages/Subscriptions';
   static readonly REFUND_FLOW: string = 'features/account/pages/RefundFlow';
-  static readonly FAQ: string = 'pages/Faq';
-  static readonly ABOUT: string = 'pages/About';
-  static readonly USER_AGREEMENT: string = 'pages/UserAgreement';
-  static readonly PRIVACY_POLICY: string = 'pages/PrivacyPolicy';
-  static readonly OSS_LICENSES: string = 'pages/OssLicenses';
+  static readonly FAQ: string = 'features/support/pages/Faq';
+  static readonly ABOUT: string = 'features/support/pages/About';
+  static readonly USER_AGREEMENT: string = 'features/support/pages/UserAgreement';
+  static readonly PRIVACY_POLICY: string = 'features/support/pages/PrivacyPolicy';
+  static readonly OSS_LICENSES: string = 'features/support/pages/OssLicenses';
   static readonly CONTACT: string = 'features/account/pages/Contact';
 }
 

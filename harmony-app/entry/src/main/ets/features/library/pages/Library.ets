@@ -11,7 +11,7 @@ import promptAction from '@ohos.promptAction';
 // W14-C2：自适应栅格列数 by 当前断点 / 折叠屏展开
 import { Breakpoint, FoldStatus, STORAGE_KEY_BREAKPOINT, STORAGE_KEY_FOLD_STATUS } from '../../../core/theme/Breakpoints';
 // W14-C3：平板双栏布局
-import { LibraryTabletLayout } from './tablet/LibraryTabletLayout';
+import { LibraryTabletLayout } from '../../multi-platform/pages/tablet/LibraryTabletLayout';
 
 type StatusTab = 'all' | BookStatus;
 type ViewMode = 'grid' | 'list';

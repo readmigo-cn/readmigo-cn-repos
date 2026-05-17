@@ -17,12 +17,12 @@ import { ProgressSync } from '../service/ProgressSync';
 // W14-C1：自适应布局 / 折叠屏感知。需要 windowStage，因此在 onWindowStageCreate 里初始化
 import { initBreakpoints, disposeBreakpoints } from '../core/theme/Breakpoints';
 // W13-C1 / W13-C3：分布式设备发现 + 接续生命周期
-import { DeviceManager } from '../service/distributed/DeviceManager';
+import { DeviceManager } from '../features/multi-device/service/distributed/DeviceManager';
 import { ContinuationManager } from '../core/atomic/ContinuationManager';
 // W13-C2：跨端剪贴板订阅（接收其它设备分享的 vocab / highlight）
-import { DistributedClipboard, IncomingEntry } from '../service/distributed/DistributedClipboard';
+import { DistributedClipboard, IncomingEntry } from '../features/multi-device/service/distributed/DistributedClipboard';
 // W13-C4：多端通知协调器
-import { MultiDeviceNotifier } from '../service/notification/MultiDeviceNotifier';
+import { MultiDeviceNotifier } from '../features/notification/service/notification/MultiDeviceNotifier';
 // W18-C1 / C2 / C3：埋点 + 双轨崩溃监控
 import { Analytics } from '../core/analytics/AnalyticsProvider';
 import { SensorsAnalytics, SaEvents } from '../core/analytics/SensorsAnalytics';
@@ -30,8 +30,8 @@ import { AgcCrashReporter } from '../core/monitoring/AgcCrashReporter';
 import { SentryClient } from '../core/monitoring/SentryClient';
 import { CrashHandler } from '../core/monitoring/CrashHandler';
 // W18-C4 / C5 / C7：HMS Push + 通知通道 + 远程配置 / A/B
-import { HmsPushService } from '../service/push/HmsPushService';
-import { NotificationChannel } from '../service/push/NotificationChannel';
+import { HmsPushService } from '../features/notification/service/push/HmsPushService';
+import { NotificationChannel } from '../features/notification/service/push/NotificationChannel';
 import { RemoteConfig } from '../core/experiments/RemoteConfig';
 // W20-C3：性能监控 + 异步启动框架 + 内存守卫
 import { PerformanceMonitor } from '../core/performance/PerformanceMonitor';
