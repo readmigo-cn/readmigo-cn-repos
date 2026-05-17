@@ -17,7 +17,7 @@ import { AppSpacing, AppRadius } from '../../../../core/theme/AppSpacing';
 import { RouterAdapter } from '../../../../core/router/RouterAdapter';
 import { BooksApi } from '../../../../api/books/BooksApi';
 import { Book } from '../../../../model/Book';
-import { ApiError } from '../../../../service/HttpClient';
+import { ApiError } from '../../../../api/client/HttpClient';
 import { AdaptiveGrid } from '../../../../ui/responsive/AdaptiveGrid';
 
 interface CategoryItem {

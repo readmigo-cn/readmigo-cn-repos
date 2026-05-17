@@ -1,4 +1,4 @@
-import { SubscriptionApi, SubscriptionPlan } from './api/SubscriptionApi';
+import { SubscriptionApi, SubscriptionPlan } from '../../../../api/subscription/SubscriptionApi';
 
 /**
  * HMS IAP 客户端封装。

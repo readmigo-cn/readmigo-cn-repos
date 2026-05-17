@@ -1,0 +1,13 @@
+{
+  "version": "PR-7-tests",
+  "mappings": [
+    { "from": "(?<=['\"])([^'\"]*main/ets/)service/HttpClient(?=['\"])", "to": "$1api/client/HttpClient" },
+    { "from": "(?<=['\"])([^'\"]*main/ets/)service/ApiConfig(?=['\"])", "to": "$1api/client/ApiConfig" },
+    { "from": "(?<=['\"])([^'\"]*main/ets/)service/SseClient(?=['\"])", "to": "$1api/client/SseClient" },
+    { "from": "(?<=['\"])([^'\"]*main/ets/)service/HighlightService(?=['\"])", "to": "$1features/reader/service/HighlightService" },
+    { "from": "(?<=['\"])([^'\"]*main/ets/)service/NoteService(?=['\"])", "to": "$1features/notes/service/NoteService" },
+    { "from": "(?<=['\"])([^'\"]*main/ets/)service/ReadingSession(?=['\"])", "to": "$1features/reader/service/ReadingSession" },
+    { "from": "(?<=['\"])([^'\"]*main/ets/)service/ProgressSync(?=['\"])", "to": "$1features/multi-device/service/ProgressSync" },
+    { "from": "(?<=['\"])([^'\"]*main/ets/)service/IAPService(?=['\"])", "to": "$1features/account/service/payment/IAPService" }
+  ]
+}

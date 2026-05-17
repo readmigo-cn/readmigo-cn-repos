@@ -13,7 +13,7 @@ import { RouterService } from '../core/router/RouterService';
 import { PagePath } from '../core/router/RouteConstants';
 import { ThemeService } from '../core/theme/ThemeService';
 import { FontRegistry } from '../core/theme/FontRegistry';
-import { ProgressSync } from '../service/ProgressSync';
+import { ProgressSync } from '../features/multi-device/service/ProgressSync';
 // W14-C1：自适应布局 / 折叠屏感知。需要 windowStage，因此在 onWindowStageCreate 里初始化
 import { initBreakpoints, disposeBreakpoints } from '../core/theme/Breakpoints';
 // W13-C1 / W13-C3：分布式设备发现 + 接续生命周期

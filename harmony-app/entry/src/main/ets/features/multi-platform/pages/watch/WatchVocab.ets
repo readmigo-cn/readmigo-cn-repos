@@ -19,7 +19,7 @@
  */
 
 import router from '@ohos.router';
-import { NoteService, VocabNote } from '../../../../service/NoteService';
+import { NoteService, VocabNote } from '../../../../features/notes/service/NoteService';
 import { WatchHaptic } from '../../../../abilities/WatchAbility';
 
 @Entry

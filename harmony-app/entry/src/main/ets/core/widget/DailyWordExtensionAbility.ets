@@ -7,7 +7,7 @@ import Want from '@ohos.app.ability.Want';
 import commonEventManager from '@ohos.commonEventManager';
 
 import { FormDataStore } from './FormDataStore';
-import { ApiConfig } from '../../service/ApiConfig';
+import { ApiConfig } from '../../api/client/ApiConfig';
 import { AtomicLauncher } from '../atomic/AtomicLauncher';
 
 /**

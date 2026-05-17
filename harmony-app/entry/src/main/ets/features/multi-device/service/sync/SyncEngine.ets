@@ -21,7 +21,7 @@
  */
 
 import connection from '@ohos.net.connection';
-import { HttpClient } from '../../../../service/HttpClient';
+import { HttpClient } from '../../../../api/client/HttpClient';
 import { PreferencesManager } from '../../../../core/persistence/PreferencesManager';
 
 // ---------------------------------------------------------------------------

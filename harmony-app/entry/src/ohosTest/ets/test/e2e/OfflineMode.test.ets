@@ -14,7 +14,7 @@ import { describe, beforeAll, beforeEach, afterAll, it, expect } from '@ohos/hyp
 import { MockSetup } from '../utils/MockSetup';
 import { BooksApi } from '../../../../main/ets/api/books/BooksApi';
 import { UserStore } from '../../../../main/ets/store/UserStore';
-import { ProgressSync } from '../../../../main/ets/service/ProgressSync';
+import { ProgressSync } from '../../../../main/ets/features/multi-device/service/ProgressSync';
 import { ChapterContent } from '../../../../main/ets/model/Chapter';
 import { StoreKeys } from '../../../../main/ets/store/StoreKeys';
 

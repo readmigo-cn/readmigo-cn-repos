@@ -21,7 +21,7 @@ import { BooksApi } from '../../../../api/books/BooksApi';
 import { ReadingApi } from '../../../../api/reading/ReadingApi';
 import { Book, BookDetail, BookStatus, UserBook } from '../../../../model/Book';
 import { Chapter } from '../../../../model/Chapter';
-import { ApiError } from '../../../../service/HttpClient';
+import { ApiError } from '../../../../api/client/HttpClient';
 import promptAction from '@ohos.promptAction';
 
 interface LibraryItem {

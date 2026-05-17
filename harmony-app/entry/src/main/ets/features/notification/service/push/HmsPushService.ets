@@ -22,7 +22,7 @@
  */
 
 import { PreferencesManager } from '../../../../core/persistence/PreferencesManager';
-import { ApiConfig } from '../../../../service/ApiConfig';
+import { ApiConfig } from '../../../../api/client/ApiConfig';
 
 const TAG = 'HmsPushService';
 

@@ -14,8 +14,8 @@
  * 缓存 key = `${provider}:${from}->${to}:${text}`。
  */
 
-import { HttpClient } from '../../../service/HttpClient';
-import { SseClient } from '../../../service/SseClient';
+import { HttpClient } from '../../../api/client/HttpClient';
+import { SseClient } from '../../../api/client/SseClient';
 import { TranslationCacheStrategy } from '../../../core/cache/strategies/TranslationCacheStrategy';
 
 // ---------- 公共类型 ----------

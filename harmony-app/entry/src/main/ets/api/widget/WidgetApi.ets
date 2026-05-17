@@ -1,4 +1,4 @@
-import { HttpClient } from '../../service/HttpClient';
+import { HttpClient } from '../../api/client/HttpClient';
 
 /**
  * Widget backend API client. 与 server-cn 路由对齐：

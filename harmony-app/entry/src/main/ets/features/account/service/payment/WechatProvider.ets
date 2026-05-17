@@ -19,7 +19,7 @@
  *   3. query: 微信回调 / 后端轮询 /subscription/orders/:id
  */
 
-import { HttpClient } from '../../../../service/HttpClient';
+import { HttpClient } from '../../../../api/client/HttpClient';
 import { SubscriptionPlan } from '../../../../api/subscription/SubscriptionApi';
 import {
   PaymentProvider,

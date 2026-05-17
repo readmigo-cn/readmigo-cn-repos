@@ -26,7 +26,7 @@ import {
 } from '../../../../main/ets/abilities/LookupAbility';
 
 // W12 — form cards
-import { FormDataStore, FormKind } from '../../../../main/ets/widget/FormDataStore';
+import { FormDataStore, FormKind } from '../../../../main/ets/core/widget/FormDataStore';
 
 // W13 — distributed
 import { DeviceManager, TrustedDevice } from '../../../../main/ets/features/multi-device/service/distributed/DeviceManager';
@@ -41,7 +41,7 @@ import {
   STORAGE_KEY_FOLD_STATUS,
   getCurrentBreakpoint,
   getCurrentFoldStatus,
-} from '../../../../main/ets/theme/Breakpoints';
+} from '../../../../main/ets/core/theme/Breakpoints';
 
 // W15 — multi-device storage keys
 import {
@@ -52,9 +52,9 @@ import {
 } from '../../../../main/ets/abilities/WatchAbility';
 
 // W16 — moderation
-import { NsfwDetector } from '../../../../main/ets/service/moderation/NsfwDetector';
-import { UgcModerator } from '../../../../main/ets/service/moderation/UgcModerator';
-import { SensitiveWordList, SensitiveCategory } from '../../../../main/ets/service/moderation/SensitiveWordList';
+import { NsfwDetector } from '../../../../main/ets/core/moderation/NsfwDetector';
+import { UgcModerator } from '../../../../main/ets/core/moderation/UgcModerator';
+import { SensitiveWordList, SensitiveCategory } from '../../../../main/ets/core/moderation/SensitiveWordList';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 工具函数

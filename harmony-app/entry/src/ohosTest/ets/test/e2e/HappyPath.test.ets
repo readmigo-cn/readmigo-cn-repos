@@ -21,7 +21,7 @@ import { AiApi, ExplainStreamHandlers } from '../../../../main/ets/api/ai/AiApi'
 import { UserStore } from '../../../../main/ets/store/UserStore';
 import { ReadingStore } from '../../../../main/ets/store/ReadingStore';
 import { StoreKeys } from '../../../../main/ets/store/StoreKeys';
-import { ProgressSync } from '../../../../main/ets/service/ProgressSync';
+import { ProgressSync } from '../../../../main/ets/features/multi-device/service/ProgressSync';
 
 const PHONE = '13800001234';
 const SMS_CODE = '123456';

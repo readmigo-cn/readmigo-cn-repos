@@ -5,7 +5,7 @@ import { AppColors } from '../../../core/theme/AppColors';
 import { AppFontSize, AppFontWeight } from '../../../core/theme/AppTypography';
 import { AppSpacing, AppRadius } from '../../../core/theme/AppSpacing';
 import { AuthApi } from '../../../api/auth/AuthApi';
-import { ApiError } from '../../../service/HttpClient';
+import { ApiError } from '../../../api/client/HttpClient';
 
 /**
  * PasswordReset —— 忘记密码 / 密码重置页（W4-C1 续）。

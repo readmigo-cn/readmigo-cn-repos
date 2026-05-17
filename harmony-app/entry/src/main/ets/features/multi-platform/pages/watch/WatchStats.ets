@@ -16,7 +16,7 @@
  */
 
 import router from '@ohos.router';
-import { NoteService } from '../../../../service/NoteService';
+import { NoteService } from '../../../../features/notes/service/NoteService';
 import { WATCH_TODAY_MINUTES_KEY, WATCH_DAILY_GOAL_KEY, WatchHaptic } from '../../../../abilities/WatchAbility';
 
 /** AppStorage key：本周打卡（[周一,…,周日] boolean，由 WatchSync 计算）*/

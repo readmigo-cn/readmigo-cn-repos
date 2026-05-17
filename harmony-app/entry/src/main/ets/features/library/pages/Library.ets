@@ -5,7 +5,7 @@ import { RouterService } from '../../../core/router/RouterService';
 import { RoutePath } from '../../../core/router/RouteConstants';
 import { BooksApi } from '../../../api/books/BooksApi';
 import { ReadingApi } from '../../../api/reading/ReadingApi';
-import { ApiError } from '../../../service/HttpClient';
+import { ApiError } from '../../../api/client/HttpClient';
 import { Book, BookStatus, SortBy, UserBook } from '../../../model/Book';
 import promptAction from '@ohos.promptAction';
 // W14-C2：自适应栅格列数 by 当前断点 / 折叠屏展开

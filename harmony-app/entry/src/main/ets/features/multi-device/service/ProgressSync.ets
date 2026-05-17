@@ -15,11 +15,11 @@
  */
 
 import connection from '@ohos.net.connection';
-import { ReadingApi } from './api/ReadingApi';
-import { ReadingProgressDto } from '../model/ReadingProgress';
-import { PreferencesManager } from '../core/persistence/PreferencesManager';
-import { StoreKeys } from '../store/StoreKeys';
-import { ReadingStore } from '../store/ReadingStore';
+import { ReadingApi } from '../../../api/reading/ReadingApi';
+import { ReadingProgressDto } from '../../../model/ReadingProgress';
+import { PreferencesManager } from '../../../core/persistence/PreferencesManager';
+import { StoreKeys } from '../../../store/StoreKeys';
+import { ReadingStore } from '../../../store/ReadingStore';
 
 /** 队列条目：用 bookId 作为去重 key，覆盖旧值。 */
 interface QueueEntry {

@@ -11,7 +11,7 @@
  *   - getCurrentSession()：UI 展示用（如顶部 "已读 12 分钟"）
  */
 
-import { ReadingApi } from './api/ReadingApi';
+import { ReadingApi } from '../../../api/reading/ReadingApi';
 
 export interface SessionInfo {
   sessionId: string | null;

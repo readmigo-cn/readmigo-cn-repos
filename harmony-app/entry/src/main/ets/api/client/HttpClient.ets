@@ -1,9 +1,9 @@
 import http from '@ohos.net.http';
 import { ApiConfig } from './ApiConfig';
-import { UserStore } from '../store/UserStore';
-import { RouterService } from '../core/router/RouterService';
-import { RoutePath } from '../core/router/RouteConstants';
-import { StoreKeys } from '../store/StoreKeys';
+import { UserStore } from '../../store/UserStore';
+import { RouterService } from '../../core/router/RouterService';
+import { RoutePath } from '../../core/router/RouteConstants';
+import { StoreKeys } from '../../store/StoreKeys';
 
 /**
  * HTTP client based on @ohos.net.http.

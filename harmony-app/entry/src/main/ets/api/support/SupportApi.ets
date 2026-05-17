@@ -17,7 +17,7 @@
  *      └─→ closed   用户直接关闭（terminal）
  */
 
-import { HttpClient } from '../../service/HttpClient';
+import { HttpClient } from '../../api/client/HttpClient';
 
 // ─────────────────────────────────────────────
 // 类型定义

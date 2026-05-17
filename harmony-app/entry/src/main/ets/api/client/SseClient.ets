@@ -1,6 +1,6 @@
 import http from '@ohos.net.http';
 import { ApiConfig } from './ApiConfig';
-import { UserStore } from '../store/UserStore';
+import { UserStore } from '../../store/UserStore';
 
 /**
  * SSE 消费器，基于 @ohos.net.http requestInStream + 数据回调。

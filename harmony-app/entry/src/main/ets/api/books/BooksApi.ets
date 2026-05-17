@@ -1,4 +1,4 @@
-import { HttpClient } from '../../service/HttpClient';
+import { HttpClient } from '../../api/client/HttpClient';
 import {
   Book,
   BookDetail,
@@ -7,7 +7,7 @@ import {
   Rating,
 } from '../../model/Book';
 import { Chapter, ChapterContent } from '../../model/Chapter';
-import { ChapterCacheStrategy } from '../../service/cache/strategies/ChapterCacheStrategy';
+import { ChapterCacheStrategy } from '../../core/cache/strategies/ChapterCacheStrategy';
 
 /**
  * BookSummary —— 旧 import 兼容（discover/library 旧调用点用）。

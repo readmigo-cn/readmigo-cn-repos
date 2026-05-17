@@ -23,9 +23,9 @@
  */
 
 import http from '@ohos.net.http';
-import { HttpClient, RequestOptions, ApiError } from '../../../service/HttpClient';
-import { SseClient } from '../../../service/SseClient';
-import { ApiConfig } from '../../../service/ApiConfig';
+import { HttpClient, RequestOptions, ApiError } from '../../../api/client/HttpClient';
+import { SseClient } from '../../../api/client/SseClient';
+import { ApiConfig } from '../../../api/client/ApiConfig';
 import { UserStore } from '../../../store/UserStore';
 import { AiApi, QuotaStatus } from '../../../api/ai/AiApi';
 

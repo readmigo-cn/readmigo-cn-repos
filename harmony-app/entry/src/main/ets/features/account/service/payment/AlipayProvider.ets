@@ -18,7 +18,7 @@
  *   3. query: 后端轮询 /subscription/orders/:id（支付宝异步通知到后端）
  */
 
-import { HttpClient } from '../../../../service/HttpClient';
+import { HttpClient } from '../../../../api/client/HttpClient';
 import { SubscriptionPlan } from '../../../../api/subscription/SubscriptionApi';
 import {
   PaymentProvider,

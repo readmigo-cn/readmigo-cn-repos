@@ -5,7 +5,7 @@ import { RouterService } from '../../../core/router/RouterService';
 import { RoutePath } from '../../../core/router/RouteConstants';
 import { UserStore } from '../../../store/UserStore';
 import { AuthApi, LoginResult } from '../../../api/auth/AuthApi';
-import { ApiError } from '../../../service/HttpClient';
+import { ApiError } from '../../../api/client/HttpClient';
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
 // W18-C1：Login 入口曝光埋点

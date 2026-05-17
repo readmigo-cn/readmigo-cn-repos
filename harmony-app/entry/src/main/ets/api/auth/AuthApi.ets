@@ -1,4 +1,4 @@
-import { HttpClient } from '../../service/HttpClient';
+import { HttpClient } from '../../api/client/HttpClient';
 
 /**
  * AuthApi —— 与 server-cn `/api/v1/auth/*` 一一对应。

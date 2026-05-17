@@ -20,14 +20,14 @@
 import { describe, beforeAll, beforeEach, afterAll, it, expect } from '@ohos/hypium';
 import { MockSetup } from '../utils/MockSetup';
 import { E2eHelper } from '../utils/E2eHelper';
-import { ModuleLoader, ModuleLoadState } from '../../../../main/ets/service/dynamic/ModuleLoader';
+import { ModuleLoader, ModuleLoadState } from '../../../../main/ets/core/dynamic/ModuleLoader';
 import { AuthApi } from '../../../../main/ets/api/auth/AuthApi';
 import { BooksApi } from '../../../../main/ets/api/books/BooksApi';
 import { AiApi, ExplainStreamHandlers } from '../../../../main/ets/api/ai/AiApi';
 import { UserStore } from '../../../../main/ets/store/UserStore';
 import { ReadingStore } from '../../../../main/ets/store/ReadingStore';
 import { StoreKeys } from '../../../../main/ets/store/StoreKeys';
-import { ProgressSync } from '../../../../main/ets/service/ProgressSync';
+import { ProgressSync } from '../../../../main/ets/features/multi-device/service/ProgressSync';
 import { TtsService } from '../../../../main/ets/features/audiobook/service/TtsService';
 import { TranslateService } from '../../../../main/ets/features/ai-tools/service/TranslateService';
 

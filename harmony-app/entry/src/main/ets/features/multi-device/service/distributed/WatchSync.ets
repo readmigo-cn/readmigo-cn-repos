@@ -15,7 +15,7 @@
 import { SyncEngine } from '../sync/SyncEngine';
 import { VocabNoteSyncer } from '../sync/syncers/VocabNoteSyncer';
 import { ReadingProgressSyncer } from '../sync/syncers/ReadingProgressSyncer';
-import { NoteService } from '../../../../service/NoteService';
+import { NoteService } from '../../../../features/notes/service/NoteService';
 import {
   WATCH_TODAY_MINUTES_KEY,
   WATCH_DAILY_GOAL_KEY,

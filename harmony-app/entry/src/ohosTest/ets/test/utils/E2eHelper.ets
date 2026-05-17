@@ -18,7 +18,7 @@ import { BooksApi } from '../../../../main/ets/api/books/BooksApi';
 import { UserStore } from '../../../../main/ets/store/UserStore';
 import { ReadingStore } from '../../../../main/ets/store/ReadingStore';
 import { StoreKeys } from '../../../../main/ets/store/StoreKeys';
-import { ModuleLoader, ModuleName, registerDefaultModules } from '../../../../main/ets/service/dynamic/ModuleLoader';
+import { ModuleLoader, ModuleName, registerDefaultModules } from '../../../../main/ets/core/dynamic/ModuleLoader';
 import { MockSetup } from './MockSetup';
 
 /** 模拟付款的输入。 */

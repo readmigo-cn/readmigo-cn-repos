@@ -19,8 +19,8 @@ import {
 import { WordExplainSheet, WordExplainContext } from '../../../features/ai-tools/components/WordExplainSheet';
 import { ReaderSettingsSheet } from '../../../features/reader/components/ReaderSettingsSheet';
 import { ChapterTocSheet } from '../../../features/reader/components/ChapterTocSheet';
-import { ProgressSync } from '../../../service/ProgressSync';
-import { ReadingSession } from '../../../service/ReadingSession';
+import { ProgressSync } from '../../../features/multi-device/service/ProgressSync';
+import { ReadingSession } from '../../../features/reader/service/ReadingSession';
 import { EffectiveTheme } from '../../../core/theme/Theme.types';
 import { BooksApi } from '../../../api/books/BooksApi';
 import { ReadingApi } from '../../../api/reading/ReadingApi';

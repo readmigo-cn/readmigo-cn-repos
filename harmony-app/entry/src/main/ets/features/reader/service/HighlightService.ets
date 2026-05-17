@@ -18,14 +18,14 @@
  *   - 仅 server 有的 → 加入本地
  */
 
-import { ReadingApi } from './api/ReadingApi';
+import { ReadingApi } from '../../../api/reading/ReadingApi';
 import {
   Highlight,
   CreateHighlightDto,
   UpdateHighlightDto,
   HighlightColor,
-} from '../model/Highlight';
-import { PreferencesManager } from '../core/persistence/PreferencesManager';
+} from '../../../model/Highlight';
+import { PreferencesManager } from '../../../core/persistence/PreferencesManager';
 
 /** 同步操作类型 */
 type PendingOpKind = 'create' | 'update' | 'delete';
