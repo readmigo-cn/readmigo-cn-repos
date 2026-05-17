@@ -1,0 +1,8 @@
+{
+  "version": "test",
+  "mappings": [
+    { "from": "(\\.\\.?/)+service/cache/", "to": "$1core/cache/" },
+    { "from": "(\\.\\.?/)+service/api/Bar", "to": "$1api/bar/Bar" },
+    { "from": "(\\.\\.?/)+router/", "to": "$1core/router/" }
+  ]
+}
