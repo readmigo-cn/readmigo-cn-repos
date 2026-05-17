@@ -1,0 +1,25 @@
+{
+  "version": "PR-4-tests",
+  "comment": "Supplementary map for ohosTest paths that route through main/ets/. The primary PR-4 map's prefix capture only matches contiguous ../ segments and stops at any non-dot segment, so paths like '../../../../main/ets/service/tts/TtsService' need this dedicated mapping.",
+  "mappings": [
+    { "from": "main/ets/pages/Reader", "to": "main/ets/features/reader/pages/Reader" },
+    { "from": "main/ets/pages/Library", "to": "main/ets/features/library/pages/Library" },
+    { "from": "main/ets/pages/AudiobookPlayer", "to": "main/ets/features/audiobook/pages/AudiobookPlayer" },
+    { "from": "main/ets/pages/AudiobookTab", "to": "main/ets/features/audiobook/pages/AudiobookTab" },
+    { "from": "main/ets/pages/Vocab", "to": "main/ets/features/vocab/pages/Vocab" },
+    { "from": "main/ets/pages/VocabStats", "to": "main/ets/features/vocab/pages/VocabStats" },
+    { "from": "main/ets/pages/FlashcardSession", "to": "main/ets/features/vocab/pages/FlashcardSession" },
+    { "from": "main/ets/pages/WordAssociation", "to": "main/ets/features/vocab/pages/WordAssociation" },
+    { "from": "main/ets/pages/WordFamily", "to": "main/ets/features/vocab/pages/WordFamily" },
+    { "from": "main/ets/components/BilingualReader", "to": "main/ets/features/reader/components/BilingualReader" },
+    { "from": "main/ets/components/HighlightLayer", "to": "main/ets/features/reader/components/HighlightLayer" },
+    { "from": "main/ets/components/SelectionLayer", "to": "main/ets/features/reader/components/SelectionLayer" },
+    { "from": "main/ets/components/SentenceHighlight", "to": "main/ets/features/reader/components/SentenceHighlight" },
+    { "from": "main/ets/components/ChapterTocSheet", "to": "main/ets/features/reader/components/ChapterTocSheet" },
+    { "from": "main/ets/components/ReaderSettingsSheet", "to": "main/ets/features/reader/components/ReaderSettingsSheet" },
+    { "from": "main/ets/components/NoteEditorSheet", "to": "main/ets/features/reader/components/NoteEditorSheet" },
+    { "from": "main/ets/components/SsmlBuilder", "to": "main/ets/features/audiobook/components/SsmlBuilder" },
+    { "from": "main/ets/components/VocabDetailSheet", "to": "main/ets/features/vocab/components/VocabDetailSheet" },
+    { "from": "main/ets/service/tts/", "to": "main/ets/features/audiobook/service/" }
+  ]
+}

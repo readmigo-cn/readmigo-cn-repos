@@ -28,7 +28,7 @@ import { UserStore } from '../../../../main/ets/store/UserStore';
 import { ReadingStore } from '../../../../main/ets/store/ReadingStore';
 import { StoreKeys } from '../../../../main/ets/store/StoreKeys';
 import { ProgressSync } from '../../../../main/ets/service/ProgressSync';
-import { TtsService } from '../../../../main/ets/service/tts/TtsService';
+import { TtsService } from '../../../../main/ets/features/audiobook/service/TtsService';
 import { TranslateService } from '../../../../main/ets/service/translation/TranslateService';
 
 export default function fullFlowE2ETest() {

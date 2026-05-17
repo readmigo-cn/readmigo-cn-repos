@@ -15,19 +15,19 @@
  */
 
 import promptAction from '@ohos.promptAction';
-import { AppColors } from '../core/theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
-import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
-import { RouterService } from '../core/router/RouterService';
+import { AppColors } from '../../../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../../../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../../../core/theme/AppSpacing';
+import { RouterService } from '../../../core/router/RouterService';
 import {
   WordAnalysisApi,
   WordAssociation as WordAssoc,
   AssociationMode,
-} from '../api/ai/WordAnalysisApi';
-import { ExplainCard } from '../components/ExplainCard';
-import { ExplainData } from '../model/ExplainData';
-import { NoteRepository, LocalNote } from '../core/persistence/NoteRepository';
-import { PreferencesManager } from '../core/persistence/PreferencesManager';
+} from '../../../api/ai/WordAnalysisApi';
+import { ExplainCard } from '../../../components/ExplainCard';
+import { ExplainData } from '../../../model/ExplainData';
+import { NoteRepository, LocalNote } from '../../../core/persistence/NoteRepository';
+import { PreferencesManager } from '../../../core/persistence/PreferencesManager';
 import util from '@ohos.util';
 
 interface WordAssociationParams {

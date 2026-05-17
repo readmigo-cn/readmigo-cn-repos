@@ -1,8 +1,8 @@
-import { AppColors } from '../core/theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
-import { AppSpacing } from '../core/theme/AppSpacing';
-import { AudiobookPlayerParams } from '../core/router/RouteConstants';
-import { RouterService } from '../core/router/RouterService';
+import { AppColors } from '../../../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../../../core/theme/AppTypography';
+import { AppSpacing } from '../../../core/theme/AppSpacing';
+import { AudiobookPlayerParams } from '../../../core/router/RouteConstants';
+import { RouterService } from '../../../core/router/RouterService';
 
 @Component
 export struct AudiobookPlayer {

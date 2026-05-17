@@ -32,14 +32,14 @@ import {
   SurfaceColors,
   StateColors,
   useColor,
-} from '../core/theme/AppColors';
+} from '../../../core/theme/AppColors';
 import {
   FontFamily,
   FontSizeToken,
   FontWeightToken,
   LineHeightToken,
-} from '../core/theme/AppTypography';
-import { Spacing, Radius, MotionDuration, MotionEasing } from '../core/theme/AppSpacing';
+} from '../../../core/theme/AppTypography';
+import { Spacing, Radius, MotionDuration, MotionEasing } from '../../../core/theme/AppSpacing';
 import { ToastManager } from './Toast';
 
 // ─────────────────────────────────────────────

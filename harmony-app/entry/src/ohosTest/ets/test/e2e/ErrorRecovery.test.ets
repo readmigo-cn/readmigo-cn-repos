@@ -13,7 +13,7 @@ import { MockSetup } from '../utils/MockSetup';
 import { AuthApi } from '../../../../main/ets/api/auth/AuthApi';
 import { BooksApi } from '../../../../main/ets/api/books/BooksApi';
 import { AiApi, ExplainStreamHandlers } from '../../../../main/ets/api/ai/AiApi';
-import { TtsService } from '../../../../main/ets/service/tts/TtsService';
+import { TtsService } from '../../../../main/ets/features/audiobook/service/TtsService';
 import { UserStore } from '../../../../main/ets/store/UserStore';
 
 const BOOK_SLUG = 'jane-eyre';

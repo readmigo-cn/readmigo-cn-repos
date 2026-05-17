@@ -178,7 +178,7 @@ struct WatchHome {
       Column().onAppear(() => router.pushUrl({ url: 'pages/watch/WatchStats' }).catch(() => {}))
     } else if (this.currentPage === 'audio') {
       // 复用主 App AudioAbility 入口，跳到现有 player（手表精简版后续 W16）
-      Column().onAppear(() => router.pushUrl({ url: 'pages/AudiobookPlayer' }).catch(() => {}))
+      Column().onAppear(() => router.pushUrl({ url: 'features/audiobook/pages/AudiobookPlayer' }).catch(() => {}))
     } else {
       this.HomeContent()
     }

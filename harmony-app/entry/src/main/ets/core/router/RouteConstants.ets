@@ -44,7 +44,7 @@ export class RoutePath {
    * W9-C5：词汇量统计 dashboard。
    */
   static readonly VOCAB_STATS: string = 'vocab-stats';
-  static readonly VOCAB_STATS_URL: string = 'pages/VocabStats';
+  static readonly VOCAB_STATS_URL: string = 'features/vocab/pages/VocabStats';
 
   /**
    * W9-C8：弱点分析报告。
@@ -56,13 +56,13 @@ export class RoutePath {
    * W9-C3：单词联想 mind-map 页。
    */
   static readonly WORD_ASSOCIATION: string = 'word-association';
-  static readonly WORD_ASSOCIATION_URL: string = 'pages/WordAssociation';
+  static readonly WORD_ASSOCIATION_URL: string = 'features/vocab/pages/WordAssociation';
 
   /**
    * W9-C4：词族分析页。
    */
   static readonly WORD_FAMILY: string = 'word-family';
-  static readonly WORD_FAMILY_URL: string = 'pages/WordFamily';
+  static readonly WORD_FAMILY_URL: string = 'features/vocab/pages/WordFamily';
 
   /**
    * W9-C6：AI 个性化学习计划页。
@@ -80,13 +80,13 @@ export class RoutePath {
    * W9-C1：生词本主页（auth required，NavPathStack 命名路由）。
    */
   static readonly VOCAB: string = 'vocab';
-  static readonly VOCAB_URL: string = 'pages/Vocab';
+  static readonly VOCAB_URL: string = 'features/vocab/pages/Vocab';
 
   /**
    * W9-C2：闪卡 SRS 复习页（auth required，NavPathStack 命名路由）。
    */
   static readonly FLASHCARD_SESSION: string = 'flashcard-session';
-  static readonly FLASHCARD_SESSION_URL: string = 'pages/FlashcardSession';
+  static readonly FLASHCARD_SESSION_URL: string = 'features/vocab/pages/FlashcardSession';
 
   /**
    * W18-C6：通知中心页（历史通知列表 + 筛选 + 操作）。
@@ -158,20 +158,20 @@ export class PagePath {
   static readonly LOGIN: string = 'pages/Login';
   static readonly ONBOARDING: string = 'pages/Onboarding';
   static readonly DISCOVER: string = 'pages/Discover';
-  static readonly LIBRARY: string = 'pages/Library';
-  static readonly READER: string = 'pages/Reader';
+  static readonly LIBRARY: string = 'features/library/pages/Library';
+  static readonly READER: string = 'features/reader/pages/Reader';
   static readonly NOTES: string = 'pages/Notes';
   static readonly ME: string = 'pages/Me';
-  static readonly AUDIOBOOK_TAB: string = 'pages/AudiobookTab';
-  static readonly AUDIOBOOK_PLAYER: string = 'pages/AudiobookPlayer';
-  static readonly VOCAB_STATS: string = 'pages/VocabStats';
+  static readonly AUDIOBOOK_TAB: string = 'features/audiobook/pages/AudiobookTab';
+  static readonly AUDIOBOOK_PLAYER: string = 'features/audiobook/pages/AudiobookPlayer';
+  static readonly VOCAB_STATS: string = 'features/vocab/pages/VocabStats';
   static readonly WEAKNESS_ANALYSIS: string = 'pages/WeaknessAnalysis';
-  static readonly WORD_ASSOCIATION: string = 'pages/WordAssociation';
-  static readonly WORD_FAMILY: string = 'pages/WordFamily';
+  static readonly WORD_ASSOCIATION: string = 'features/vocab/pages/WordAssociation';
+  static readonly WORD_FAMILY: string = 'features/vocab/pages/WordFamily';
   static readonly STUDY_PLAN: string = 'pages/StudyPlan';
   static readonly READING_COMPREHENSION: string = 'pages/ReadingComprehension';
-  static readonly VOCAB: string = 'pages/Vocab';
-  static readonly FLASHCARD_SESSION: string = 'pages/FlashcardSession';
+  static readonly VOCAB: string = 'features/vocab/pages/Vocab';
+  static readonly FLASHCARD_SESSION: string = 'features/vocab/pages/FlashcardSession';
   static readonly FEEDBACK: string = 'pages/Feedback';
   static readonly TICKET_LIST: string = 'pages/TicketList';
   static readonly TICKET_DETAIL: string = 'pages/TicketDetail';

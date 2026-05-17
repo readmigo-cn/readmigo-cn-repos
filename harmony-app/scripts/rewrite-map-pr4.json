@@ -1,0 +1,24 @@
+{
+  "version": "PR-4",
+  "mappings": [
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/Reader(?=['\"])", "to": "$1features/reader/pages/Reader" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/Library(?=['\"])", "to": "$1features/library/pages/Library" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/AudiobookPlayer(?=['\"])", "to": "$1features/audiobook/pages/AudiobookPlayer" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/AudiobookTab(?=['\"])", "to": "$1features/audiobook/pages/AudiobookTab" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/Vocab(?=['\"])", "to": "$1features/vocab/pages/Vocab" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/VocabStats(?=['\"])", "to": "$1features/vocab/pages/VocabStats" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/FlashcardSession(?=['\"])", "to": "$1features/vocab/pages/FlashcardSession" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/WordAssociation(?=['\"])", "to": "$1features/vocab/pages/WordAssociation" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/WordFamily(?=['\"])", "to": "$1features/vocab/pages/WordFamily" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/BilingualReader(?=['\"])", "to": "$1features/reader/components/BilingualReader" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/HighlightLayer(?=['\"])", "to": "$1features/reader/components/HighlightLayer" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/SelectionLayer(?=['\"])", "to": "$1features/reader/components/SelectionLayer" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/SentenceHighlight(?=['\"])", "to": "$1features/reader/components/SentenceHighlight" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/ChapterTocSheet(?=['\"])", "to": "$1features/reader/components/ChapterTocSheet" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/ReaderSettingsSheet(?=['\"])", "to": "$1features/reader/components/ReaderSettingsSheet" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/NoteEditorSheet(?=['\"])", "to": "$1features/reader/components/NoteEditorSheet" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/SsmlBuilder(?=['\"])", "to": "$1features/audiobook/components/SsmlBuilder" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/VocabDetailSheet(?=['\"])", "to": "$1features/vocab/components/VocabDetailSheet" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)service/tts/", "to": "$1features/audiobook/service/" }
+  ]
+}

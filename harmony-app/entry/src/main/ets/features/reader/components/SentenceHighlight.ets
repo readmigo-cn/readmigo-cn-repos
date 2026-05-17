@@ -19,7 +19,7 @@
  *   - 触摸穿透：本组件不接收 click/gesture，只是叠加显示层
  */
 
-import { AppColors } from '../core/theme/AppColors';
+import { AppColors } from '../../../core/theme/AppColors';
 
 /** 单个句子矩形。Reader 计算后传入。 */
 export interface SentenceRect {

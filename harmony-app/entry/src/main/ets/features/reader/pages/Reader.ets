@@ -1,47 +1,47 @@
-import { AppColors } from '../core/theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
-import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
-import { ReaderRouteParams, RoutePath, ComprehensionRouteParams } from '../core/router/RouteConstants';
-import { RouterService } from '../core/router/RouterService';
+import { AppColors } from '../../../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../../../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../../../core/theme/AppSpacing';
+import { ReaderRouteParams, RoutePath, ComprehensionRouteParams } from '../../../core/router/RouteConstants';
+import { RouterService } from '../../../core/router/RouterService';
 import {
   SettingsStore,
   ReaderTheme,
   PageTurnMode,
   ReaderFont,
-} from '../store/SettingsStore';
-import { ReadingStore, ReadingProgress as LocalProgress } from '../store/ReadingStore';
+} from '../../../store/SettingsStore';
+import { ReadingStore, ReadingProgress as LocalProgress } from '../../../store/ReadingStore';
 import {
   TypesettingEngine,
   TypesetPage,
   HitResult,
   createTypesettingEngine,
-} from '../core/native/typesetting';
-import { WordExplainSheet, WordExplainContext } from '../components/WordExplainSheet';
-import { ReaderSettingsSheet } from '../components/ReaderSettingsSheet';
-import { ChapterTocSheet } from '../components/ChapterTocSheet';
-import { ProgressSync } from '../service/ProgressSync';
-import { ReadingSession } from '../service/ReadingSession';
-import { EffectiveTheme } from '../core/theme/Theme.types';
-import { BooksApi } from '../api/books/BooksApi';
-import { ReadingApi } from '../api/reading/ReadingApi';
-import { NotesApi, NoteRecord } from '../api/notes/NotesApi';
-import { Chapter, ChapterContent } from '../model/Chapter';
-import { Highlight, HighlightColor } from '../model/Highlight';
-import { ReadingProgressDto } from '../model/ReadingProgress';
+} from '../../../core/native/typesetting';
+import { WordExplainSheet, WordExplainContext } from '../../../components/WordExplainSheet';
+import { ReaderSettingsSheet } from '../../../features/reader/components/ReaderSettingsSheet';
+import { ChapterTocSheet } from '../../../features/reader/components/ChapterTocSheet';
+import { ProgressSync } from '../../../service/ProgressSync';
+import { ReadingSession } from '../../../service/ReadingSession';
+import { EffectiveTheme } from '../../../core/theme/Theme.types';
+import { BooksApi } from '../../../api/books/BooksApi';
+import { ReadingApi } from '../../../api/reading/ReadingApi';
+import { NotesApi, NoteRecord } from '../../../api/notes/NotesApi';
+import { Chapter, ChapterContent } from '../../../model/Chapter';
+import { Highlight, HighlightColor } from '../../../model/Highlight';
+import { ReadingProgressDto } from '../../../model/ReadingProgress';
 import promptAction from '@ohos.promptAction';
 // W8-C4 / C5 / C6：翻译 / TTS / 句子高亮
-import { TranslateService, TranslateResult } from '../service/translation/TranslateService';
-import { TtsService, TtsHandle, Voice } from '../service/tts/TtsService';
-import { SentenceHighlight, SentenceRect } from '../components/SentenceHighlight';
-import { ToastManager } from '../ui/primitives/Toast';
+import { TranslateService, TranslateResult } from '../../../service/translation/TranslateService';
+import { TtsService, TtsHandle, Voice } from '../../../features/audiobook/service/TtsService';
+import { SentenceHighlight, SentenceRect } from '../../../features/reader/components/SentenceHighlight';
+import { ToastManager } from '../../../ui/primitives/Toast';
 // W11-C3 / W13-C3：阅读接续（手机 ↔ 平板 多端协同）+ 设备选择
-import { ContinuationManager } from '../core/atomic/ContinuationManager';
-import { DeviceSelectorSheet } from '../components/DeviceSelectorSheet';
-import { TrustedDevice } from '../service/distributed/DeviceManager';
+import { ContinuationManager } from '../../../core/atomic/ContinuationManager';
+import { DeviceSelectorSheet } from '../../../components/DeviceSelectorSheet';
+import { TrustedDevice } from '../../../service/distributed/DeviceManager';
 // W11-C2 / W11-C4：单词分享 / 划词查询元服务
-import { AtomicLauncher } from '../core/atomic/AtomicLauncher';
+import { AtomicLauncher } from '../../../core/atomic/AtomicLauncher';
 // W13-C2：跨端剪贴板（把选中单词分享到其它设备）
-import { DistributedClipboard, VocabPayload } from '../service/distributed/DistributedClipboard';
+import { DistributedClipboard, VocabPayload } from '../../../service/distributed/DistributedClipboard';
 import common from '@ohos.app.ability.common';
 // W14-C4：平板双页阅读布局
 import {
@@ -49,11 +49,11 @@ import {
   FoldStatus,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_FOLD_STATUS,
-} from '../core/theme/Breakpoints';
+} from '../../../core/theme/Breakpoints';
 import { ReaderTabletLayout } from './tablet/ReaderTabletLayout';
 // W18-C1：Reader 页面曝光埋点
-import { Analytics } from '../core/analytics/AnalyticsProvider';
-import { SaEvents } from '../core/analytics/SensorsAnalytics';
+import { Analytics } from '../../../core/analytics/AnalyticsProvider';
+import { SaEvents } from '../../../core/analytics/SensorsAnalytics';
 
 const FALLBACK_HTML = `
 <h1>Chapter 1 — Sample</h1>

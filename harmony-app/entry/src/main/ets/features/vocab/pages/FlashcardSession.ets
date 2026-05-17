@@ -22,7 +22,7 @@
  *   5 「太简单」     蓝    EF 略升，下次间隔加长
  */
 
-import { EffectiveTheme } from '../core/theme/Theme.types';
+import { EffectiveTheme } from '../../../core/theme/Theme.types';
 import {
   useColor,
   TextColors,
@@ -32,20 +32,20 @@ import {
   StateColors,
   BrandPalette,
   ColorPalette,
-} from '../core/theme/AppColors';
+} from '../../../core/theme/AppColors';
 import {
   FontSizeToken,
   FontWeightToken,
   LineHeightToken,
-} from '../core/theme/AppTypography';
-import { Spacing, Radius, Elevation, MotionEasing } from '../core/theme/AppSpacing';
-import { ToastManager } from '../ui/primitives/Toast';
-import { VocabDetailSheet, VocabDetailActions } from '../components/VocabDetailSheet';
+} from '../../../core/theme/AppTypography';
+import { Spacing, Radius, Elevation, MotionEasing } from '../../../core/theme/AppSpacing';
+import { ToastManager } from '../../../ui/primitives/Toast';
+import { VocabDetailSheet, VocabDetailActions } from '../../../features/vocab/components/VocabDetailSheet';
 import {
   NotesApi,
   VocabNoteRecord,
-} from '../api/notes/NotesApi';
-import { TtsService } from '../service/tts/TtsService';
+} from '../../../api/notes/NotesApi';
+import { TtsService } from '../../../features/audiobook/service/TtsService';
 import router from '@ohos.router';
 
 // ─────────────────────────────────────────────

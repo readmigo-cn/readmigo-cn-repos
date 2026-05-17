@@ -16,9 +16,9 @@
  * 状态由 Reader 通过 @Link 持有；本组件只负责 UI + 手势。
  */
 
-import { AppColors } from '../core/theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
-import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { AppColors } from '../../../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../../../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../../../core/theme/AppSpacing';
 
 /** 选区范围（屏幕坐标 + 字符偏移，与 typesetting.HitResult 兼容） */
 export interface SelectionRange {

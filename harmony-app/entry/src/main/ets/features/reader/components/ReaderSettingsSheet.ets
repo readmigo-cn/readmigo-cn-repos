@@ -24,14 +24,14 @@ import {
   AccentColors,
   SurfaceColors,
   useColor,
-} from '../core/theme/AppColors';
+} from '../../../core/theme/AppColors';
 import {
   FontFamily,
   FontSizeToken,
   FontWeightToken,
   LineHeightToken,
-} from '../core/theme/AppTypography';
-import { Spacing, Radius, MotionDuration, MotionEasing } from '../core/theme/AppSpacing';
+} from '../../../core/theme/AppTypography';
+import { Spacing, Radius, MotionDuration, MotionEasing } from '../../../core/theme/AppSpacing';
 import {
   SettingsStore,
   ReaderTheme,
@@ -41,8 +41,8 @@ import {
   LineHeightLevel,
   FONT_SIZE_LEVEL_MAP,
   LINE_HEIGHT_LEVEL_MAP,
-} from '../store/SettingsStore';
-import { ThemeService } from '../core/theme/ThemeService';
+} from '../../../store/SettingsStore';
+import { ThemeService } from '../../../core/theme/ThemeService';
 import { AppSheet } from './Modal';
 import { ToastManager } from './Toast';
 

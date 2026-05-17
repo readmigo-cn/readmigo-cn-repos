@@ -13,7 +13,7 @@
 import { AuthApi, LoginResult } from '../../../../main/ets/api/auth/AuthApi';
 import { BooksApi } from '../../../../main/ets/api/books/BooksApi';
 import { AiApi, ExplainWordPayload, SseHandlers } from '../../../../main/ets/api/ai/AiApi';
-import { TtsService, TtsHandle, TtsSpeakOptions } from '../../../../main/ets/service/tts/TtsService';
+import { TtsService, TtsHandle, TtsSpeakOptions } from '../../../../main/ets/features/audiobook/service/TtsService';
 import { TranslateService, TranslateResult } from '../../../../main/ets/service/translation/TranslateService';
 import { Book, BookListResponse } from '../../../../main/ets/model/Book';
 import { Chapter, ChapterContent } from '../../../../main/ets/model/Chapter';

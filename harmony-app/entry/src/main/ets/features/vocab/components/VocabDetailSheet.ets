@@ -13,7 +13,7 @@
  *   组件不直接调用 NoteService / NotesApi，所有持久化由上层接管。
  */
 
-import { EffectiveTheme } from '../core/theme/Theme.types';
+import { EffectiveTheme } from '../../../core/theme/Theme.types';
 import {
   useColor,
   TextColors,
@@ -21,15 +21,15 @@ import {
   BorderColors,
   AccentColors,
   BrandPalette,
-} from '../core/theme/AppColors';
+} from '../../../core/theme/AppColors';
 import {
   FontFamily,
   FontSizeToken,
   FontWeightToken,
   LineHeightToken,
-} from '../core/theme/AppTypography';
-import { Spacing, Radius } from '../core/theme/AppSpacing';
-import { VocabNoteRecord } from '../api/notes/NotesApi';
+} from '../../../core/theme/AppTypography';
+import { Spacing, Radius } from '../../../core/theme/AppSpacing';
+import { VocabNoteRecord } from '../../../api/notes/NotesApi';
 
 // ─────────────────────────────────────────────
 // 数据契约

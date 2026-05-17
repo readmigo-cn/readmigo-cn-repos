@@ -19,7 +19,7 @@ import {
   BrandPalette,
   GrayPalette,
   ColorPalette,
-} from '../core/theme/AppColors';
+} from '../../../core/theme/AppColors';
 import {
   TitleStyles,
   HeadlineStyles,
@@ -27,15 +27,15 @@ import {
   LabelStyles,
   CaptionStyle,
   Typography,
-} from '../core/theme/AppTypography';
-import { Spacing, Radius, Elevation } from '../core/theme/AppSpacing';
-import { EffectiveTheme } from '../core/theme/Theme.types';
-import { RouterService } from '../core/router/RouterService';
-import { RoutePath } from '../core/router/RouteConstants';
-import { AppCard } from '../ui/primitives/Card';
-import { AppButton } from '../ui/primitives/Button';
-import { AppEmptyState } from '../ui/primitives/EmptyState';
-import { AppTabs } from '../ui/primitives/Tab';
+} from '../../../core/theme/AppTypography';
+import { Spacing, Radius, Elevation } from '../../../core/theme/AppSpacing';
+import { EffectiveTheme } from '../../../core/theme/Theme.types';
+import { RouterService } from '../../../core/router/RouterService';
+import { RoutePath } from '../../../core/router/RouteConstants';
+import { AppCard } from '../../../ui/primitives/Card';
+import { AppButton } from '../../../ui/primitives/Button';
+import { AppEmptyState } from '../../../ui/primitives/EmptyState';
+import { AppTabs } from '../../../ui/primitives/Tab';
 import {
   StatsApi,
   VocabStats as VocabStatsDto,
@@ -44,7 +44,7 @@ import {
   CefrBucket,
   PosBucket,
   SparkPoint,
-} from '../api/reading/StatsApi';
+} from '../../../api/reading/StatsApi';
 
 // ─────────────────────────────────────────────
 // 常量

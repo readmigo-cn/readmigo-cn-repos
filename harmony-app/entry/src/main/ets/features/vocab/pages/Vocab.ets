@@ -17,7 +17,7 @@
  *   - 「开始复习」CTA → push FLASHCARD_SESSION 路由
  */
 
-import { EffectiveTheme } from '../core/theme/Theme.types';
+import { EffectiveTheme } from '../../../core/theme/Theme.types';
 import {
   useColor,
   TextColors,
@@ -26,30 +26,30 @@ import {
   AccentColors,
   StateColors,
   BrandPalette,
-} from '../core/theme/AppColors';
+} from '../../../core/theme/AppColors';
 import {
   FontSizeToken,
   FontWeightToken,
   LineHeightToken,
-} from '../core/theme/AppTypography';
-import { Spacing, Radius, Elevation } from '../core/theme/AppSpacing';
-import { AppEmptyState } from '../ui/primitives/EmptyState';
-import { ToastManager } from '../ui/primitives/Toast';
-import { VocabDetailSheet, VocabDetailActions } from '../components/VocabDetailSheet';
-import { RoutePath } from '../core/router/RouteConstants';
+} from '../../../core/theme/AppTypography';
+import { Spacing, Radius, Elevation } from '../../../core/theme/AppSpacing';
+import { AppEmptyState } from '../../../ui/primitives/EmptyState';
+import { ToastManager } from '../../../ui/primitives/Toast';
+import { VocabDetailSheet, VocabDetailActions } from '../../../features/vocab/components/VocabDetailSheet';
+import { RoutePath } from '../../../core/router/RouteConstants';
 import {
   NotesApi,
   VocabNoteRecord,
   ReviewStats,
-} from '../api/notes/NotesApi';
-import { TtsService } from '../service/tts/TtsService';
+} from '../../../api/notes/NotesApi';
+import { TtsService } from '../../../features/audiobook/service/TtsService';
 // W13-C2：跨端剪贴板（复制到其它设备）
-import { DistributedClipboard, VocabPayload } from '../service/distributed/DistributedClipboard';
+import { DistributedClipboard, VocabPayload } from '../../../service/distributed/DistributedClipboard';
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
 // W18-C1：Vocab 页面曝光埋点
-import { Analytics } from '../core/analytics/AnalyticsProvider';
-import { SaEvents } from '../core/analytics/SensorsAnalytics';
+import { Analytics } from '../../../core/analytics/AnalyticsProvider';
+import { SaEvents } from '../../../core/analytics/SensorsAnalytics';
 
 type FilterTab = 'all' | 'due' | 'known';
 type SortKind = 'createdAt' | 'lastReviewedAt' | 'difficulty';

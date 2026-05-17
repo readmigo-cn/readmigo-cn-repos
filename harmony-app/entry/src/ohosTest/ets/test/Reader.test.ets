@@ -1,5 +1,5 @@
 // Reader.test.ets
-// Placeholder Hypium test for `entry/src/main/ets/pages/Reader.ets`.
+// Placeholder Hypium test for `entry/src/main/ets/features/reader/pages/Reader.ets`.
 // Phase 2 will exercise the typesetting bridge (libreadmigo_typesetting.so or
 // its mock) and assert paginated layout output. W1 only proves the test file
 // is discovered and Hypium can run it.
@@ -18,8 +18,8 @@ export default function readerPageTest() {
 
     it('should render reader page without crashing (placeholder)', 0, () => {
       // Phase 2: assert page header renders with book title from fixture.
-      const pageRoute: string = 'pages/Reader';
-      expect(pageRoute).assertEqual('pages/Reader');
+      const pageRoute: string = 'features/reader/pages/Reader';
+      expect(pageRoute).assertEqual('features/reader/pages/Reader');
     });
 
     it('should expose the typesetting mock when NATIVE_AVAILABLE=false', 0, () => {

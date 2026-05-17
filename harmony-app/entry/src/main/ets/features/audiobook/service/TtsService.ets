@@ -25,8 +25,8 @@
 
 import common from '@ohos.app.ability.common';
 import Want from '@ohos.app.ability.Want';
-import { SsmlBuilder } from '../../components/SsmlBuilder';
-import { SettingsStore } from '../../store/SettingsStore';
+import { SsmlBuilder } from '../../../features/audiobook/components/SsmlBuilder';
+import { SettingsStore } from '../../../store/SettingsStore';
 
 // ---------- 公共类型 ----------
 
