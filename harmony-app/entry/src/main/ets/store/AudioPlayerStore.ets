@@ -10,7 +10,7 @@
  * - Speed control
  */
 
-import type {
+import {
   Audiobook,
   AudiobookChapter,
   PlaybackSpeed,
@@ -18,6 +18,8 @@ import type {
   AudioPlayerState,
 } from '../model/Audiobook';
 import { PLAYBACK_SPEEDS } from '../model/Audiobook';
+
+export type AudioPlayerStateListener = (state: AudioPlayerStore) => void;
 
 // Store state
 class AudioPlayerStore implements AudioPlayerState {
@@ -47,12 +49,12 @@ class AudioPlayerStore implements AudioPlayerState {
   error: string | null = null;
 
   // Callbacks
-  private onStateChangeCallbacks: Array<(state: AudioPlayerStore) => void> = [];
+  private onStateChangeCallbacks: AudioPlayerStateListener[] = [];
 
   /**
    * Subscribe to state changes
    */
-  subscribe(callback: (state: AudioPlayerStore) => void): () => void {
+  subscribe(callback: AudioPlayerStateListener): () => void {
     this.onStateChangeCallbacks.push(callback);
     return () => {
       const index = this.onStateChangeCallbacks.indexOf(callback);
@@ -341,3 +343,8 @@ export const audioPlayerStore = new AudioPlayerStore();
 export function useAudioPlayerStore(): AudioPlayerStore {
   return audioPlayerStore;
 }
+
+// PHASE 2 FOLLOWUP: replace callback subscribe with @ObservedV2 + @Trace decorators
+// or migrate to AppStorage so ArkUI @State / @StorageLink can subscribe directly.
+// Current callback model does NOT trigger ArkUI rebuild — UI changes rely on
+// upstream wrappers. See docs/specs/2026-05-17-harmony-app-feature-first-design.md §8.

@@ -1,0 +1,8 @@
+{
+  "version": "PR-1",
+  "mappings": [
+    { "from": "/model/Book\\.ts(?=['\"])", "to": "/model/Book" },
+    { "from": "/model/Audiobook\\.ts(?=['\"])", "to": "/model/Audiobook" },
+    { "from": "/store/AudioPlayerStore\\.ts(?=['\"])", "to": "/store/AudioPlayerStore" }
+  ]
+}
