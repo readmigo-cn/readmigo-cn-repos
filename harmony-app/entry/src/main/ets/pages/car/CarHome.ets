@@ -11,8 +11,8 @@
  * 操作分发统一走 VoiceCommand.dispatch，与按键 / 语音 / 触摸三入口共享。
  */
 
-import { BrandPalette, GrayPalette } from '../core/theme/AppColors';
-import { Spacing, Radius } from '../core/theme/AppSpacing';
+import { BrandPalette, GrayPalette } from '../../core/theme/AppColors';
+import { Spacing, Radius } from '../../core/theme/AppSpacing';
 import { audioPlayerStore } from '../../store/AudioPlayerStore';
 import { VoiceCommand } from '../../service/car/VoiceCommand';
 import { CAR_STORAGE_KEYS } from '../../abilities/CarAbility';

@@ -22,7 +22,7 @@
 
 import connection from '@ohos.net.connection';
 import { HttpClient } from '../HttpClient';
-import { PreferencesManager } from '../core/persistence/PreferencesManager';
+import { PreferencesManager } from '../../core/persistence/PreferencesManager';
 
 // ---------------------------------------------------------------------------
 // 通用类型

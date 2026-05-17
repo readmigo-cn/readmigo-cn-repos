@@ -14,7 +14,7 @@
  *   - 集成 W10 CacheManager（covers 分类）做磁盘持久化
  */
 
-import { CacheManager } from '../core/cache/CacheManager';
+import { CacheManager } from '../../core/cache/CacheManager';
 
 // -------------------- LRU 内存缓存 --------------------
 

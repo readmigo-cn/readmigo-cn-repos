@@ -19,7 +19,7 @@
  *   （PricingTable 是前端单一源），便于 UI 直接 hasFeature(key)。
  */
 
-import { PreferencesManager, NamespacedPreferences } from '../core/persistence/PreferencesManager';
+import { PreferencesManager, NamespacedPreferences } from '../../core/persistence/PreferencesManager';
 import {
   SubscriptionApi,
   SubscriptionInfo,

@@ -15,7 +15,7 @@
  */
 
 import { AiApi, ExplainWordPayload } from './AiApi';
-import { PreferencesManager } from '../core/persistence/PreferencesManager';
+import { PreferencesManager } from '../../core/persistence/PreferencesManager';
 
 // ---------------------------------------------------------------------------
 // 类型

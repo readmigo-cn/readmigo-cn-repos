@@ -24,8 +24,8 @@
  *   })
  */
 
-import { Spacing } from '../core/theme/AppSpacing';
-import { Breakpoint, STORAGE_KEY_BREAKPOINT } from '../core/theme/Breakpoints';
+import { Spacing } from '../../core/theme/AppSpacing';
+import { Breakpoint, STORAGE_KEY_BREAKPOINT } from '../../core/theme/Breakpoints';
 
 /** 与 ArkUI BreakpointMap 形状一致的配置 */
 export interface AdaptiveBreakpointMap {

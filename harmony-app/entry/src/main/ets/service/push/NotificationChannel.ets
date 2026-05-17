@@ -20,7 +20,7 @@
  */
 
 import notificationManager from '@ohos.notificationManager';
-import { PreferencesManager } from '../core/persistence/PreferencesManager';
+import { PreferencesManager } from '../../core/persistence/PreferencesManager';
 import { SettingsStore } from '../../store/SettingsStore';
 import { HmsPushService, PushMessage } from './HmsPushService';
 

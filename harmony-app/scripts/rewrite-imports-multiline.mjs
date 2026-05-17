@@ -5,6 +5,14 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { glob } from 'node:fs/promises';
 
+// GOTCHA: When writing rewrite-map JSON, capture path prefixes with a
+// NON-CAPTURING repeat: ((?:\\.\\.?/)+) — NOT (\\.\\.?/)+. The `+` quantifier
+// only retains the LAST iteration in the capture group, dropping `../`s.
+// Example correct mapping:
+//   { "from": "(?<=['\"])((?:\\.\\.?/)+)theme/", "to": "$1core/theme/" }
+// Example INCORRECT mapping (used in PR-2 — caused 64 broken imports):
+//   { "from": "(?<=['\"])(\\.\\.?/)+theme/",     "to": "$1core/theme/" }
+
 const NAPI_SKIP = /from\s+['"]lib[^'"]*\.so['"]/;
 
 async function main() {

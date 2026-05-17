@@ -13,10 +13,10 @@
  *   - 进入 Reader 仍由 RouterService.push(READER) 触发，与手机一致
  */
 
-import { AppColors } from '../core/theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
-import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
-import { RouterAdapter } from '../core/router/RouterAdapter';
+import { AppColors } from '../../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../../core/theme/AppSpacing';
+import { RouterAdapter } from '../../core/router/RouterAdapter';
 import { BooksApi } from '../../service/api/BooksApi';
 import { ReadingApi } from '../../service/api/ReadingApi';
 import { Book, BookDetail, BookStatus, UserBook } from '../../model/Book';

@@ -23,8 +23,8 @@
  *   - 长按 SELECT 也可调速（非本任务，留 TODO）
  */
 
-import { AppColors } from '../core/theme/AppColors';
-import { Spacing, Radius } from '../core/theme/AppSpacing';
+import { AppColors } from '../../core/theme/AppColors';
+import { Spacing, Radius } from '../../core/theme/AppSpacing';
 import { RemoteController } from '../../service/tv/RemoteController';
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';

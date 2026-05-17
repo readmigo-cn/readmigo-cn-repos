@@ -1,6 +1,6 @@
-import { AppColors } from '../core/theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
-import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { AppColors } from '../../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../../core/theme/AppSpacing';
 import { ShareWordPayload, SHARE_WORD_STORAGE_KEY } from '../../abilities/ShareWordAbility';
 import promptAction from '@ohos.promptAction';
 import pasteboard from '@ohos.pasteboard';

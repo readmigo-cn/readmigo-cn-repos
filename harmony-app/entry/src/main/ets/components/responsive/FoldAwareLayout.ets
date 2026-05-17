@@ -23,14 +23,14 @@
  *   })
  */
 
-import { AppColors } from '../core/theme/AppColors';
-import { Spacing } from '../core/theme/AppSpacing';
+import { AppColors } from '../../core/theme/AppColors';
+import { Spacing } from '../../core/theme/AppSpacing';
 import {
   Breakpoint,
   FoldStatus,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_FOLD_STATUS,
-} from '../core/theme/Breakpoints';
+} from '../../core/theme/Breakpoints';
 
 /** 当前布局模式 —— 决定 build() 走哪个分支 */
 export enum FoldLayoutMode {
