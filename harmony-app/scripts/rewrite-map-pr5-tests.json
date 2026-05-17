@@ -1,0 +1,26 @@
+{
+  "version": "PR-5-tests",
+  "comment": "Supplementary map for ohosTest paths that route through main/ets/. Mirrors the primary PR-5 map for non-anchored main/ets/ patterns.",
+  "mappings": [
+    { "from": "main/ets/pages/ReadingComprehension", "to": "main/ets/features/ai-tools/pages/ReadingComprehension" },
+    { "from": "main/ets/pages/WeaknessAnalysis", "to": "main/ets/features/ai-tools/pages/WeaknessAnalysis" },
+    { "from": "main/ets/pages/Login", "to": "main/ets/features/account/pages/Login" },
+    { "from": "main/ets/pages/Onboarding", "to": "main/ets/features/account/pages/Onboarding" },
+    { "from": "main/ets/pages/Me", "to": "main/ets/features/account/pages/Me" },
+    { "from": "main/ets/pages/Subscriptions", "to": "main/ets/features/account/pages/Subscriptions" },
+    { "from": "main/ets/pages/RefundFlow", "to": "main/ets/features/account/pages/RefundFlow" },
+    { "from": "main/ets/pages/Contact", "to": "main/ets/features/account/pages/Contact" },
+    { "from": "main/ets/pages/PasswordReset", "to": "main/ets/features/account/pages/PasswordReset" },
+    { "from": "main/ets/pages/StudyPlan", "to": "main/ets/features/study/pages/StudyPlan" },
+    { "from": "main/ets/pages/Discover", "to": "main/ets/features/discover/pages/Discover" },
+    { "from": "main/ets/pages/Notes", "to": "main/ets/features/notes/pages/Notes" },
+    { "from": "main/ets/components/AiContentBadge", "to": "main/ets/features/ai-tools/components/AiContentBadge" },
+    { "from": "main/ets/components/ExplainCard", "to": "main/ets/features/ai-tools/components/ExplainCard" },
+    { "from": "main/ets/components/WordExplainSheet", "to": "main/ets/features/ai-tools/components/WordExplainSheet" },
+    { "from": "main/ets/components/PaywallSheet", "to": "main/ets/features/account/components/PaywallSheet" },
+    { "from": "main/ets/service/llm/", "to": "main/ets/features/ai-tools/service/" },
+    { "from": "main/ets/service/translation/", "to": "main/ets/features/ai-tools/service/" },
+    { "from": "main/ets/service/payment/", "to": "main/ets/features/account/service/payment/" },
+    { "from": "main/ets/service/subscription/", "to": "main/ets/features/account/service/subscription/" }
+  ]
+}

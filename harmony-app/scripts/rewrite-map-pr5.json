@@ -1,0 +1,25 @@
+{
+  "version": "PR-5",
+  "mappings": [
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/ReadingComprehension(?=['\"])", "to": "$1features/ai-tools/pages/ReadingComprehension" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/WeaknessAnalysis(?=['\"])", "to": "$1features/ai-tools/pages/WeaknessAnalysis" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/Login(?=['\"])", "to": "$1features/account/pages/Login" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/Onboarding(?=['\"])", "to": "$1features/account/pages/Onboarding" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/Me(?=['\"])", "to": "$1features/account/pages/Me" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/Subscriptions(?=['\"])", "to": "$1features/account/pages/Subscriptions" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/RefundFlow(?=['\"])", "to": "$1features/account/pages/RefundFlow" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/Contact(?=['\"])", "to": "$1features/account/pages/Contact" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/PasswordReset(?=['\"])", "to": "$1features/account/pages/PasswordReset" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/StudyPlan(?=['\"])", "to": "$1features/study/pages/StudyPlan" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/Discover(?=['\"])", "to": "$1features/discover/pages/Discover" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)pages/Notes(?=['\"])", "to": "$1features/notes/pages/Notes" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/AiContentBadge(?=['\"])", "to": "$1features/ai-tools/components/AiContentBadge" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/ExplainCard(?=['\"])", "to": "$1features/ai-tools/components/ExplainCard" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/WordExplainSheet(?=['\"])", "to": "$1features/ai-tools/components/WordExplainSheet" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)components/PaywallSheet(?=['\"])", "to": "$1features/account/components/PaywallSheet" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)service/llm/", "to": "$1features/ai-tools/service/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)service/translation/", "to": "$1features/ai-tools/service/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)service/payment/", "to": "$1features/account/service/payment/" },
+    { "from": "(?<=['\"])((?:\\.\\.?/)+)service/subscription/", "to": "$1features/account/service/subscription/" }
+  ]
+}

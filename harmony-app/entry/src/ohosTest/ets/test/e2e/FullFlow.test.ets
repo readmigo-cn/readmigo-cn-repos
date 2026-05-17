@@ -29,7 +29,7 @@ import { ReadingStore } from '../../../../main/ets/store/ReadingStore';
 import { StoreKeys } from '../../../../main/ets/store/StoreKeys';
 import { ProgressSync } from '../../../../main/ets/service/ProgressSync';
 import { TtsService } from '../../../../main/ets/features/audiobook/service/TtsService';
-import { TranslateService } from '../../../../main/ets/service/translation/TranslateService';
+import { TranslateService } from '../../../../main/ets/features/ai-tools/service/TranslateService';
 
 export default function fullFlowE2ETest() {
   describe('E2E_FullFlow_W1_to_W22', () => {

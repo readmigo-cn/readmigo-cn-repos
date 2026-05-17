@@ -24,7 +24,7 @@ import {
   WordAssociation as WordAssoc,
   AssociationMode,
 } from '../../../api/ai/WordAnalysisApi';
-import { ExplainCard } from '../../../components/ExplainCard';
+import { ExplainCard } from '../../../features/ai-tools/components/ExplainCard';
 import { ExplainData } from '../../../model/ExplainData';
 import { NoteRepository, LocalNote } from '../../../core/persistence/NoteRepository';
 import { PreferencesManager } from '../../../core/persistence/PreferencesManager';

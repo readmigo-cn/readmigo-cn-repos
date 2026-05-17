@@ -21,7 +21,7 @@
 import { AppColors } from '../../core/theme/AppColors';
 import { AppFontSize, AppFontWeight } from '../../core/theme/AppTypography';
 import { AppSpacing, AppRadius } from '../../core/theme/AppSpacing';
-import { ExplainCard } from '../../components/ExplainCard';
+import { ExplainCard } from '../../features/ai-tools/components/ExplainCard';
 import { AppButton } from '../../ui/primitives/Button';
 import { AppInput } from '../../ui/primitives/Input';
 import { LoadingIndicator } from '../../ui/primitives/Loading';

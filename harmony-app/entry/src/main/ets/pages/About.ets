@@ -43,7 +43,7 @@ const ABOUT_LINKS: AboutLink[] = [
   { id: 'agreement', label: '用户协议', url: 'pages/UserAgreement' },
   { id: 'privacy',   label: '隐私政策', url: 'pages/PrivacyPolicy' },
   { id: 'oss',       label: '第三方开源声明', url: 'pages/OssLicenses' },
-  { id: 'contact',   label: '联系我们', url: 'pages/Contact' },
+  { id: 'contact',   label: '联系我们', url: 'features/account/pages/Contact' },
   { id: 'update',    label: '检查更新', url: 'placeholder' },
 ];
 

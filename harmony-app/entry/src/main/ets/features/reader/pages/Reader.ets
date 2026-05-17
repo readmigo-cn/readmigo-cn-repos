@@ -16,7 +16,7 @@ import {
   HitResult,
   createTypesettingEngine,
 } from '../../../core/native/typesetting';
-import { WordExplainSheet, WordExplainContext } from '../../../components/WordExplainSheet';
+import { WordExplainSheet, WordExplainContext } from '../../../features/ai-tools/components/WordExplainSheet';
 import { ReaderSettingsSheet } from '../../../features/reader/components/ReaderSettingsSheet';
 import { ChapterTocSheet } from '../../../features/reader/components/ChapterTocSheet';
 import { ProgressSync } from '../../../service/ProgressSync';
@@ -30,7 +30,7 @@ import { Highlight, HighlightColor } from '../../../model/Highlight';
 import { ReadingProgressDto } from '../../../model/ReadingProgress';
 import promptAction from '@ohos.promptAction';
 // W8-C4 / C5 / C6：翻译 / TTS / 句子高亮
-import { TranslateService, TranslateResult } from '../../../service/translation/TranslateService';
+import { TranslateService, TranslateResult } from '../../../features/ai-tools/service/TranslateService';
 import { TtsService, TtsHandle, Voice } from '../../../features/audiobook/service/TtsService';
 import { SentenceHighlight, SentenceRect } from '../../../features/reader/components/SentenceHighlight';
 import { ToastManager } from '../../../ui/primitives/Toast';

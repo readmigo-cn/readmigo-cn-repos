@@ -31,7 +31,7 @@ export class RoutePath {
    * router.pushUrl 用 PASSWORD_RESET_URL；name key 保留用于将来切换到 NavPathStack。
    */
   static readonly PASSWORD_RESET: string = 'password-reset';
-  static readonly PASSWORD_RESET_URL: string = 'pages/PasswordReset';
+  static readonly PASSWORD_RESET_URL: string = 'features/account/pages/PasswordReset';
 
   /**
    * 开发者工具：W6 组件演示页（W6-C10）。
@@ -50,7 +50,7 @@ export class RoutePath {
    * W9-C8：弱点分析报告。
    */
   static readonly WEAKNESS_ANALYSIS: string = 'weakness-analysis';
-  static readonly WEAKNESS_ANALYSIS_URL: string = 'pages/WeaknessAnalysis';
+  static readonly WEAKNESS_ANALYSIS_URL: string = 'features/ai-tools/pages/WeaknessAnalysis';
 
   /**
    * W9-C3：单词联想 mind-map 页。
@@ -68,13 +68,13 @@ export class RoutePath {
    * W9-C6：AI 个性化学习计划页。
    */
   static readonly STUDY_PLAN: string = 'StudyPlan';
-  static readonly STUDY_PLAN_URL: string = 'pages/StudyPlan';
+  static readonly STUDY_PLAN_URL: string = 'features/study/pages/StudyPlan';
 
   /**
    * W9-C7：阅读理解题页（书内 toolbar 触发，传 bookId / chapterIndex）。
    */
   static readonly READING_COMPREHENSION: string = 'ReadingComprehension';
-  static readonly READING_COMPREHENSION_URL: string = 'pages/ReadingComprehension';
+  static readonly READING_COMPREHENSION_URL: string = 'features/ai-tools/pages/ReadingComprehension';
 
   /**
    * W9-C1：生词本主页（auth required，NavPathStack 命名路由）。
@@ -116,13 +116,13 @@ export class RoutePath {
    * W17-C5：订阅管理页（auth required）。
    */
   static readonly SUBSCRIPTIONS: string = 'Subscriptions';
-  static readonly SUBSCRIPTIONS_URL: string = 'pages/Subscriptions';
+  static readonly SUBSCRIPTIONS_URL: string = 'features/account/pages/Subscriptions';
 
   /**
    * W17-C6：退款申请流程页（auth required）。
    */
   static readonly REFUND_FLOW: string = 'RefundFlow';
-  static readonly REFUND_FLOW_URL: string = 'pages/RefundFlow';
+  static readonly REFUND_FLOW_URL: string = 'features/account/pages/RefundFlow';
 
   /**
    * W19-C3：常见问题（FAQ）页。
@@ -146,7 +146,7 @@ export class RoutePath {
   static readonly OSS_LICENSES: string = 'OssLicenses';
   static readonly OSS_LICENSES_URL: string = 'pages/OssLicenses';
   static readonly CONTACT: string = 'Contact';
-  static readonly CONTACT_URL: string = 'pages/Contact';
+  static readonly CONTACT_URL: string = 'features/account/pages/Contact';
 }
 
 /**
@@ -155,35 +155,35 @@ export class RoutePath {
  */
 export class PagePath {
   static readonly INDEX: string = 'core/shell/Index';
-  static readonly LOGIN: string = 'pages/Login';
-  static readonly ONBOARDING: string = 'pages/Onboarding';
-  static readonly DISCOVER: string = 'pages/Discover';
+  static readonly LOGIN: string = 'features/account/pages/Login';
+  static readonly ONBOARDING: string = 'features/account/pages/Onboarding';
+  static readonly DISCOVER: string = 'features/discover/pages/Discover';
   static readonly LIBRARY: string = 'features/library/pages/Library';
   static readonly READER: string = 'features/reader/pages/Reader';
-  static readonly NOTES: string = 'pages/Notes';
-  static readonly ME: string = 'pages/Me';
+  static readonly NOTES: string = 'features/notes/pages/Notes';
+  static readonly ME: string = 'features/account/pages/Me';
   static readonly AUDIOBOOK_TAB: string = 'features/audiobook/pages/AudiobookTab';
   static readonly AUDIOBOOK_PLAYER: string = 'features/audiobook/pages/AudiobookPlayer';
   static readonly VOCAB_STATS: string = 'features/vocab/pages/VocabStats';
-  static readonly WEAKNESS_ANALYSIS: string = 'pages/WeaknessAnalysis';
+  static readonly WEAKNESS_ANALYSIS: string = 'features/ai-tools/pages/WeaknessAnalysis';
   static readonly WORD_ASSOCIATION: string = 'features/vocab/pages/WordAssociation';
   static readonly WORD_FAMILY: string = 'features/vocab/pages/WordFamily';
-  static readonly STUDY_PLAN: string = 'pages/StudyPlan';
-  static readonly READING_COMPREHENSION: string = 'pages/ReadingComprehension';
+  static readonly STUDY_PLAN: string = 'features/study/pages/StudyPlan';
+  static readonly READING_COMPREHENSION: string = 'features/ai-tools/pages/ReadingComprehension';
   static readonly VOCAB: string = 'features/vocab/pages/Vocab';
   static readonly FLASHCARD_SESSION: string = 'features/vocab/pages/FlashcardSession';
   static readonly FEEDBACK: string = 'pages/Feedback';
   static readonly TICKET_LIST: string = 'pages/TicketList';
   static readonly TICKET_DETAIL: string = 'pages/TicketDetail';
   static readonly NOTIFICATION_CENTER: string = 'pages/NotificationCenter';
-  static readonly SUBSCRIPTIONS: string = 'pages/Subscriptions';
-  static readonly REFUND_FLOW: string = 'pages/RefundFlow';
+  static readonly SUBSCRIPTIONS: string = 'features/account/pages/Subscriptions';
+  static readonly REFUND_FLOW: string = 'features/account/pages/RefundFlow';
   static readonly FAQ: string = 'pages/Faq';
   static readonly ABOUT: string = 'pages/About';
   static readonly USER_AGREEMENT: string = 'pages/UserAgreement';
   static readonly PRIVACY_POLICY: string = 'pages/PrivacyPolicy';
   static readonly OSS_LICENSES: string = 'pages/OssLicenses';
-  static readonly CONTACT: string = 'pages/Contact';
+  static readonly CONTACT: string = 'features/account/pages/Contact';
 }
 
 /** 需要登录态才能进的路由（router auth-guard 使用）。 */

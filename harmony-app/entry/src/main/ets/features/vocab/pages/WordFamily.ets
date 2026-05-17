@@ -23,7 +23,7 @@ import {
   WordFamilyResult,
   WordFamilyMember,
 } from '../../../api/ai/WordAnalysisApi';
-import { ExplainCard } from '../../../components/ExplainCard';
+import { ExplainCard } from '../../../features/ai-tools/components/ExplainCard';
 import { ExplainData } from '../../../model/ExplainData';
 import { NoteRepository, LocalNote } from '../../../core/persistence/NoteRepository';
 import util from '@ohos.util';
