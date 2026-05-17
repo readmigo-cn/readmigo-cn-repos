@@ -26,9 +26,9 @@ import {
   LineHeightToken,
 } from '../../../core/theme/AppTypography';
 import { Spacing, Radius } from '../../../core/theme/AppSpacing';
-import { AppSheet } from './Modal';
-import { AppSkeleton } from './Loading';
-import { AppEmptyState } from './EmptyState';
+import { AppSheet } from '../../../ui/primitives/Modal';
+import { AppSkeleton } from '../../../ui/primitives/Loading';
+import { AppEmptyState } from '../../../ui/primitives/EmptyState';
 import { Chapter } from '../../../model/Chapter';
 import { BooksApi } from '../../../api/books/BooksApi';
 import { ChapterStatus, ReadingStore } from '../../../store/ReadingStore';

@@ -43,7 +43,7 @@ import {
   LINE_HEIGHT_LEVEL_MAP,
 } from '../../../store/SettingsStore';
 import { ThemeService } from '../../../core/theme/ThemeService';
-import { AppSheet } from './Modal';
+import { AppSheet } from '../../../ui/primitives/Modal';
 import { ToastManager } from './Toast';
 
 // ─────────────────────────────────────────────

@@ -38,7 +38,7 @@ import {
   LineHeightToken,
 } from '../../../core/theme/AppTypography';
 import { Spacing, Radius } from '../../../core/theme/AppSpacing';
-import { AppSheet } from './Modal';
+import { AppSheet } from '../../../ui/primitives/Modal';
 import { AppTextArea } from './Input';
 import { AppButton } from './Button';
 import { ToastManager } from './Toast';
