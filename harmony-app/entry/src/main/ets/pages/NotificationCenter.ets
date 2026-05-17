@@ -16,15 +16,15 @@
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import {
   NotificationChannel,
   NotificationCategory,
   ArchivedNotification,
 } from '../service/push/NotificationChannel';
-import { RouterService } from '../router/RouterService';
+import { RouterService } from '../core/router/RouterService';
 
 type FilterMode = 'unread' | 'all' | NotificationCategory;
 

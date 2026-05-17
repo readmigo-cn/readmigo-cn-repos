@@ -25,7 +25,7 @@ import {
   UpdateHighlightDto,
   HighlightColor,
 } from '../model/Highlight';
-import { PreferencesManager } from '../persistence/PreferencesManager';
+import { PreferencesManager } from '../core/persistence/PreferencesManager';
 
 /** 同步操作类型 */
 type PendingOpKind = 'create' | 'update' | 'delete';

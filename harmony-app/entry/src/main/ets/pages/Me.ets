@@ -1,10 +1,10 @@
 import router from '@ohos.router';
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import { UserStore, UserProfile } from '../store/UserStore';
-import { RouterService } from '../router/RouterService';
-import { RoutePath } from '../router/RouteConstants';
+import { RouterService } from '../core/router/RouterService';
+import { RoutePath } from '../core/router/RouteConstants';
 import { PaywallSheet } from '../components/PaywallSheet';
 import { SubscriptionApi, SubscriptionInfo } from '../service/api/SubscriptionApi';
 

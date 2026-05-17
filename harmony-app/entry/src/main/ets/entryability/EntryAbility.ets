@@ -3,40 +3,40 @@ import AbilityConstant from '@ohos.app.ability.AbilityConstant';
 import Want from '@ohos.app.ability.Want';
 import window from '@ohos.window';
 import Configuration from '@ohos.app.ability.Configuration';
-import { PreferencesManager } from '../persistence/PreferencesManager';
-import { DatabaseManager } from '../persistence/DatabaseManager';
+import { PreferencesManager } from '../core/persistence/PreferencesManager';
+import { DatabaseManager } from '../core/persistence/DatabaseManager';
 import { UserStore } from '../store/UserStore';
 import { ReadingStore } from '../store/ReadingStore';
 import { SettingsStore } from '../store/SettingsStore';
 import { StoreKeys } from '../store/StoreKeys';
-import { RouterService } from '../router/RouterService';
-import { PagePath } from '../router/RouteConstants';
-import { ThemeService } from '../theme/ThemeService';
-import { FontRegistry } from '../theme/FontRegistry';
+import { RouterService } from '../core/router/RouterService';
+import { PagePath } from '../core/router/RouteConstants';
+import { ThemeService } from '../core/theme/ThemeService';
+import { FontRegistry } from '../core/theme/FontRegistry';
 import { ProgressSync } from '../service/ProgressSync';
 // W14-C1：自适应布局 / 折叠屏感知。需要 windowStage，因此在 onWindowStageCreate 里初始化
-import { initBreakpoints, disposeBreakpoints } from '../theme/Breakpoints';
+import { initBreakpoints, disposeBreakpoints } from '../core/theme/Breakpoints';
 // W13-C1 / W13-C3：分布式设备发现 + 接续生命周期
 import { DeviceManager } from '../service/distributed/DeviceManager';
-import { ContinuationManager } from '../service/atomic/ContinuationManager';
+import { ContinuationManager } from '../core/atomic/ContinuationManager';
 // W13-C2：跨端剪贴板订阅（接收其它设备分享的 vocab / highlight）
 import { DistributedClipboard, IncomingEntry } from '../service/distributed/DistributedClipboard';
 // W13-C4：多端通知协调器
 import { MultiDeviceNotifier } from '../service/notification/MultiDeviceNotifier';
 // W18-C1 / C2 / C3：埋点 + 双轨崩溃监控
-import { Analytics } from '../service/analytics/AnalyticsProvider';
-import { SensorsAnalytics, SaEvents } from '../service/analytics/SensorsAnalytics';
-import { AgcCrashReporter } from '../service/monitoring/AgcCrashReporter';
-import { SentryClient } from '../service/monitoring/SentryClient';
-import { CrashHandler } from '../service/monitoring/CrashHandler';
+import { Analytics } from '../core/analytics/AnalyticsProvider';
+import { SensorsAnalytics, SaEvents } from '../core/analytics/SensorsAnalytics';
+import { AgcCrashReporter } from '../core/monitoring/AgcCrashReporter';
+import { SentryClient } from '../core/monitoring/SentryClient';
+import { CrashHandler } from '../core/monitoring/CrashHandler';
 // W18-C4 / C5 / C7：HMS Push + 通知通道 + 远程配置 / A/B
 import { HmsPushService } from '../service/push/HmsPushService';
 import { NotificationChannel } from '../service/push/NotificationChannel';
-import { RemoteConfig } from '../service/experiments/RemoteConfig';
+import { RemoteConfig } from '../core/experiments/RemoteConfig';
 // W20-C3：性能监控 + 异步启动框架 + 内存守卫
-import { PerformanceMonitor } from '../service/performance/PerformanceMonitor';
-import { StartupOptimizer, TaskPriority } from '../service/performance/StartupOptimizer';
-import { MemoryGuard } from '../service/performance/MemoryGuard';
+import { PerformanceMonitor } from '../core/performance/PerformanceMonitor';
+import { StartupOptimizer, TaskPriority } from '../core/performance/StartupOptimizer';
+import { MemoryGuard } from '../core/performance/MemoryGuard';
 
 const TAG = 'EntryAbility';
 

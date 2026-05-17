@@ -1,5 +1,5 @@
-import { UserStore } from '../store/UserStore';
-import { StoreKeys } from '../store/StoreKeys';
+import { UserStore } from '../../store/UserStore';
+import { StoreKeys } from '../../store/StoreKeys';
 import {
   RoutePath,
   AUTH_REQUIRED_ROUTES,

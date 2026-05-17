@@ -23,7 +23,7 @@
  *   - 网络失败时退回上次缓存；都没有则用 EXPERIMENT_DEFS 默认值
  */
 
-import { PreferencesManager } from '../../persistence/PreferencesManager';
+import { PreferencesManager } from '../persistence/PreferencesManager';
 import { UserStore } from '../../store/UserStore';
 
 const TAG = 'RemoteConfig';

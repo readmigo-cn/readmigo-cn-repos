@@ -1,8 +1,8 @@
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
-import { ReaderRouteParams, RoutePath, ComprehensionRouteParams } from '../router/RouteConstants';
-import { RouterService } from '../router/RouterService';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { ReaderRouteParams, RoutePath, ComprehensionRouteParams } from '../core/router/RouteConstants';
+import { RouterService } from '../core/router/RouterService';
 import {
   SettingsStore,
   ReaderTheme,
@@ -15,13 +15,13 @@ import {
   TypesetPage,
   HitResult,
   createTypesettingEngine,
-} from '../native/typesetting';
+} from '../core/native/typesetting';
 import { WordExplainSheet, WordExplainContext } from '../components/WordExplainSheet';
 import { ReaderSettingsSheet } from '../components/ReaderSettingsSheet';
 import { ChapterTocSheet } from '../components/ChapterTocSheet';
 import { ProgressSync } from '../service/ProgressSync';
 import { ReadingSession } from '../service/ReadingSession';
-import { EffectiveTheme } from '../theme/Theme.types';
+import { EffectiveTheme } from '../core/theme/Theme.types';
 import { BooksApi } from '../service/api/BooksApi';
 import { ReadingApi } from '../service/api/ReadingApi';
 import { NotesApi, NoteRecord } from '../service/api/NotesApi';
@@ -35,11 +35,11 @@ import { TtsService, TtsHandle, Voice } from '../service/tts/TtsService';
 import { SentenceHighlight, SentenceRect } from '../components/SentenceHighlight';
 import { ToastManager } from '../components/Toast';
 // W11-C3 / W13-C3：阅读接续（手机 ↔ 平板 多端协同）+ 设备选择
-import { ContinuationManager } from '../service/atomic/ContinuationManager';
+import { ContinuationManager } from '../core/atomic/ContinuationManager';
 import { DeviceSelectorSheet } from '../components/DeviceSelectorSheet';
 import { TrustedDevice } from '../service/distributed/DeviceManager';
 // W11-C2 / W11-C4：单词分享 / 划词查询元服务
-import { AtomicLauncher } from '../service/atomic/AtomicLauncher';
+import { AtomicLauncher } from '../core/atomic/AtomicLauncher';
 // W13-C2：跨端剪贴板（把选中单词分享到其它设备）
 import { DistributedClipboard, VocabPayload } from '../service/distributed/DistributedClipboard';
 import common from '@ohos.app.ability.common';
@@ -49,11 +49,11 @@ import {
   FoldStatus,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_FOLD_STATUS,
-} from '../theme/Breakpoints';
+} from '../core/theme/Breakpoints';
 import { ReaderTabletLayout } from './tablet/ReaderTabletLayout';
 // W18-C1：Reader 页面曝光埋点
-import { Analytics } from '../service/analytics/AnalyticsProvider';
-import { SaEvents } from '../service/analytics/SensorsAnalytics';
+import { Analytics } from '../core/analytics/AnalyticsProvider';
+import { SaEvents } from '../core/analytics/SensorsAnalytics';
 
 const FALLBACK_HTML = `
 <h1>Chapter 1 — Sample</h1>

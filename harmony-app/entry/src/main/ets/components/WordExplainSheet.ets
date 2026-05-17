@@ -1,9 +1,9 @@
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import { AiApi } from '../service/api/AiApi';
 import { NotesApi } from '../service/api/NotesApi';
-import { NoteRepository, LocalNote } from '../persistence/NoteRepository';
+import { NoteRepository, LocalNote } from '../core/persistence/NoteRepository';
 import { UserStore } from '../store/UserStore';
 import { SettingsStore } from '../store/SettingsStore';
 import { ExplainCard, StructuredExplain, parseExplainJson } from './ExplainCard';

@@ -1,26 +1,26 @@
 import { RoutePath, ReaderRouteParams, AudiobookPlayerParams } from '../router/RouteConstants';
 import { RouterService } from '../router/RouterService';
-import { UserStore } from '../store/UserStore';
+import { UserStore } from '../../store/UserStore';
 import { AppColors } from '../theme/AppColors';
 import { EffectiveTheme } from '../theme/Theme.types';
 import { APP_THEME_STORAGE_KEY, ThemeService } from '../theme/ThemeService';
 // W14-C1：自适应布局 —— 平板 / 折叠屏展开态走顶部 TabBar + 双栏内容
 import { Breakpoint, STORAGE_KEY_BREAKPOINT } from '../theme/Breakpoints';
-import { ResponsiveContainer } from '../components/responsive/ResponsiveContainer';
-import { Login } from './Login';
-import { Onboarding } from './Onboarding';
-import { Discover } from './Discover';
-import { Library } from './Library';
-import { Reader } from './Reader';
-import { Me } from './Me';
-import { AudiobookTab } from './AudiobookTab';
-import { AudiobookPlayer } from './AudiobookPlayer';
-import { Notes } from './Notes';
-import { StudyPlanPage } from './StudyPlan';
-import { ReadingComprehensionPage } from './ReadingComprehension';
-import { FeedbackPage } from './Feedback';
-import { TicketListPage } from './TicketList';
-import { TicketDetailPage } from './TicketDetail';
+import { ResponsiveContainer } from '../../components/responsive/ResponsiveContainer';
+import { Login } from '../../pages/Login';
+import { Onboarding } from '../../pages/Onboarding';
+import { Discover } from '../../pages/Discover';
+import { Library } from '../../pages/Library';
+import { Reader } from '../../pages/Reader';
+import { Me } from '../../pages/Me';
+import { AudiobookTab } from '../../pages/AudiobookTab';
+import { AudiobookPlayer } from '../../pages/AudiobookPlayer';
+import { Notes } from '../../pages/Notes';
+import { StudyPlanPage } from '../../pages/StudyPlan';
+import { ReadingComprehensionPage } from '../../pages/ReadingComprehension';
+import { FeedbackPage } from '../../pages/Feedback';
+import { TicketListPage } from '../../pages/TicketList';
+import { TicketDetailPage } from '../../pages/TicketDetail';
 
 @Entry
 @Component

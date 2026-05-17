@@ -9,11 +9,11 @@
  *   5) 满意度评分弹窗（关闭瞬间自动弹出，1-5 星 + 可选评论）
  */
 
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
-import { RouterService } from '../router/RouterService';
-import { RoutePath, TicketDetailRouteParams } from '../router/RouteConstants';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { RouterService } from '../core/router/RouterService';
+import { RoutePath, TicketDetailRouteParams } from '../core/router/RouteConstants';
 import { AppButton } from '../components/Button';
 import { AppCard } from '../components/Card';
 import { AppEmptyState } from '../components/EmptyState';

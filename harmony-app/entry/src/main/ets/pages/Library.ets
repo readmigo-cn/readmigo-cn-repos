@@ -1,15 +1,15 @@
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
-import { RouterService } from '../router/RouterService';
-import { RoutePath } from '../router/RouteConstants';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { RouterService } from '../core/router/RouterService';
+import { RoutePath } from '../core/router/RouteConstants';
 import { BooksApi } from '../service/api/BooksApi';
 import { ReadingApi } from '../service/api/ReadingApi';
 import { ApiError } from '../service/HttpClient';
 import { Book, BookStatus, SortBy, UserBook } from '../model/Book';
 import promptAction from '@ohos.promptAction';
 // W14-C2：自适应栅格列数 by 当前断点 / 折叠屏展开
-import { Breakpoint, FoldStatus, STORAGE_KEY_BREAKPOINT, STORAGE_KEY_FOLD_STATUS } from '../theme/Breakpoints';
+import { Breakpoint, FoldStatus, STORAGE_KEY_BREAKPOINT, STORAGE_KEY_FOLD_STATUS } from '../core/theme/Breakpoints';
 // W14-C3：平板双栏布局
 import { LibraryTabletLayout } from './tablet/LibraryTabletLayout';
 

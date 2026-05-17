@@ -18,8 +18,8 @@
  */
 
 import { NotesApi, NoteRecord, CreateNotePayload, NoteKind } from './api/NotesApi';
-import { NoteRepository, LocalNote } from '../persistence/NoteRepository';
-import { PreferencesManager } from '../persistence/PreferencesManager';
+import { NoteRepository, LocalNote } from '../core/persistence/NoteRepository';
+import { PreferencesManager } from '../core/persistence/PreferencesManager';
 import { ExplainData } from '../model/ExplainData';
 
 /** 生词本条目（含 SRS 状态字段，可选） */

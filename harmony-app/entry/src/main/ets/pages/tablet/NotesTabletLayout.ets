@@ -9,10 +9,10 @@
  *   左侧选中 → 右侧加载笔记内容；编辑后调 NoteRepository.update（占位）。
  */
 
-import { AppColors } from '../../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../../theme/AppSpacing';
-import { NoteRepository, LocalNote } from '../../persistence/NoteRepository';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { NoteRepository, LocalNote } from '../core/persistence/NoteRepository';
 import promptAction from '@ohos.promptAction';
 
 @Component

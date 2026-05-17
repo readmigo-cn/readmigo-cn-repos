@@ -3,7 +3,7 @@ import AbilityConstant from '@ohos.app.ability.AbilityConstant';
 import Want from '@ohos.app.ability.Want';
 import window from '@ohos.window';
 import { StoreKeys } from '../store/StoreKeys';
-import { PagePath } from '../router/RouteConstants';
+import { PagePath } from '../core/router/RouteConstants';
 
 const TAG = 'AudioAbility';
 

@@ -19,16 +19,16 @@
  * 设计 token 沿用现有 PaywallSheet.ets 的 AppColors / AppFontSize 等约定。
  */
 
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import promptAction from '@ohos.promptAction';
 import { SubscriptionState } from '../service/subscription/SubscriptionState';
 import { PricingTable, PlanMeta, PlanTier, FeatureRow } from '../service/subscription/PricingTable';
 import { PaymentChannel } from '../service/api/SubscriptionApi';
 // W18-C1：付费漏斗埋点
-import { Analytics } from '../service/analytics/AnalyticsProvider';
-import { SaEvents } from '../service/analytics/SensorsAnalytics';
+import { Analytics } from '../core/analytics/AnalyticsProvider';
+import { SaEvents } from '../core/analytics/SensorsAnalytics';
 
 /** 支付方式选项展示用。 */
 interface PayOption {

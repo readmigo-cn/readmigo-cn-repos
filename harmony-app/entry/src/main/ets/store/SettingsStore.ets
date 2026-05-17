@@ -1,5 +1,5 @@
 import { StoreKeys } from './StoreKeys';
-import { PreferencesManager } from '../persistence/PreferencesManager';
+import { PreferencesManager } from '../core/persistence/PreferencesManager';
 
 export type AppLocale = 'zh-CN' | 'zh-TW' | 'en-US' | 'en';
 export type AppThemeMode = 'system' | 'light' | 'dark';

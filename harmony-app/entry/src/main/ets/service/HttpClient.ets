@@ -1,8 +1,8 @@
 import http from '@ohos.net.http';
 import { ApiConfig } from './ApiConfig';
 import { UserStore } from '../store/UserStore';
-import { RouterService } from '../router/RouterService';
-import { RoutePath } from '../router/RouteConstants';
+import { RouterService } from '../core/router/RouterService';
+import { RoutePath } from '../core/router/RouteConstants';
 import { StoreKeys } from '../store/StoreKeys';
 
 /**

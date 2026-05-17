@@ -21,11 +21,11 @@
  * 留给 mobile Reader 处理 —— 本布局聚焦「双页阅读」核心。
  */
 
-import { AppColors } from '../../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../../theme/AppSpacing';
-import { ReaderRouteParams } from '../../router/RouteConstants';
-import { RouterService } from '../../router/RouterService';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { ReaderRouteParams } from '../core/router/RouteConstants';
+import { RouterService } from '../core/router/RouterService';
 import {
   SettingsStore,
   ReaderTheme,
@@ -34,7 +34,7 @@ import {
   TypesettingEngine,
   TypesetPage,
   createTypesettingEngine,
-} from '../../native/typesetting';
+} from '../core/native/typesetting';
 import { BooksApi } from '../../service/api/BooksApi';
 import { Chapter, ChapterContent } from '../../model/Chapter';
 import promptAction from '@ohos.promptAction';

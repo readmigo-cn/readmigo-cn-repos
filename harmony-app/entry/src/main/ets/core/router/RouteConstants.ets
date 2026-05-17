@@ -154,7 +154,7 @@ export class RoutePath {
  * 必须与 main_pages.json 中的 src 项一致。
  */
 export class PagePath {
-  static readonly INDEX: string = 'pages/Index';
+  static readonly INDEX: string = 'core/shell/Index';
   static readonly LOGIN: string = 'pages/Login';
   static readonly ONBOARDING: string = 'pages/Onboarding';
   static readonly DISCOVER: string = 'pages/Discover';

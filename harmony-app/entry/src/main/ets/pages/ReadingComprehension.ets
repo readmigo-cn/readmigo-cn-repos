@@ -14,14 +14,14 @@
  * 历史：最近 10 次 attempt 持久化在 Preferences['settings_comprehension_history']
  */
 
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
-import { RouterService } from '../router/RouterService';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { RouterService } from '../core/router/RouterService';
 import { AppButton } from '../components/Button';
 import { AppCard } from '../components/Card';
 import { ToastManager } from '../components/Toast';
-import { PreferencesManager } from '../persistence/PreferencesManager';
+import { PreferencesManager } from '../core/persistence/PreferencesManager';
 import {
   StudyPlanApi,
   ComprehensionQuestion,

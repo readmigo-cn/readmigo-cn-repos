@@ -1,5 +1,5 @@
 import { StoreKeys } from './StoreKeys';
-import { PreferencesManager } from '../persistence/PreferencesManager';
+import { PreferencesManager } from '../core/persistence/PreferencesManager';
 
 export interface UserProfile {
   id: string;

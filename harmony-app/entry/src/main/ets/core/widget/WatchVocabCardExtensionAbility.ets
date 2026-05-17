@@ -17,7 +17,7 @@ import formProvider from '@ohos.app.form.formProvider';
 import formBindingData from '@ohos.app.form.formBindingData';
 import http from '@ohos.net.http';
 import Want from '@ohos.app.ability.Want';
-import { ApiConfig } from '../service/ApiConfig';
+import { ApiConfig } from '../../service/ApiConfig';
 
 interface WatchVocabPayload {
   word: string;

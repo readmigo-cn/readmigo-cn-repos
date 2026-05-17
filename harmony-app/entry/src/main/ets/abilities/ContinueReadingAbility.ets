@@ -5,7 +5,7 @@ import window from '@ohos.window';
 import { StoreKeys } from '../store/StoreKeys';
 import { ReadingStore } from '../store/ReadingStore';
 import { UserStore } from '../store/UserStore';
-import { PagePath } from '../router/RouteConstants';
+import { PagePath } from '../core/router/RouteConstants';
 
 const TAG = 'ContinueReadingAbility';
 

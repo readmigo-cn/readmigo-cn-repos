@@ -16,15 +16,15 @@
 
 import promptAction from '@ohos.promptAction';
 import deviceInfo from '@ohos.deviceInfo';
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
-import { RouterService } from '../router/RouterService';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { RouterService } from '../core/router/RouterService';
 import {
   RoutePath,
   FeedbackRouteParams,
   TicketDetailRouteParams,
-} from '../router/RouteConstants';
+} from '../core/router/RouteConstants';
 import { UserStore } from '../store/UserStore';
 import { AppButton } from '../components/Button';
 import { AppCard } from '../components/Card';

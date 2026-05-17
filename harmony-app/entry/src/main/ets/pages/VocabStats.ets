@@ -19,7 +19,7 @@ import {
   BrandPalette,
   GrayPalette,
   ColorPalette,
-} from '../theme/AppColors';
+} from '../core/theme/AppColors';
 import {
   TitleStyles,
   HeadlineStyles,
@@ -27,11 +27,11 @@ import {
   LabelStyles,
   CaptionStyle,
   Typography,
-} from '../theme/AppTypography';
-import { Spacing, Radius, Elevation } from '../theme/AppSpacing';
-import { EffectiveTheme } from '../theme/Theme.types';
-import { RouterService } from '../router/RouterService';
-import { RoutePath } from '../router/RouteConstants';
+} from '../core/theme/AppTypography';
+import { Spacing, Radius, Elevation } from '../core/theme/AppSpacing';
+import { EffectiveTheme } from '../core/theme/Theme.types';
+import { RouterService } from '../core/router/RouterService';
+import { RoutePath } from '../core/router/RouteConstants';
 import { AppCard } from '../components/Card';
 import { AppButton } from '../components/Button';
 import { AppEmptyState } from '../components/EmptyState';

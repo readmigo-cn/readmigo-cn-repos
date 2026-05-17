@@ -22,9 +22,9 @@
  *   - 不读 SettingsStore（合规标识不可被关闭）
  */
 
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 
 /** 显示位置 / 形态 */
 export type AiContentBadgeMode = 'inline' | 'prefix' | 'suffix';

@@ -1,8 +1,8 @@
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
-import { RouterService } from '../router/RouterService';
-import { NoteRepository, LocalNote } from '../persistence/NoteRepository';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { RouterService } from '../core/router/RouterService';
+import { NoteRepository, LocalNote } from '../core/persistence/NoteRepository';
 import promptAction from '@ohos.promptAction';
 // W14-C3：平板双栏布局
 import {
@@ -10,7 +10,7 @@ import {
   FoldStatus,
   STORAGE_KEY_BREAKPOINT,
   STORAGE_KEY_FOLD_STATUS,
-} from '../theme/Breakpoints';
+} from '../core/theme/Breakpoints';
 import { NotesTabletLayout } from './tablet/NotesTabletLayout';
 
 @Component

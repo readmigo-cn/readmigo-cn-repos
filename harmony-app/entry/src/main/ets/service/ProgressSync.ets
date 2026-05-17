@@ -17,7 +17,7 @@
 import connection from '@ohos.net.connection';
 import { ReadingApi } from './api/ReadingApi';
 import { ReadingProgressDto } from '../model/ReadingProgress';
-import { PreferencesManager } from '../persistence/PreferencesManager';
+import { PreferencesManager } from '../core/persistence/PreferencesManager';
 import { StoreKeys } from '../store/StoreKeys';
 import { ReadingStore } from '../store/ReadingStore';
 

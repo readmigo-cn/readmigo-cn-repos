@@ -25,7 +25,7 @@
  */
 
 import pasteboard from '@ohos.pasteboard';
-import { PreferencesManager } from '../../persistence/PreferencesManager';
+import { PreferencesManager } from '../core/persistence/PreferencesManager';
 
 const TAG = 'DistributedClipboard';
 

@@ -25,7 +25,7 @@ import AbilityConstant from '@ohos.app.ability.AbilityConstant';
 import Want from '@ohos.app.ability.Want';
 import window from '@ohos.window';
 import common from '@ohos.app.ability.common';
-import { decodeTextRecord } from '../service/atomic/NfcDecoder';
+import { decodeTextRecord } from '../core/atomic/NfcDecoder';
 import { StoreKeys } from '../store/StoreKeys';
 
 const TAG = 'LookupAbility';

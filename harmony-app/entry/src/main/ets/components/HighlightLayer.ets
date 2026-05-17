@@ -19,9 +19,9 @@
  *      → onUpdate / onDelete / onAddNote
  */
 
-import { TextColors, BgColors, useColor, ReaderHighlightColors, BorderColors } from '../theme/AppColors';
-import { BodyStyles, LabelStyles } from '../theme/AppTypography';
-import { Spacing, Radius, Elevation } from '../theme/AppSpacing';
+import { TextColors, BgColors, useColor, ReaderHighlightColors, BorderColors } from '../core/theme/AppColors';
+import { BodyStyles, LabelStyles } from '../core/theme/AppTypography';
+import { Spacing, Radius, Elevation } from '../core/theme/AppSpacing';
 import { Highlight, HighlightColor } from '../model/Highlight';
 import { SelectionRange } from './SelectionLayer';
 import { AppButton } from './Button';

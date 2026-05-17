@@ -14,10 +14,10 @@
  */
 
 import promptAction from '@ohos.promptAction';
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
-import { RouterService } from '../router/RouterService';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { RouterService } from '../core/router/RouterService';
 import {
   WordAnalysisApi,
   WordFamilyResult,
@@ -25,7 +25,7 @@ import {
 } from '../service/api/WordAnalysisApi';
 import { ExplainCard } from '../components/ExplainCard';
 import { ExplainData } from '../model/ExplainData';
-import { NoteRepository, LocalNote } from '../persistence/NoteRepository';
+import { NoteRepository, LocalNote } from '../core/persistence/NoteRepository';
 import util from '@ohos.util';
 
 interface WordFamilyParams {

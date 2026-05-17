@@ -18,23 +18,23 @@
  *           所有外链跳转走 AtomicLauncher.launchMainAppFromAtomic
  */
 
-import { AppColors } from '../../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../../theme/AppSpacing';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import { ExplainCard } from '../../components/ExplainCard';
 import { AppButton } from '../../components/Button';
 import { AppInput } from '../../components/Input';
 import { LoadingIndicator } from '../../components/Loading';
 import { ExplainData } from '../../model/ExplainData';
-import { AtomicLauncher } from '../../service/atomic/AtomicLauncher';
+import { AtomicLauncher } from '../core/atomic/AtomicLauncher';
 import {
   LOOKUP_CURRENT_WORD_KEY,
   LOOKUP_CURRENT_CONTEXT_KEY,
   LOOKUP_CURRENT_SOURCE_KEY,
   LOOKUP_RESULT_KEY,
 } from '../../abilities/LookupAbility';
-import { NoteRepository, LocalNote } from '../../persistence/NoteRepository';
-import { ThemeProvider } from '../../theme/ThemeProvider';
+import { NoteRepository, LocalNote } from '../core/persistence/NoteRepository';
+import { ThemeProvider } from '../core/theme/ThemeProvider';
 import promptAction from '@ohos.promptAction';
 import util from '@ohos.util';
 import common from '@ohos.app.ability.common';

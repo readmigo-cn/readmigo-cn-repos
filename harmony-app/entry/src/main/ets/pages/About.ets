@@ -22,13 +22,13 @@ import {
   AccentColors,
   SurfaceColors,
   BrandPalette,
-} from '../theme/AppColors';
+} from '../core/theme/AppColors';
 import {
   FontSizeToken,
   FontWeightToken,
   LineHeightToken,
-} from '../theme/AppTypography';
-import { Spacing, Radius } from '../theme/AppSpacing';
+} from '../core/theme/AppTypography';
+import { Spacing, Radius } from '../core/theme/AppSpacing';
 
 interface AboutLink {
   id: string;

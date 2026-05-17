@@ -16,7 +16,7 @@
  *   - AGC 在中国大陆出现率高、Sentry 在出海版本可用
  */
 
-import { PreferencesManager } from '../../persistence/PreferencesManager';
+import { PreferencesManager } from '../persistence/PreferencesManager';
 
 const TAG = 'AgcCrashReporter';
 const CRASH_LOG_KEY = 'agc_crash_log';

@@ -15,9 +15,9 @@
  *   - onClose 由父组件控制关闭（关闭 sheet / dialog）
  */
 
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import { AiApi, ExplainWordPayload } from '../service/api/AiApi';
 import { ExplainData, ExplainExample, parseExplainData } from '../model/ExplainData';
 import { SettingsStore } from '../store/SettingsStore';

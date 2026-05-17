@@ -22,7 +22,7 @@
  *   5 「太简单」     蓝    EF 略升，下次间隔加长
  */
 
-import { EffectiveTheme } from '../theme/Theme.types';
+import { EffectiveTheme } from '../core/theme/Theme.types';
 import {
   useColor,
   TextColors,
@@ -32,13 +32,13 @@ import {
   StateColors,
   BrandPalette,
   ColorPalette,
-} from '../theme/AppColors';
+} from '../core/theme/AppColors';
 import {
   FontSizeToken,
   FontWeightToken,
   LineHeightToken,
-} from '../theme/AppTypography';
-import { Spacing, Radius, Elevation, MotionEasing } from '../theme/AppSpacing';
+} from '../core/theme/AppTypography';
+import { Spacing, Radius, Elevation, MotionEasing } from '../core/theme/AppSpacing';
 import { ToastManager } from '../components/Toast';
 import { VocabDetailSheet, VocabDetailActions } from '../components/VocabDetailSheet';
 import {

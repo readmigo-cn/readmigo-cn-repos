@@ -1,0 +1,6 @@
+{
+  "version": "PR-2-sibling-fix",
+  "mappings": [
+    { "from": "(?<=['\"])\\.\\./core/(router|native|persistence|widget|theme|extensions|cache|monitoring|performance|analytics|experiments|moderation|dynamic|atomic|shell)/", "to": "../$1/" }
+  ]
+}

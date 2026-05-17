@@ -1,16 +1,16 @@
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
-import { RouterService } from '../router/RouterService';
-import { RoutePath } from '../router/RouteConstants';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { RouterService } from '../core/router/RouterService';
+import { RoutePath } from '../core/router/RouteConstants';
 import { UserStore } from '../store/UserStore';
 import { AuthApi, LoginResult } from '../service/api/AuthApi';
 import { ApiError } from '../service/HttpClient';
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
 // W18-C1：Login 入口曝光埋点
-import { Analytics } from '../service/analytics/AnalyticsProvider';
-import { SaEvents } from '../service/analytics/SensorsAnalytics';
+import { Analytics } from '../core/analytics/AnalyticsProvider';
+import { SaEvents } from '../core/analytics/SensorsAnalytics';
 
 /**
  * Login —— 登录页（W4-C1）。

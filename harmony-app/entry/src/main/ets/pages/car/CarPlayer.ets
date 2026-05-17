@@ -8,8 +8,8 @@
  * 行驶中（car_lock_active=true）：所有触控按钮被遮罩吃掉，仅语音 / 方向盘按键可控制
  */
 
-import { BrandPalette, GrayPalette } from '../../theme/AppColors';
-import { Spacing, Radius } from '../../theme/AppSpacing';
+import { BrandPalette, GrayPalette } from '../core/theme/AppColors';
+import { Spacing, Radius } from '../core/theme/AppSpacing';
 import { audioPlayerStore } from '../../store/AudioPlayerStore';
 import { VoiceCommand } from '../../service/car/VoiceCommand';
 

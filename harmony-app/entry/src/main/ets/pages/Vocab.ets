@@ -17,7 +17,7 @@
  *   - 「开始复习」CTA → push FLASHCARD_SESSION 路由
  */
 
-import { EffectiveTheme } from '../theme/Theme.types';
+import { EffectiveTheme } from '../core/theme/Theme.types';
 import {
   useColor,
   TextColors,
@@ -26,17 +26,17 @@ import {
   AccentColors,
   StateColors,
   BrandPalette,
-} from '../theme/AppColors';
+} from '../core/theme/AppColors';
 import {
   FontSizeToken,
   FontWeightToken,
   LineHeightToken,
-} from '../theme/AppTypography';
-import { Spacing, Radius, Elevation } from '../theme/AppSpacing';
+} from '../core/theme/AppTypography';
+import { Spacing, Radius, Elevation } from '../core/theme/AppSpacing';
 import { AppEmptyState } from '../components/EmptyState';
 import { ToastManager } from '../components/Toast';
 import { VocabDetailSheet, VocabDetailActions } from '../components/VocabDetailSheet';
-import { RoutePath } from '../router/RouteConstants';
+import { RoutePath } from '../core/router/RouteConstants';
 import {
   NotesApi,
   VocabNoteRecord,
@@ -48,8 +48,8 @@ import { DistributedClipboard, VocabPayload } from '../service/distributed/Distr
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';
 // W18-C1：Vocab 页面曝光埋点
-import { Analytics } from '../service/analytics/AnalyticsProvider';
-import { SaEvents } from '../service/analytics/SensorsAnalytics';
+import { Analytics } from '../core/analytics/AnalyticsProvider';
+import { SaEvents } from '../core/analytics/SensorsAnalytics';
 
 type FilterTab = 'all' | 'due' | 'known';
 type SortKind = 'createdAt' | 'lastReviewedAt' | 'difficulty';

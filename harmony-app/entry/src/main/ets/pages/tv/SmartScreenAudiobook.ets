@@ -29,8 +29,8 @@
  *   - 高度固定 160vp，避免布局抖动
  */
 
-import { AppColors } from '../../theme/AppColors';
-import { Spacing, Radius } from '../../theme/AppSpacing';
+import { AppColors } from '../core/theme/AppColors';
+import { Spacing, Radius } from '../core/theme/AppSpacing';
 import { RemoteController } from '../../service/tv/RemoteController';
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';

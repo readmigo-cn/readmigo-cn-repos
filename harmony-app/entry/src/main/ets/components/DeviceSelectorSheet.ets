@@ -24,14 +24,14 @@ import {
   StateColors,
   SurfaceColors,
   useColor,
-} from '../theme/AppColors';
+} from '../core/theme/AppColors';
 import {
   FontFamily,
   FontSizeToken,
   FontWeightToken,
   LineHeightToken,
-} from '../theme/AppTypography';
-import { Spacing, Radius } from '../theme/AppSpacing';
+} from '../core/theme/AppTypography';
+import { Spacing, Radius } from '../core/theme/AppSpacing';
 import { AppSheet } from './Modal';
 import { AppSkeleton } from './Loading';
 import { AppEmptyState } from './EmptyState';

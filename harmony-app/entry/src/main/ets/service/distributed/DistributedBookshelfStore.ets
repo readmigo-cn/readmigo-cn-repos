@@ -29,7 +29,7 @@
  *   dataObj.on('change', cb);
  */
 
-import { PreferencesManager } from '../../persistence/PreferencesManager';
+import { PreferencesManager } from '../core/persistence/PreferencesManager';
 import { BookStatus } from '../../model/Book';
 
 const TAG = 'DistributedBookshelfStore';

@@ -1,7 +1,7 @@
 import ConfigurationConstant from '@ohos.app.ability.ConfigurationConstant';
 import common from '@ohos.app.ability.common';
-import { SettingsStore } from '../store/SettingsStore';
-import { StoreKeys } from '../store/StoreKeys';
+import { SettingsStore } from '../../store/SettingsStore';
+import { StoreKeys } from '../../store/StoreKeys';
 import {
   ThemeMode,
   EffectiveTheme,

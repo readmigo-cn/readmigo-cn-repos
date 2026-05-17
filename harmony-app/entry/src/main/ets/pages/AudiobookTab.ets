@@ -1,8 +1,8 @@
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing } from '../theme/AppSpacing';
-import { RouterService } from '../router/RouterService';
-import { RoutePath } from '../router/RouteConstants';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing } from '../core/theme/AppSpacing';
+import { RouterService } from '../core/router/RouterService';
+import { RoutePath } from '../core/router/RouteConstants';
 
 @Component
 export struct AudiobookTab {

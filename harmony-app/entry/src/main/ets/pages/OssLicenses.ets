@@ -13,13 +13,13 @@ import {
   TextColors,
   BgColors,
   AccentColors,
-} from '../theme/AppColors';
+} from '../core/theme/AppColors';
 import {
   FontSizeToken,
   FontWeightToken,
   LineHeightToken,
-} from '../theme/AppTypography';
-import { Spacing } from '../theme/AppSpacing';
+} from '../core/theme/AppTypography';
+import { Spacing } from '../core/theme/AppSpacing';
 
 @Entry
 @Component

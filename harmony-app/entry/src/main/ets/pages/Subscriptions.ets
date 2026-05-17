@@ -12,9 +12,9 @@
 
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
-import { AppColors } from '../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../theme/AppSpacing';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import {
   SubscriptionApi,
   OrderRecord,
@@ -23,7 +23,7 @@ import {
 import { SubscriptionState } from '../service/subscription/SubscriptionState';
 import { PricingTable, PlanMeta } from '../service/subscription/PricingTable';
 import { PaywallSheet } from '../components/PaywallSheet';
-import { RoutePath } from '../router/RouteConstants';
+import { RoutePath } from '../core/router/RouteConstants';
 
 interface OrderParams {
   orderId: string;

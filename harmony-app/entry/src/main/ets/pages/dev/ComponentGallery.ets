@@ -10,8 +10,8 @@
  */
 
 import router from '@ohos.router';
-import { EffectiveTheme, ThemeMode } from '../../theme/Theme.types';
-import { ThemeService, APP_THEME_STORAGE_KEY } from '../../theme/ThemeService';
+import { EffectiveTheme, ThemeMode } from '../core/theme/Theme.types';
+import { ThemeService, APP_THEME_STORAGE_KEY } from '../core/theme/ThemeService';
 import {
   useColor,
   TextColors,
@@ -20,15 +20,15 @@ import {
   AccentColors,
   StateColors,
   BrandPalette,
-} from '../../theme/AppColors';
+} from '../core/theme/AppColors';
 import {
   TitleStyles,
   HeadlineStyles,
   BodyStyles,
   LabelStyles,
   CaptionStyle,
-} from '../../theme/AppTypography';
-import { Spacing, Radius, Elevation, MotionDuration, MotionEasing } from '../../theme/AppSpacing';
+} from '../core/theme/AppTypography';
+import { Spacing, Radius, Elevation, MotionDuration, MotionEasing } from '../core/theme/AppSpacing';
 
 // W6-C1 按钮（来自并行 agent 的产出）
 import { AppButton } from '../../components/Button';

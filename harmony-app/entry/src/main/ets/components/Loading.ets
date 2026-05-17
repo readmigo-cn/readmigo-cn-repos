@@ -7,7 +7,7 @@
  *   - AppLoadingScreen  全页加载（splash 之后、首屏数据就位前）
  */
 
-import { EffectiveTheme } from '../theme/Theme.types';
+import { EffectiveTheme } from '../core/theme/Theme.types';
 import {
   useColor,
   TextColors,
@@ -15,9 +15,9 @@ import {
   AccentColors,
   GrayPalette,
   BrandPalette,
-} from '../theme/AppColors';
-import { LabelStyles, BodyStyles, TitleStyles } from '../theme/AppTypography';
-import { Spacing, Radius, MotionDuration, MotionEasing } from '../theme/AppSpacing';
+} from '../core/theme/AppColors';
+import { LabelStyles, BodyStyles, TitleStyles } from '../core/theme/AppTypography';
+import { Spacing, Radius, MotionDuration, MotionEasing } from '../core/theme/AppSpacing';
 
 // ─────────────────────────────────────────────
 // 类型

@@ -22,7 +22,7 @@
  */
 
 import { AnalyticsProvider, AnalyticsProperties, AnalyticsProperty } from './AnalyticsProvider';
-import { PreferencesManager } from '../../persistence/PreferencesManager';
+import { PreferencesManager } from '../persistence/PreferencesManager';
 // Phase 4 切真实上报后启用：
 // import http from '@ohos.net.http';
 

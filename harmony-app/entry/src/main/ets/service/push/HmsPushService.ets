@@ -21,7 +21,7 @@
  *   - onMessage 多订阅者支持（NotificationChannel + analytics 各订一份）
  */
 
-import { PreferencesManager } from '../../persistence/PreferencesManager';
+import { PreferencesManager } from '../core/persistence/PreferencesManager';
 import { ApiConfig } from '../ApiConfig';
 
 const TAG = 'HmsPushService';

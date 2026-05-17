@@ -7,8 +7,8 @@ import Want from '@ohos.app.ability.Want';
 import commonEventManager from '@ohos.commonEventManager';
 
 import { FormDataStore } from './FormDataStore';
-import { ApiConfig } from '../service/ApiConfig';
-import { AtomicLauncher } from '../service/atomic/AtomicLauncher';
+import { ApiConfig } from '../../service/ApiConfig';
+import { AtomicLauncher } from '../atomic/AtomicLauncher';
 
 /**
  * DailyWordExtensionAbility — W12-C1

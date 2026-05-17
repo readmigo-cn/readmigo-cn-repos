@@ -24,8 +24,8 @@
  *   - 高对比度：背景 #0F1018 / 主文字 #F5F5F7
  */
 
-import { AppColors } from '../../theme/AppColors';
-import { Spacing, Radius } from '../../theme/AppSpacing';
+import { AppColors } from '../core/theme/AppColors';
+import { Spacing, Radius } from '../core/theme/AppSpacing';
 import { RemoteController, FocusStyle } from '../../service/tv/RemoteController';
 import router from '@ohos.router';
 

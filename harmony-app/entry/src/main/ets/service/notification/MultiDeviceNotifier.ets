@@ -27,7 +27,7 @@
 
 import notificationManager from '@ohos.notificationManager';
 import commonEventManager from '@ohos.commonEventManager';
-import { PreferencesManager } from '../../persistence/PreferencesManager';
+import { PreferencesManager } from '../core/persistence/PreferencesManager';
 import { SettingsStore } from '../../store/SettingsStore';
 import { NotificationTemplates, NotificationContent } from './NotificationTemplates';
 

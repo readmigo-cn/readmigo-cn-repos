@@ -1,6 +1,6 @@
 {
   "src": [
-    "pages/Index",
+    "core/shell/Index",
     "pages/Onboarding",
     "pages/Login",
     "pages/PasswordReset",

@@ -11,10 +11,10 @@
  *   - 与 mobile Discover 共用 BooksApi 缓存
  */
 
-import { AppColors } from '../../theme/AppColors';
-import { AppFontSize, AppFontWeight } from '../../theme/AppTypography';
-import { AppSpacing, AppRadius } from '../../theme/AppSpacing';
-import { RouterAdapter } from '../../router/RouterAdapter';
+import { AppColors } from '../core/theme/AppColors';
+import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
+import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
+import { RouterAdapter } from '../core/router/RouterAdapter';
 import { BooksApi } from '../../service/api/BooksApi';
 import { Book } from '../../model/Book';
 import { ApiError } from '../../service/HttpClient';

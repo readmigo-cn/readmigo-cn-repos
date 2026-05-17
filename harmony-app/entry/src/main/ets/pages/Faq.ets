@@ -20,15 +20,15 @@ import {
   SurfaceColors,
   AccentColors,
   BrandPalette,
-} from '../theme/AppColors';
+} from '../core/theme/AppColors';
 import {
   FontFamily,
   FontSizeToken,
   FontWeightToken,
   LineHeightToken,
-} from '../theme/AppTypography';
-import { Spacing, Radius, MotionDuration, MotionEasing } from '../theme/AppSpacing';
-import { RoutePath } from '../router/RouteConstants';
+} from '../core/theme/AppTypography';
+import { Spacing, Radius, MotionDuration, MotionEasing } from '../core/theme/AppSpacing';
+import { RoutePath } from '../core/router/RouteConstants';
 
 // ─────────────────────────────────────────────
 // 数据

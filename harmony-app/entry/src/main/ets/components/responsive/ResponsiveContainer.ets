@@ -21,7 +21,7 @@
  *     用 *Provided 布尔标记 + @Watch 同步当前 layout flavor。
  */
 
-import { Breakpoint, STORAGE_KEY_BREAKPOINT, FoldStatus, STORAGE_KEY_FOLD_STATUS } from '../../theme/Breakpoints';
+import { Breakpoint, STORAGE_KEY_BREAKPOINT, FoldStatus, STORAGE_KEY_FOLD_STATUS } from '../core/theme/Breakpoints';
 
 /** 当前选中的布局口味 */
 export enum LayoutFlavor {
