@@ -35,9 +35,9 @@ import { Spacing, Radius, Elevation } from '../core/theme/AppSpacing';
 import { EffectiveTheme } from '../core/theme/Theme.types';
 import { RouterService } from '../core/router/RouterService';
 import { RoutePath } from '../core/router/RouteConstants';
-import { AppCard } from '../components/Card';
-import { AppButton } from '../components/Button';
-import { AppEmptyState } from '../components/EmptyState';
+import { AppCard } from '../ui/primitives/Card';
+import { AppButton } from '../ui/primitives/Button';
+import { AppEmptyState } from '../ui/primitives/EmptyState';
 import {
   StatsApi,
   WeaknessReport,
@@ -45,7 +45,7 @@ import {
   WeakWord,
   WeakPos,
   WeakTopic,
-} from '../service/api/StatsApi';
+} from '../api/reading/StatsApi';
 
 const POS_LABELS: Record<string, string> = {
   noun: '名词',

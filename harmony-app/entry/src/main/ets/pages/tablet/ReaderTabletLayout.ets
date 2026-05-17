@@ -35,7 +35,7 @@ import {
   TypesetPage,
   createTypesettingEngine,
 } from '../../core/native/typesetting';
-import { BooksApi } from '../../service/api/BooksApi';
+import { BooksApi } from '../../api/books/BooksApi';
 import { Chapter, ChapterContent } from '../../model/Chapter';
 import promptAction from '@ohos.promptAction';
 

@@ -4,7 +4,7 @@ import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import { RouterService } from '../core/router/RouterService';
 import { RoutePath } from '../core/router/RouteConstants';
 import { UserStore } from '../store/UserStore';
-import { AuthApi, LoginResult } from '../service/api/AuthApi';
+import { AuthApi, LoginResult } from '../api/auth/AuthApi';
 import { ApiError } from '../service/HttpClient';
 import promptAction from '@ohos.promptAction';
 import router from '@ohos.router';

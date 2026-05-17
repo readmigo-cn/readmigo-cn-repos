@@ -39,12 +39,12 @@ import {
   LineHeightToken,
 } from '../core/theme/AppTypography';
 import { Spacing, Radius, Elevation, MotionEasing } from '../core/theme/AppSpacing';
-import { ToastManager } from '../components/Toast';
+import { ToastManager } from '../ui/primitives/Toast';
 import { VocabDetailSheet, VocabDetailActions } from '../components/VocabDetailSheet';
 import {
   NotesApi,
   VocabNoteRecord,
-} from '../service/api/NotesApi';
+} from '../api/notes/NotesApi';
 import { TtsService } from '../service/tts/TtsService';
 import router from '@ohos.router';
 

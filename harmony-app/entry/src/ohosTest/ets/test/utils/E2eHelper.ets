@@ -13,8 +13,8 @@
 //   3. 提供 captureScreenshot 占位——返回 base64 字符串方便快照对比；W22 引入真实
 //      driver 截图后再替换实现。
 
-import { AuthApi, LoginResult } from '../../../../main/ets/service/api/AuthApi';
-import { BooksApi } from '../../../../main/ets/service/api/BooksApi';
+import { AuthApi, LoginResult } from '../../../../main/ets/api/auth/AuthApi';
+import { BooksApi } from '../../../../main/ets/api/books/BooksApi';
 import { UserStore } from '../../../../main/ets/store/UserStore';
 import { ReadingStore } from '../../../../main/ets/store/ReadingStore';
 import { StoreKeys } from '../../../../main/ets/store/StoreKeys';

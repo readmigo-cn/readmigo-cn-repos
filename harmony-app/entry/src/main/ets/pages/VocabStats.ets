@@ -32,10 +32,10 @@ import { Spacing, Radius, Elevation } from '../core/theme/AppSpacing';
 import { EffectiveTheme } from '../core/theme/Theme.types';
 import { RouterService } from '../core/router/RouterService';
 import { RoutePath } from '../core/router/RouteConstants';
-import { AppCard } from '../components/Card';
-import { AppButton } from '../components/Button';
-import { AppEmptyState } from '../components/EmptyState';
-import { AppTabs } from '../components/Tab';
+import { AppCard } from '../ui/primitives/Card';
+import { AppButton } from '../ui/primitives/Button';
+import { AppEmptyState } from '../ui/primitives/EmptyState';
+import { AppTabs } from '../ui/primitives/Tab';
 import {
   StatsApi,
   VocabStats as VocabStatsDto,
@@ -44,7 +44,7 @@ import {
   CefrBucket,
   PosBucket,
   SparkPoint,
-} from '../service/api/StatsApi';
+} from '../api/reading/StatsApi';
 
 // ─────────────────────────────────────────────
 // 常量

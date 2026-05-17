@@ -29,7 +29,7 @@ import {
   LineHeightToken,
 } from '../core/theme/AppTypography';
 import { Spacing, Radius } from '../core/theme/AppSpacing';
-import { VocabNoteRecord } from '../service/api/NotesApi';
+import { VocabNoteRecord } from '../api/notes/NotesApi';
 
 // ─────────────────────────────────────────────
 // 数据契约

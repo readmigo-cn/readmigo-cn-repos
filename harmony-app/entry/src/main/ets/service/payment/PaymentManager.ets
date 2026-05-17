@@ -13,7 +13,7 @@
  *   - pay 阶段成功后由各 Provider 内部触发后端 verify 或等异步通知
  */
 
-import { ToastManager } from '../../components/Toast';
+import { ToastManager } from '../../ui/primitives/Toast';
 import { SubscriptionPlan } from '../api/SubscriptionApi';
 import {
   PaymentProvider,

@@ -1,5 +1,5 @@
-import { HttpClient } from '../HttpClient';
-import { SseClient } from '../SseClient';
+import { HttpClient } from '../../service/HttpClient';
+import { SseClient } from '../../service/SseClient';
 
 /**
  * AiApi — server-cn AI 端点全量封装

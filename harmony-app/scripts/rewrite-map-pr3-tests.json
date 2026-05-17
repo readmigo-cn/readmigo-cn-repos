@@ -1,0 +1,20 @@
+{
+  "version": "PR-3-tests",
+  "comment": "Supplementary map for ohosTest paths that route through main/ets/. The primary PR-3 map's prefix capture only matches contiguous ../ segments and stops at any non-dot segment, so paths like '../../../../main/ets/service/api/BooksApi' need this dedicated mapping.",
+  "mappings": [
+    { "from": "main/ets/components/(Button|Card|Input|List|Tab|Toast|Modal|Loading|EmptyState)", "to": "main/ets/ui/primitives/$1" },
+    { "from": "main/ets/components/responsive/", "to": "main/ets/ui/responsive/" },
+    { "from": "main/ets/components/optimized/LazyImage", "to": "main/ets/ui/lazy/LazyImage" },
+    { "from": "main/ets/service/api/BooksApi", "to": "main/ets/api/books/BooksApi" },
+    { "from": "main/ets/service/api/AuthApi", "to": "main/ets/api/auth/AuthApi" },
+    { "from": "main/ets/service/api/ReadingApi", "to": "main/ets/api/reading/ReadingApi" },
+    { "from": "main/ets/service/api/StatsApi", "to": "main/ets/api/reading/StatsApi" },
+    { "from": "main/ets/service/api/AiApi", "to": "main/ets/api/ai/AiApi" },
+    { "from": "main/ets/service/api/WordAnalysisApi", "to": "main/ets/api/ai/WordAnalysisApi" },
+    { "from": "main/ets/service/api/NotesApi", "to": "main/ets/api/notes/NotesApi" },
+    { "from": "main/ets/service/api/StudyPlanApi", "to": "main/ets/api/study/StudyPlanApi" },
+    { "from": "main/ets/service/api/SubscriptionApi", "to": "main/ets/api/subscription/SubscriptionApi" },
+    { "from": "main/ets/service/api/SupportApi", "to": "main/ets/api/support/SupportApi" },
+    { "from": "main/ets/service/api/WidgetApi", "to": "main/ets/api/widget/WidgetApi" }
+  ]
+}

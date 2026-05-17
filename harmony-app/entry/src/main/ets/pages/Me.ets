@@ -6,7 +6,7 @@ import { UserStore, UserProfile } from '../store/UserStore';
 import { RouterService } from '../core/router/RouterService';
 import { RoutePath } from '../core/router/RouteConstants';
 import { PaywallSheet } from '../components/PaywallSheet';
-import { SubscriptionApi, SubscriptionInfo } from '../service/api/SubscriptionApi';
+import { SubscriptionApi, SubscriptionInfo } from '../api/subscription/SubscriptionApi';
 
 @Component
 export struct Me {

@@ -1,4 +1,4 @@
-import { HttpClient } from '../HttpClient';
+import { HttpClient } from '../../service/HttpClient';
 import {
   ReadingProgressDto,
   ReadingSessionStartResponse,

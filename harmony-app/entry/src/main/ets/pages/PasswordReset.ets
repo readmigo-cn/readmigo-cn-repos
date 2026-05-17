@@ -4,7 +4,7 @@ import promptAction from '@ohos.promptAction';
 import { AppColors } from '../core/theme/AppColors';
 import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
 import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
-import { AuthApi } from '../service/api/AuthApi';
+import { AuthApi } from '../api/auth/AuthApi';
 import { ApiError } from '../service/HttpClient';
 
 /**

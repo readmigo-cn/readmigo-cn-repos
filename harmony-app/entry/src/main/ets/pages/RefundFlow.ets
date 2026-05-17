@@ -21,7 +21,7 @@ import {
   SubscriptionApi,
   OrderRecord,
   RefundResponse,
-} from '../service/api/SubscriptionApi';
+} from '../api/subscription/SubscriptionApi';
 import { SubscriptionState } from '../service/subscription/SubscriptionState';
 import { PricingTable } from '../service/subscription/PricingTable';
 

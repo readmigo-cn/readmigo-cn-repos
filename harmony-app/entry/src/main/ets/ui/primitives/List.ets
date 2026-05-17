@@ -16,19 +16,19 @@ import {
   AccentColors,
   SurfaceColors,
   useColor,
-} from '../core/theme/AppColors';
+} from '../../core/theme/AppColors';
 import {
   FontFamily,
   FontSizeToken,
   FontWeightToken,
   LineHeightToken,
-} from '../core/theme/AppTypography';
+} from '../../core/theme/AppTypography';
 import {
   Spacing,
   Radius,
   MotionDuration,
   MotionEasing,
-} from '../core/theme/AppSpacing';
+} from '../../core/theme/AppSpacing';
 
 // ─────────────────────────────────────────────
 // 数据类型

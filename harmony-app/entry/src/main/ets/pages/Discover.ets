@@ -3,7 +3,7 @@ import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
 import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import { RouterService } from '../core/router/RouterService';
 import { RoutePath } from '../core/router/RouteConstants';
-import { BookSummary, BooksApi } from '../service/api/BooksApi';
+import { BookSummary, BooksApi } from '../api/books/BooksApi';
 import { ApiError } from '../service/HttpClient';
 // W14-C3：平板双栏布局
 import {

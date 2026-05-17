@@ -30,7 +30,7 @@ import { AppSheet } from './Modal';
 import { AppSkeleton } from './Loading';
 import { AppEmptyState } from './EmptyState';
 import { Chapter } from '../model/Chapter';
-import { BooksApi } from '../service/api/BooksApi';
+import { BooksApi } from '../api/books/BooksApi';
 import { ChapterStatus, ReadingStore } from '../store/ReadingStore';
 
 /** 视图模型：在 Chapter 基础上挂状态。 */

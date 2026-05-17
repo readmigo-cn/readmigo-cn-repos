@@ -10,9 +10,9 @@
 //   - 每个测试文件 beforeEach 调 MockSetup.resetAll()，确保隔离。
 //   - 真实业务代码不被 import 修改：mock 只在 ohosTest 模块内挂钩 static method。
 
-import { AuthApi, LoginResult } from '../../../../main/ets/service/api/AuthApi';
-import { BooksApi } from '../../../../main/ets/service/api/BooksApi';
-import { AiApi, ExplainWordPayload, SseHandlers } from '../../../../main/ets/service/api/AiApi';
+import { AuthApi, LoginResult } from '../../../../main/ets/api/auth/AuthApi';
+import { BooksApi } from '../../../../main/ets/api/books/BooksApi';
+import { AiApi, ExplainWordPayload, SseHandlers } from '../../../../main/ets/api/ai/AiApi';
 import { TtsService, TtsHandle, TtsSpeakOptions } from '../../../../main/ets/service/tts/TtsService';
 import { TranslateService, TranslateResult } from '../../../../main/ets/service/translation/TranslateService';
 import { Book, BookListResponse } from '../../../../main/ets/model/Book';

@@ -11,10 +11,10 @@ import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
 import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import { RouterService } from '../core/router/RouterService';
 import { RoutePath, TicketDetailRouteParams } from '../core/router/RouteConstants';
-import { AppCard } from '../components/Card';
-import { AppButton } from '../components/Button';
-import { AppEmptyState } from '../components/EmptyState';
-import { ToastManager } from '../components/Toast';
+import { AppCard } from '../ui/primitives/Card';
+import { AppButton } from '../ui/primitives/Button';
+import { AppEmptyState } from '../ui/primitives/EmptyState';
+import { ToastManager } from '../ui/primitives/Toast';
 import {
   SupportApi,
   Ticket,
@@ -23,7 +23,7 @@ import {
   ticketCategoryLabel,
   ticketStatusLabel,
   ticketStatusColor,
-} from '../service/api/SupportApi';
+} from '../api/support/SupportApi';
 
 type TabKind = 'open' | 'resolved' | 'all';
 const TABS: TabKind[] = ['open', 'resolved', 'all'];

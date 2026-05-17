@@ -3,7 +3,7 @@ import formInfo from '@ohos.app.form.formInfo';
 import formProvider from '@ohos.app.form.formProvider';
 import formBindingData from '@ohos.app.form.formBindingData';
 import commonEventManager from '@ohos.commonEventManager';
-import { WidgetApi, ReadingProgressCardData } from '../../service/api/WidgetApi';
+import { WidgetApi, ReadingProgressCardData } from '../../api/widget/WidgetApi';
 
 /**
  * 我的阅读 FormExtensionAbility（W12-C2）。

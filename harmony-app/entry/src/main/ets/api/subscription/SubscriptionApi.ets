@@ -1,4 +1,4 @@
-import { HttpClient } from '../HttpClient';
+import { HttpClient } from '../../service/HttpClient';
 
 export type SubscriptionPlan = 'pro_monthly' | 'pro_yearly' | 'premium_monthly';
 export type SubscriptionStatus = 'pending' | 'active' | 'cancelled' | 'expired' | 'failed';

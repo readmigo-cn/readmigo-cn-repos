@@ -18,7 +18,7 @@
 import { AppColors } from '../core/theme/AppColors';
 import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
 import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
-import { AiApi, ExplainWordPayload } from '../service/api/AiApi';
+import { AiApi, ExplainWordPayload } from '../api/ai/AiApi';
 import { ExplainData, ExplainExample, parseExplainData } from '../model/ExplainData';
 import { SettingsStore } from '../store/SettingsStore';
 import { AiContentBadge } from './AiContentBadge';

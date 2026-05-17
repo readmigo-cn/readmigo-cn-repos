@@ -9,7 +9,7 @@
  * 无障碍：accessibilityText
  */
 
-import { EffectiveTheme } from '../core/theme/Theme.types';
+import { EffectiveTheme } from '../../core/theme/Theme.types';
 import {
   useColor,
   TextColors,
@@ -19,12 +19,12 @@ import {
   StateColors,
   BrandPalette,
   GrayPalette,
-} from '../core/theme/AppColors';
+} from '../../core/theme/AppColors';
 import {
   Typography,
   LabelStyles,
-} from '../core/theme/AppTypography';
-import { Spacing, Radius, MotionDuration, MotionEasing } from '../core/theme/AppSpacing';
+} from '../../core/theme/AppTypography';
+import { Spacing, Radius, MotionDuration, MotionEasing } from '../../core/theme/AppSpacing';
 
 // ─────────────────────────────────────────────
 // 类型导出

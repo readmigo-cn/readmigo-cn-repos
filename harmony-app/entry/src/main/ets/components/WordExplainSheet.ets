@@ -1,8 +1,8 @@
 import { AppColors } from '../core/theme/AppColors';
 import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
 import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
-import { AiApi } from '../service/api/AiApi';
-import { NotesApi } from '../service/api/NotesApi';
+import { AiApi } from '../api/ai/AiApi';
+import { NotesApi } from '../api/notes/NotesApi';
 import { NoteRepository, LocalNote } from '../core/persistence/NoteRepository';
 import { UserStore } from '../store/UserStore';
 import { SettingsStore } from '../store/SettingsStore';

@@ -10,7 +10,7 @@
  *        clear button / counter / autoFocus / validation
  */
 
-import { EffectiveTheme } from '../core/theme/Theme.types';
+import { EffectiveTheme } from '../../core/theme/Theme.types';
 import {
   useColor,
   TextColors,
@@ -20,14 +20,14 @@ import {
   StateColors,
   AccentColors,
   BrandPalette,
-} from '../core/theme/AppColors';
+} from '../../core/theme/AppColors';
 import {
   Typography,
   BodyStyles,
   LabelStyles,
   CaptionStyle,
-} from '../core/theme/AppTypography';
-import { Spacing, Radius, MotionDuration, MotionEasing } from '../core/theme/AppSpacing';
+} from '../../core/theme/AppTypography';
+import { Spacing, Radius, MotionDuration, MotionEasing } from '../../core/theme/AppSpacing';
 
 // ─────────────────────────────────────────────
 // 类型导出

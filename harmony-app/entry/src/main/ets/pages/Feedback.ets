@@ -26,10 +26,10 @@ import {
   TicketDetailRouteParams,
 } from '../core/router/RouteConstants';
 import { UserStore } from '../store/UserStore';
-import { AppButton } from '../components/Button';
-import { AppCard } from '../components/Card';
-import { AppTextArea, AppInput } from '../components/Input';
-import { ToastManager } from '../components/Toast';
+import { AppButton } from '../ui/primitives/Button';
+import { AppCard } from '../ui/primitives/Card';
+import { AppTextArea, AppInput } from '../ui/primitives/Input';
+import { ToastManager } from '../ui/primitives/Toast';
 import {
   SupportApi,
   SubmitTicketPayload,
@@ -37,7 +37,7 @@ import {
   TicketContext,
   ticketCategoryLabel,
   ticketCategoryIcon,
-} from '../service/api/SupportApi';
+} from '../api/support/SupportApi';
 
 const APP_VERSION = '0.1.0';
 const MAX_TITLE = 50;

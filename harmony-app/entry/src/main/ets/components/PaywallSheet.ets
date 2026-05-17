@@ -25,7 +25,7 @@ import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import promptAction from '@ohos.promptAction';
 import { SubscriptionState } from '../service/subscription/SubscriptionState';
 import { PricingTable, PlanMeta, PlanTier, FeatureRow } from '../service/subscription/PricingTable';
-import { PaymentChannel } from '../service/api/SubscriptionApi';
+import { PaymentChannel } from '../api/subscription/SubscriptionApi';
 // W18-C1：付费漏斗埋点
 import { Analytics } from '../core/analytics/AnalyticsProvider';
 import { SaEvents } from '../core/analytics/SensorsAnalytics';

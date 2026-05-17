@@ -31,24 +31,24 @@ import {
 import { Spacing, Radius, Elevation, MotionDuration, MotionEasing } from '../../core/theme/AppSpacing';
 
 // W6-C1 按钮（来自并行 agent 的产出）
-import { AppButton } from '../../components/Button';
-import { AppInput, AppTextArea } from '../../components/Input';
-import { AppCard } from '../../components/Card';
-import { AppList, AppListItem, AppListDataSource, ListItemData, ListGroupData } from '../../components/List';
-import { AppModal, AppSheet, AppDialog, ModalManager } from '../../components/Modal';
-import { AppTabs, AppTabBar, TabBarItem } from '../../components/Tab';
+import { AppButton } from '../../ui/primitives/Button';
+import { AppInput, AppTextArea } from '../../ui/primitives/Input';
+import { AppCard } from '../../ui/primitives/Card';
+import { AppList, AppListItem, AppListDataSource, ListItemData, ListGroupData } from '../../ui/primitives/List';
+import { AppModal, AppSheet, AppDialog, ModalManager } from '../../ui/primitives/Modal';
+import { AppTabs, AppTabBar, TabBarItem } from '../../ui/primitives/Tab';
 
 // W6-C6 / C8 / C9 反馈、加载、空状态
 import {
   ToastManager,
   AppSnackbar,
   AppToastLayer,
-} from '../../components/Toast';
+} from '../../ui/primitives/Toast';
 import {
   LoadingIndicator,
   AppSkeleton,
-} from '../../components/Loading';
-import { AppEmptyState, EmptyStateVariant } from '../../components/EmptyState';
+} from '../../ui/primitives/Loading';
+import { AppEmptyState, EmptyStateVariant } from '../../ui/primitives/EmptyState';
 
 // ─────────────────────────────────────────────
 // Section 类型

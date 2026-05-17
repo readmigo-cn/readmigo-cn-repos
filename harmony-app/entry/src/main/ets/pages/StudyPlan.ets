@@ -12,9 +12,9 @@ import { AppColors } from '../core/theme/AppColors';
 import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
 import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import { RouterService } from '../core/router/RouterService';
-import { AppButton } from '../components/Button';
-import { AppCard } from '../components/Card';
-import { ToastManager } from '../components/Toast';
+import { AppButton } from '../ui/primitives/Button';
+import { AppCard } from '../ui/primitives/Card';
+import { ToastManager } from '../ui/primitives/Toast';
 import { PreferencesManager } from '../core/persistence/PreferencesManager';
 import {
   StudyPlanApi,
@@ -23,7 +23,7 @@ import {
   StudyTask,
   DailyPlan,
   CefrLevel,
-} from '../service/api/StudyPlanApi';
+} from '../api/study/StudyPlanApi';
 
 const STORAGE_KEY = 'settings_study_plan';
 

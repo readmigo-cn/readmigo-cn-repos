@@ -1,4 +1,4 @@
-import { HttpClient } from '../HttpClient';
+import { HttpClient } from '../../service/HttpClient';
 
 /**
  * StatsApi — W9-C5 + C8 学习数据 / 弱点分析

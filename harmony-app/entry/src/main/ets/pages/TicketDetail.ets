@@ -14,10 +14,10 @@ import { AppFontSize, AppFontWeight } from '../core/theme/AppTypography';
 import { AppSpacing, AppRadius } from '../core/theme/AppSpacing';
 import { RouterService } from '../core/router/RouterService';
 import { RoutePath, TicketDetailRouteParams } from '../core/router/RouteConstants';
-import { AppButton } from '../components/Button';
-import { AppCard } from '../components/Card';
-import { AppEmptyState } from '../components/EmptyState';
-import { ToastManager } from '../components/Toast';
+import { AppButton } from '../ui/primitives/Button';
+import { AppCard } from '../ui/primitives/Card';
+import { AppEmptyState } from '../ui/primitives/EmptyState';
+import { ToastManager } from '../ui/primitives/Toast';
 import {
   SupportApi,
   Ticket,
@@ -27,7 +27,7 @@ import {
   ticketCategoryLabel,
   ticketStatusLabel,
   ticketStatusColor,
-} from '../service/api/SupportApi';
+} from '../api/support/SupportApi';
 
 @Component
 export struct TicketDetailPage {

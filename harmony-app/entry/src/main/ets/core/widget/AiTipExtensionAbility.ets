@@ -2,7 +2,7 @@ import FormExtensionAbility from '@ohos.app.form.FormExtensionAbility';
 import formInfo from '@ohos.app.form.formInfo';
 import formProvider from '@ohos.app.form.formProvider';
 import formBindingData from '@ohos.app.form.formBindingData';
-import { WidgetApi, AiTipCardData } from '../../service/api/WidgetApi';
+import { WidgetApi, AiTipCardData } from '../../api/widget/WidgetApi';
 
 /**
  * AI 助手卡片 FormExtensionAbility（W12-C3）。

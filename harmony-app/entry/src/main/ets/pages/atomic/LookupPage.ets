@@ -22,9 +22,9 @@ import { AppColors } from '../../core/theme/AppColors';
 import { AppFontSize, AppFontWeight } from '../../core/theme/AppTypography';
 import { AppSpacing, AppRadius } from '../../core/theme/AppSpacing';
 import { ExplainCard } from '../../components/ExplainCard';
-import { AppButton } from '../../components/Button';
-import { AppInput } from '../../components/Input';
-import { LoadingIndicator } from '../../components/Loading';
+import { AppButton } from '../../ui/primitives/Button';
+import { AppInput } from '../../ui/primitives/Input';
+import { LoadingIndicator } from '../../ui/primitives/Loading';
 import { ExplainData } from '../../model/ExplainData';
 import { AtomicLauncher } from '../../core/atomic/AtomicLauncher';
 import {

@@ -15,10 +15,10 @@ import { AppColors } from '../../core/theme/AppColors';
 import { AppFontSize, AppFontWeight } from '../../core/theme/AppTypography';
 import { AppSpacing, AppRadius } from '../../core/theme/AppSpacing';
 import { RouterAdapter } from '../../core/router/RouterAdapter';
-import { BooksApi } from '../../service/api/BooksApi';
+import { BooksApi } from '../../api/books/BooksApi';
 import { Book } from '../../model/Book';
 import { ApiError } from '../../service/HttpClient';
-import { AdaptiveGrid } from '../../components/responsive/AdaptiveGrid';
+import { AdaptiveGrid } from '../../ui/responsive/AdaptiveGrid';
 
 interface CategoryItem {
   key: string;

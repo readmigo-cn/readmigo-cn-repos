@@ -1,4 +1,4 @@
-import { HttpClient } from '../HttpClient';
+import { HttpClient } from '../../service/HttpClient';
 
 export type NoteKind = 'highlight' | 'note' | 'word';
 

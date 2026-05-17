@@ -23,7 +23,7 @@ import {
   WordAnalysisApi,
   WordAssociation as WordAssoc,
   AssociationMode,
-} from '../service/api/WordAnalysisApi';
+} from '../api/ai/WordAnalysisApi';
 import { ExplainCard } from '../components/ExplainCard';
 import { ExplainData } from '../model/ExplainData';
 import { NoteRepository, LocalNote } from '../core/persistence/NoteRepository';

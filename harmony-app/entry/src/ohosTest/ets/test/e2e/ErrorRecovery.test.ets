@@ -10,9 +10,9 @@
 
 import { describe, beforeAll, beforeEach, afterAll, it, expect } from '@ohos/hypium';
 import { MockSetup } from '../utils/MockSetup';
-import { AuthApi } from '../../../../main/ets/service/api/AuthApi';
-import { BooksApi } from '../../../../main/ets/service/api/BooksApi';
-import { AiApi, ExplainStreamHandlers } from '../../../../main/ets/service/api/AiApi';
+import { AuthApi } from '../../../../main/ets/api/auth/AuthApi';
+import { BooksApi } from '../../../../main/ets/api/books/BooksApi';
+import { AiApi, ExplainStreamHandlers } from '../../../../main/ets/api/ai/AiApi';
 import { TtsService } from '../../../../main/ets/service/tts/TtsService';
 import { UserStore } from '../../../../main/ets/store/UserStore';
 

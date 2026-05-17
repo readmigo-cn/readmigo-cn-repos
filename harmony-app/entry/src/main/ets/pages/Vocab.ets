@@ -33,15 +33,15 @@ import {
   LineHeightToken,
 } from '../core/theme/AppTypography';
 import { Spacing, Radius, Elevation } from '../core/theme/AppSpacing';
-import { AppEmptyState } from '../components/EmptyState';
-import { ToastManager } from '../components/Toast';
+import { AppEmptyState } from '../ui/primitives/EmptyState';
+import { ToastManager } from '../ui/primitives/Toast';
 import { VocabDetailSheet, VocabDetailActions } from '../components/VocabDetailSheet';
 import { RoutePath } from '../core/router/RouteConstants';
 import {
   NotesApi,
   VocabNoteRecord,
   ReviewStats,
-} from '../service/api/NotesApi';
+} from '../api/notes/NotesApi';
 import { TtsService } from '../service/tts/TtsService';
 // W13-C2：跨端剪贴板（复制到其它设备）
 import { DistributedClipboard, VocabPayload } from '../service/distributed/DistributedClipboard';

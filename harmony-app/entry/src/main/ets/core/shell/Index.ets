@@ -6,7 +6,7 @@ import { EffectiveTheme } from '../theme/Theme.types';
 import { APP_THEME_STORAGE_KEY, ThemeService } from '../theme/ThemeService';
 // W14-C1：自适应布局 —— 平板 / 折叠屏展开态走顶部 TabBar + 双栏内容
 import { Breakpoint, STORAGE_KEY_BREAKPOINT } from '../theme/Breakpoints';
-import { ResponsiveContainer } from '../../components/responsive/ResponsiveContainer';
+import { ResponsiveContainer } from '../../ui/responsive/ResponsiveContainer';
 import { Login } from '../../pages/Login';
 import { Onboarding } from '../../pages/Onboarding';
 import { Discover } from '../../pages/Discover';

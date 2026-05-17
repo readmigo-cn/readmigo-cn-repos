@@ -19,7 +19,7 @@ import {
   SubscriptionApi,
   OrderRecord,
   SubscriptionStatus,
-} from '../service/api/SubscriptionApi';
+} from '../api/subscription/SubscriptionApi';
 import { SubscriptionState } from '../service/subscription/SubscriptionState';
 import { PricingTable, PlanMeta } from '../service/subscription/PricingTable';
 import { PaywallSheet } from '../components/PaywallSheet';

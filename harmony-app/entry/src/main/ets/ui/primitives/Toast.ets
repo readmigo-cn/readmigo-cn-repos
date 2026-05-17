@@ -13,16 +13,16 @@
  *   每条 toast 由 setTimeout 在 duration 后从列表移除。
  */
 
-import { EffectiveTheme } from '../core/theme/Theme.types';
+import { EffectiveTheme } from '../../core/theme/Theme.types';
 import {
   useColor,
   TextColors,
   BgColors,
   StateColors,
   BrandPalette,
-} from '../core/theme/AppColors';
-import { LabelStyles, BodyStyles } from '../core/theme/AppTypography';
-import { Spacing, Radius, Elevation, MotionDuration, MotionEasing } from '../core/theme/AppSpacing';
+} from '../../core/theme/AppColors';
+import { LabelStyles, BodyStyles } from '../../core/theme/AppTypography';
+import { Spacing, Radius, Elevation, MotionDuration, MotionEasing } from '../../core/theme/AppSpacing';
 
 // ─────────────────────────────────────────────
 // 类型

@@ -7,22 +7,22 @@
  * 支持整卡点击、宽高比、自动深色主题
  */
 
-import { EffectiveTheme } from '../core/theme/Theme.types';
+import { EffectiveTheme } from '../../core/theme/Theme.types';
 import {
   useColor,
   TextColors,
   BgColors,
   BorderColors,
   SurfaceColors,
-} from '../core/theme/AppColors';
+} from '../../core/theme/AppColors';
 import {
   Typography,
   TitleStyles,
   BodyStyles,
   LabelStyles,
   CaptionStyle,
-} from '../core/theme/AppTypography';
-import { Spacing, Radius, Elevation, MotionDuration, MotionEasing } from '../core/theme/AppSpacing';
+} from '../../core/theme/AppTypography';
+import { Spacing, Radius, Elevation, MotionDuration, MotionEasing } from '../../core/theme/AppSpacing';
 
 // ─────────────────────────────────────────────
 // 类型导出

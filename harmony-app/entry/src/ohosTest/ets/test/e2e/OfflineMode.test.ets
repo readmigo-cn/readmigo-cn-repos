@@ -12,7 +12,7 @@
 
 import { describe, beforeAll, beforeEach, afterAll, it, expect } from '@ohos/hypium';
 import { MockSetup } from '../utils/MockSetup';
-import { BooksApi } from '../../../../main/ets/service/api/BooksApi';
+import { BooksApi } from '../../../../main/ets/api/books/BooksApi';
 import { UserStore } from '../../../../main/ets/store/UserStore';
 import { ProgressSync } from '../../../../main/ets/service/ProgressSync';
 import { ChapterContent } from '../../../../main/ets/model/Chapter';

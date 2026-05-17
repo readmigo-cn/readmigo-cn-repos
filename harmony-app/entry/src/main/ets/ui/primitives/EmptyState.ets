@@ -7,19 +7,19 @@
  *   - 可覆盖 title / description / icon / action
  */
 
-import { EffectiveTheme } from '../core/theme/Theme.types';
+import { EffectiveTheme } from '../../core/theme/Theme.types';
 import {
   useColor,
   TextColors,
   BgColors,
   AccentColors,
-} from '../core/theme/AppColors';
+} from '../../core/theme/AppColors';
 import {
   TitleStyles,
   BodyStyles,
   LabelStyles,
-} from '../core/theme/AppTypography';
-import { Spacing, Radius, MotionDuration, MotionEasing } from '../core/theme/AppSpacing';
+} from '../../core/theme/AppTypography';
+import { Spacing, Radius, MotionDuration, MotionEasing } from '../../core/theme/AppSpacing';
 
 // ─────────────────────────────────────────────
 // 类型

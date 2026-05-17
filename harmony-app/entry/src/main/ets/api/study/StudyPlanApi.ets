@@ -9,7 +9,7 @@
  * payload，服务端 prompt 模板会原样透传给 LLM。
  */
 
-import { AiApi, ContentQAPayload } from './AiApi';
+import { AiApi, ContentQAPayload } from '../ai/AiApi';
 
 // ---- StudyPlan 类型 -----------------------------------------------------
 

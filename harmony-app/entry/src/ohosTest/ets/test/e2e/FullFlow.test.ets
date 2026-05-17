@@ -21,9 +21,9 @@ import { describe, beforeAll, beforeEach, afterAll, it, expect } from '@ohos/hyp
 import { MockSetup } from '../utils/MockSetup';
 import { E2eHelper } from '../utils/E2eHelper';
 import { ModuleLoader, ModuleLoadState } from '../../../../main/ets/service/dynamic/ModuleLoader';
-import { AuthApi } from '../../../../main/ets/service/api/AuthApi';
-import { BooksApi } from '../../../../main/ets/service/api/BooksApi';
-import { AiApi, ExplainStreamHandlers } from '../../../../main/ets/service/api/AiApi';
+import { AuthApi } from '../../../../main/ets/api/auth/AuthApi';
+import { BooksApi } from '../../../../main/ets/api/books/BooksApi';
+import { AiApi, ExplainStreamHandlers } from '../../../../main/ets/api/ai/AiApi';
 import { UserStore } from '../../../../main/ets/store/UserStore';
 import { ReadingStore } from '../../../../main/ets/store/ReadingStore';
 import { StoreKeys } from '../../../../main/ets/store/StoreKeys';
