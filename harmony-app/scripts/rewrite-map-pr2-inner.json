@@ -1,7 +1,0 @@
-{
-  "version": "PR-2-inner",
-  "mappings": [
-    { "from": "(?<=['\"])\\.\\./(model|store|pages|components|service|abilities|entryability)/", "to": "../../$1/" },
-    { "from": "(?<=['\"])\\./(model|store|pages|components|service|abilities|entryability)/", "to": "../$1/" }
-  ]
-}
