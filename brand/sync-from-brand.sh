@@ -7,7 +7,7 @@
 set -e
 
 BRAND_REPO="/Users/HONGBGU/Documents/readmigo-repos/brand"
-HARMONY_APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+HARMONY_APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../harmony-app" && pwd)"
 ENTRY_MEDIA_DIR="${HARMONY_APP_DIR}/entry/src/main/resources/base/media"
 APPSCOPE_MEDIA_DIR="${HARMONY_APP_DIR}/AppScope/resources/base/media"
 

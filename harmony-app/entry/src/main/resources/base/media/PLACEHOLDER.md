@@ -24,7 +24,7 @@
 | `wordmark_en.svg` | SVG | 英文文字标 | Readmigo 英文 wordmark | 待提供 |
 
 **获取方式**：
-- 从海外 brand repo 同步：`./brand/sync-from-brand.sh`
+- 从海外 brand repo 同步：`bash brand/sync-from-brand.sh`（在 repo 根目录运行）
 - 或由 Design team 直接提供
 
 ### 功能和 UI 图标（24×24 px SVG 或 PNG）
@@ -179,11 +179,11 @@ Rectangle()
 
 2. **复制到项目**
    ```bash
-   # 使用同步脚本（推荐）
-   ./brand/sync-from-brand.sh
-   
+   # 使用同步脚本（推荐，在 repo 根目录运行）
+   bash brand/sync-from-brand.sh
+
    # 或手动复制
-   cp /path/to/logo.svg entry/src/main/resources/base/media/
+   cp /path/to/logo.svg harmony-app/entry/src/main/resources/base/media/
    ```
 
 3. **在 DevEco Studio 中扫描**
@@ -217,8 +217,8 @@ Rectangle()
 ls -la /Users/HONGBGU/Documents/readmigo-repos/brand/dist/harmony/
 
 # 运行同步脚本
-cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/harmony-app/
-./brand/sync-from-brand.sh
+cd /Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos/
+bash brand/sync-from-brand.sh
 ```
 
 ## 相关文档
