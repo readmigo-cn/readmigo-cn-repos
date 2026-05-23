@@ -30,7 +30,7 @@ claude
 | 资源 | 位置 | 校验命令 |
 |---|---|---|
 | Gitee PAT | `~/.gitee_token`（chmod 600） | `curl -s "https://gitee.com/api/v5/user?access_token=$(cat ~/.gitee_token)" \| python3 -c "import json,sys;print(json.load(sys.stdin).get('login'))"` |
-| Gitee SSH alias | `~/.ssh/config` 内 `Host gitee-readmigo-cn` | `ssh -T git@gitee-readmigo-cn` 应返回 "successfully authenticated" |
+| Gitee SSH alias | `~/.ssh/config` 内 `Host github.com (default)` | `ssh -T git@github.com` 应返回 "successfully authenticated" |
 | Monorepo | `/Users/HONGBGU/Documents/readmigo-cn/readmigo-cn-repos` | HEAD = `5a35265`（W24 收官） |
 | Sibling 仓 | `~/Documents/readmigo-{server-cn,infra-cn,llm-adapter,napi-bridge,typesetting,badge-engine}` | `ls -d ~/Documents/readmigo-*` 应见 7 个 |
 | Gitee 仓状态 | 8 个仓全 default_branch=main | 见 §四 |
@@ -97,9 +97,9 @@ agent team — 全自动收尾 W24+ 剩余任务，不再询问 1/2 确认
 **扫描范围**：`docs/01-tech-selection.md` `docs/02-architecture.md` `docs/03-overseas-reuse.md` `docs/05-roadmap.md` `docs/08-deveco-setup.md` `docs/10-domestic-stack-integration.md` `docs/12-fullstack-technical-spec.md` `docs/30-4-track-initiation-summary.md` `docs/50-execution-orchestration.md`
 
 **改动模式**：
-- "monorepo 内 napi-bridge/" → "独立仓 [`napi-bridge`](https://gitee.com/readmigo/napi-bridge)"
-- "native/typesetting" → "独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting)"
-- "native/badge-engine" → "独立仓 [`badge-engine`](https://gitee.com/readmigo/badge-engine)"
+- "monorepo 内 napi-bridge/" → "独立仓 [`napi-bridge`](https://github.com/readmigo-cn/napi-bridge)"
+- "native/typesetting" → "独立仓 [`typesetting`](https://github.com/readmigo/typesetting)"
+- "native/badge-engine" → "独立仓 [`badge-engine`](https://github.com/readmigo/badge-engine)"
 - "W24 计划 / W25-W26 计划" 涉及上述 3 仓的 → 改 "W23 已完成"
 
 只改语义引用，不动技术内容（cmake / cpp 代码示例不变）。

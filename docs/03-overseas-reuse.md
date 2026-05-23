@@ -15,15 +15,15 @@
 
 | 海外 repo | 行数 | 主语言 | 国内目标位置 | 国内化动作 | 复用度 | 工作量 |
 |---------|------|------|----------|---------|-------|------|
-| `api` | 118,855 | TypeScript | `server-cn/api/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/src/modules/ai/)) | 重写 LLM provider + 接 GaussDB + 国行登录 | 70% | 3-4 周 |
-| `gutenberg` | 35,314 | JSON | `server-cn/content/gutenberg-cn/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/content/gutenberg-cn/)) | 白名单过滤 + 内容审核 | 60% | 1 周 |
-| `tts-data` | 9,712 | JSON | `server-cn/tts-data-cn/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/tts-data-cn/)) | 重新用讯飞 TTS 生成 | 50% | 1 周 |
-| `tts` | 17,635 | JSON | `server-cn/tts/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/tts/)) | 接讯飞 TTS API | 70% | 1 周 |
-| `ocr-pipeline` | 454 | TypeScript | `server-cn/ocr-pipeline/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/ocr-pipeline/)) | 接百度 OCR API | 90% | 0.5 周 |
-| `nlp` | 299 | Python | `server-cn/nlp/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/nlp/)) | 接 DeepSeek / 文心 | 80% | 0.5 周 |
-| `ai` | 2,031 | TypeScript | `server-cn/ai/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/ai/)) | 重写 LLM provider 层 | 60% | 1 周 |
-| `audiolab` | 3,776 | TypeScript | `server-cn/audiolab/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/audiolab/)) | 接讯飞 TTS | 85% | 1 周 |
-| `book-translator` | 1,177 | TypeScript | `server-cn/book-translator/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/book-translator/)) | 接百度翻译 | 80% | 0.5 周 |
+| `api` | 118,855 | TypeScript | `server-cn/api/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/src/modules/ai/)) | 重写 LLM provider + 接 GaussDB + 国行登录 | 70% | 3-4 周 |
+| `gutenberg` | 35,314 | JSON | `server-cn/content/gutenberg-cn/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/content/gutenberg-cn/)) | 白名单过滤 + 内容审核 | 60% | 1 周 |
+| `tts-data` | 9,712 | JSON | `server-cn/tts-data-cn/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/tts-data-cn/)) | 重新用讯飞 TTS 生成 | 50% | 1 周 |
+| `tts` | 17,635 | JSON | `server-cn/tts/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/tts/)) | 接讯飞 TTS API | 70% | 1 周 |
+| `ocr-pipeline` | 454 | TypeScript | `server-cn/ocr-pipeline/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/ocr-pipeline/)) | 接百度 OCR API | 90% | 0.5 周 |
+| `nlp` | 299 | Python | `server-cn/nlp/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/nlp/)) | 接 DeepSeek / 文心 | 80% | 0.5 周 |
+| `ai` | 2,031 | TypeScript | `server-cn/ai/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/ai/)) | 重写 LLM provider 层 | 60% | 1 周 |
+| `audiolab` | 3,776 | TypeScript | `server-cn/audiolab/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/audiolab/)) | 接讯飞 TTS | 85% | 1 周 |
+| `book-translator` | 1,177 | TypeScript | `server-cn/book-translator/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/book-translator/)) | 接百度翻译 | 80% | 0.5 周 |
 | `reader-engine` | 7,047 | TypeScript | `packages/shared-arkts/reader-engine/` | TS → ArkTS 重写 | 70% | 1 周 |
 | `shipkit` | 13,280 | TypeScript | `tools/shipkit-cn/` | npm 镜像配置 | 90% | 0.5 周 |
 | `badge-content` | 1,349 | YAML | `harmony-app/.../badge-content/` | 直接拷贝 | 100% | 0.1 周 |
@@ -35,8 +35,8 @@
 
 | 海外 repo | 行数 | 国内位置 | 共享方式 | 双向同步策略 |
 |---------|------|--------|---------|----------|
-| `typesetting` | 114,763（C++） | 独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) | git submodule | 海外为主 + 国内 PR 提修复 |
-| `badge-engine` | ~42,000（C/C++） | 独立仓 [`badge-engine`](https://gitee.com/readmigo/badge-engine) | git submodule | 海外为主 + 国内 PR 提修复 |
+| `typesetting` | 114,763（C++） | 独立仓 [`typesetting`](https://github.com/readmigo/typesetting) | git submodule | 海外为主 + 国内 PR 提修复 |
+| `badge-engine` | ~42,000（C/C++） | 独立仓 [`badge-engine`](https://github.com/readmigo/badge-engine) | git submodule | 海外为主 + 国内 PR 提修复 |
 | **小计** | **156,763** | | | **0 改动 / 双向同步** |
 
 ⭐ **关键工程红利**：
@@ -135,8 +135,8 @@ cp -r ../badge-assets harmony-app/.../badge-assets
 ### 3.3 添加 git submodule（C++ 引擎）
 
 ```bash
-git submodule add https://gitee.com/readmigo/typesetting native/typesetting
-git submodule add https://gitee.com/readmigo/badge-engine native/badge-engine
+git submodule add https://github.com/readmigo/typesetting native/typesetting
+git submodule add https://github.com/readmigo/badge-engine native/badge-engine
 git submodule update --init --recursive
 ```
 
@@ -158,7 +158,7 @@ git push origin fix/some-issue
 
 ## 4. 国内化适配清单（每个拷贝过来的 repo 要做的事）
 
-### 4.1 `server-cn/api` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/api))（NestJS 后端）
+### 4.1 `server-cn/api` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/api))（NestJS 后端）
 
 - [ ] 重写 `src/llm/` 模块：从 OpenAI / Claude 切到 DeepSeek / 文心 / 智谱 / Qwen
 - [ ] 重写 `src/auth/`：从 Apple / Google Sign-In 切到华为账号 / 微信 / QQ
@@ -169,13 +169,13 @@ git push origin fix/some-issue
 - [ ] 监控：Sentry → AGC Crash + 阿里云 ARMS
 - [ ] 中文用户接口：错误信息 / 提示文案中文化
 
-### 4.2 `server-cn/ocr-pipeline` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/ocr-pipeline))
+### 4.2 `server-cn/ocr-pipeline` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/ocr-pipeline))
 
 - [ ] 替换 OCR provider：tesseract / Azure → **百度智能云 OCR**
 - [ ] 内容审核：增加白名单过滤
 - [ ] 部署到华为云
 
-### 4.3 `server-cn/audiolab` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/audiolab)) + `server-cn/tts` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/tts))
+### 4.3 `server-cn/audiolab` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/audiolab)) + `server-cn/tts` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/tts))
 
 - [ ] 替换 TTS provider：OpenAI TTS / ElevenLabs → **科大讯飞 TTS**
 - [ ] 重新生成 TTS 音频缓存（讯飞音色）
@@ -198,7 +198,7 @@ git push origin fix/some-issue
 
 ### 5.1 C++ 引擎（共享）
 
-- 海外团队 own 独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) / [`badge-engine`](https://gitee.com/readmigo/badge-engine) 主分支
+- 海外团队 own 独立仓 [`typesetting`](https://github.com/readmigo/typesetting) / [`badge-engine`](https://github.com/readmigo/badge-engine) 主分支
 - 国内团队修复 bug → 在 fork 上改 → 提 PR 到海外主分支
 - 国内不直接 push 海外主分支
 - 海外审核合并后 → 国内 `git submodule update --remote`

@@ -155,10 +155,10 @@ VS Code（后端 / 工具）
 
 ### LLM 适配层架构
 
-详见 `llm-adapter` ([gitee](https://gitee.com/readmigo/llm-adapter)) 实现，4 层抽象：
+详见 `llm-adapter` ([gitee](https://github.com/readmigo-cn/llm-adapter)) 实现，4 层抽象：
 
 ```typescript
-// llm-adapter/src/types.ts ([gitee](https://gitee.com/readmigo/llm-adapter/blob/main/src/types.ts))
+// llm-adapter/src/types.ts ([gitee](https://github.com/readmigo-cn/llm-adapter/blob/main/src/types.ts))
 export interface LLMProvider {
   chat(messages: Message[], options?: ChatOptions): Promise<ChatResponse>;
   embed(text: string): Promise<number[]>;
@@ -188,7 +188,7 @@ export interface LLMProvider {
 | 包管理（鸿蒙） | **ohpm** | 鸿蒙原生 |
 | 包管理（共享 TS） | **pnpm**（阿里 npm 镜像） | monorepo |
 | 构建（鸿蒙） | **hvigor** | 鸿蒙原生 |
-| 构建（C++） | **CMake + NDK** | 独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) / [`badge-engine`](https://gitee.com/readmigo/badge-engine) 共用 |
+| 构建（C++） | **CMake + NDK** | 独立仓 [`typesetting`](https://github.com/readmigo/typesetting) / [`badge-engine`](https://github.com/readmigo/badge-engine) 共用 |
 
 ### 配置要点
 

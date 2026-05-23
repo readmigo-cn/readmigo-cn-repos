@@ -7,14 +7,14 @@
 
 | 子目录（已删除） | 独立仓 | 镜像策略 |
 |---|---|---|
-| `typesetting/` | https://gitee.com/readmigo/typesetting | GitHub `readmigo/typesetting` 单向 mirror |
-| `badge-engine/` | https://gitee.com/readmigo/badge-engine | GitHub `readmigo/badge-engine` 单向 mirror |
+| `typesetting/` | https://github.com/readmigo/typesetting | GitHub `readmigo/typesetting` 单向 mirror |
+| `badge-engine/` | https://github.com/readmigo/badge-engine | GitHub `readmigo/badge-engine` 单向 mirror |
 
 NAPI 桥接层同样已独立：
 
 | 旧路径（已删除） | 独立仓 |
 |---|---|
-| `napi-bridge/` | https://gitee.com/readmigo/napi-bridge |
+| `napi-bridge/` | https://github.com/readmigo-cn/napi-bridge |
 
 ## 引用方式（未来）
 

@@ -85,8 +85,8 @@
 
 - `docs/07-ai-coding.md`：AI coding 决策与使用边界
 - `docs/08-deveco-setup.md`：鸿蒙开发环境与 AGC 启动基线
-- `server-cn/.env.example` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/.env.example))：国内云与 LLM 环境变量模板
-- `llm-adapter` ([gitee](https://gitee.com/readmigo/llm-adapter))：DeepSeek 优先的适配层骨架
+- `server-cn/.env.example` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/.env.example))：国内云与 LLM 环境变量模板
+- `llm-adapter` ([gitee](https://github.com/readmigo-cn/llm-adapter))：DeepSeek 优先的适配层骨架
 - `.npmrc`：国内 npm 镜像默认配置
 
 ## 实施顺序

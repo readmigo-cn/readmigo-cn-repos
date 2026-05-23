@@ -189,7 +189,7 @@ graph TD
 | 周 | 推荐 subagent 数 | 编排模式 |
 |---|---|---|
 | W1 | 6 | 4 PREP 文档（主体决策/AI备案/内容审核/招聘JD）+ 2 CODE（CI/IaC） |
-| W2 | 4 | 4 CODE：NAPI 桥框架 / typesetting bridge（独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting)） / badge-engine bridge（独立仓 [`badge-engine`](https://gitee.com/readmigo/badge-engine)） / XComponent demo |
+| W2 | 4 | 4 CODE：NAPI 桥框架 / typesetting bridge（独立仓 [`typesetting`](https://github.com/readmigo/typesetting)） / badge-engine bridge（独立仓 [`badge-engine`](https://github.com/readmigo/badge-engine)） / XComponent demo |
 | W3 | 8 | 8 CODE：server-cn 拷贝 8 个模块（auth/books/reading/notes/ai/subscription/widget/sync） |
 | W4 | 5 | 5 CODE：HMS Account Mock / Login UX / 书库列表 / Reader 翻页 / e2e 联调 |
 | W5-W6 | 6 | UIAbility / 设计系统 / 暗色模式 / 通用组件库 / Token 映射 / 字体策略 |
@@ -237,8 +237,8 @@ graph TD
 | W1-C1 | Gitee Actions CI 模板（PR / build / typecheck / lint） | `.gitee/workflows/ci.yml` | 80 |
 | W1-C2 | Gitee Actions 构建产物上传（HAP / Server image） | `.gitee/workflows/build.yml` | 100 |
 | W1-C3 | DevEco 项目骨架完善（hvigor / oh-package 修订） | `harmony-app/{build-profile,oh-package}.json5` | 30 |
-| W1-C4 | server-cn Dockerfile + docker-compose 完整化 | `server-cn/{Dockerfile,docker-compose.yml}` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/)) | 80 |
-| W1-C5 | 极狐 GitLab CE IaC（docker-compose / Helm） | `infra-cn/gitlab-ce/docker-compose.yml` ([gitee](https://gitee.com/readmigo/infra-cn/blob/main/)) + README | 200 |
+| W1-C4 | server-cn Dockerfile + docker-compose 完整化 | `server-cn/{Dockerfile,docker-compose.yml}` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 80 |
+| W1-C5 | 极狐 GitLab CE IaC（docker-compose / Helm） | `infra-cn/gitlab-ce/docker-compose.yml` ([gitee](https://github.com/readmigo-cn/infra-cn/blob/main/)) + README | 200 |
 | W1-C6 | 测试框架接入（jest 给 server-cn / hypium 给 ArkTS） | 各项目 test config | 120 |
 
 ##### 🟡 PREP 任务（Claude 起草）
@@ -276,7 +276,7 @@ graph TD
 
 #### **W2：C++ NAPI 桥接框架完整化**
 
-**目标**：独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) + [`badge-engine`](https://gitee.com/readmigo/badge-engine) 双 native 桥接跑通，HAP 真机部署。
+**目标**：独立仓 [`typesetting`](https://github.com/readmigo/typesetting) + [`badge-engine`](https://github.com/readmigo/badge-engine) 双 native 桥接跑通，HAP 真机部署。
 
 ##### 🟢 CODE 任务
 
@@ -297,14 +297,14 @@ graph TD
 |---|---|---|
 | W2-P1 | 鸿蒙签名证书申请 SOP | `docs/deployment/01-harmonyos-signing.md` |
 | W2-P2 | DevEco 真机部署 SOP | `docs/deployment/02-real-device-deploy.md` |
-| W2-P3 | C++ 引擎升级流程文档（同步独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) / [`badge-engine`](https://gitee.com/readmigo/badge-engine)） | `docs/native/00-engine-sync-flow.md` |
+| W2-P3 | C++ 引擎升级流程文档（同步独立仓 [`typesetting`](https://github.com/readmigo/typesetting) / [`badge-engine`](https://github.com/readmigo/badge-engine)） | `docs/native/00-engine-sync-flow.md` |
 
 ##### 🟠 真机依赖
 
 | ID | 任务 | 你做 |
 |---|---|---|
 | W2-X1 | 申请鸿蒙签名证书（依赖 W1 华为开发者账号通过） | ✅ |
-| W2-X2 | 真机部署测试 typesetting demo（来自独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting)） | ✅ |
+| W2-X2 | 真机部署测试 typesetting demo（来自独立仓 [`typesetting`](https://github.com/readmigo/typesetting)） | ✅ |
 
 ##### 🔴 EXTERNAL
 
@@ -312,8 +312,8 @@ graph TD
 
 ##### 验收标准
 
-- [ ] HAP 真机运行，看到独立仓 [`typesetting`](https://gitee.com/readmigo/typesetting) 渲染的样例文字
-- [ ] 独立仓 [`badge-engine`](https://gitee.com/readmigo/badge-engine) 在真机上能 init 并返回测试 badge
+- [ ] HAP 真机运行，看到独立仓 [`typesetting`](https://github.com/readmigo/typesetting) 渲染的样例文字
+- [ ] 独立仓 [`badge-engine`](https://github.com/readmigo/badge-engine) 在真机上能 init 并返回测试 badge
 
 ---
 
@@ -325,15 +325,15 @@ graph TD
 
 | ID | 任务（每个 module 完整化） | 文件 | LOC |
 |---|---|---|---|
-| W3-C1 | auth module（JWT / 短信 / 华为账号 ID） | `server-cn/src/modules/auth/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/)) | 500 |
-| W3-C2 | books module（CRUD / 搜索 / 推荐） | `server-cn/src/modules/books/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/)) | 600 |
-| W3-C3 | reading module（进度 / 章节 / 高亮） | `server-cn/src/modules/reading/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/)) | 500 |
-| W3-C4 | notes module（生词 / 闪卡 SRS） | `server-cn/src/modules/notes/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/)) | 500 |
-| W3-C5 | ai module（划词 / 翻译 / 解释 SSE） | `server-cn/src/modules/ai/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/)) | 600 |
-| W3-C6 | subscription module（Mock IAP） | `server-cn/src/modules/subscription/` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/)) | 400 |
+| W3-C1 | auth module（JWT / 短信 / 华为账号 ID） | `server-cn/src/modules/auth/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 500 |
+| W3-C2 | books module（CRUD / 搜索 / 推荐） | `server-cn/src/modules/books/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 600 |
+| W3-C3 | reading module（进度 / 章节 / 高亮） | `server-cn/src/modules/reading/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 500 |
+| W3-C4 | notes module（生词 / 闪卡 SRS） | `server-cn/src/modules/notes/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 500 |
+| W3-C5 | ai module（划词 / 翻译 / 解释 SSE） | `server-cn/src/modules/ai/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 600 |
+| W3-C6 | subscription module（Mock IAP） | `server-cn/src/modules/subscription/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 400 |
 | W3-C7 | bookshelf / sync / widget 三个模块 | 各 module 目录 | 600 |
-| W3-C8 | TypeORM → GaussDB 迁移脚本 | `server-cn/src/database/migrations/*` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/)) | 800 |
-| W3-C9 | OpenAPI / Swagger 文档自动生成 | `server-cn/src/main.ts` ([gitee](https://gitee.com/readmigo/server-cn/blob/main/)) | 50 |
+| W3-C8 | TypeORM → GaussDB 迁移脚本 | `server-cn/src/database/migrations/*` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 800 |
+| W3-C9 | OpenAPI / Swagger 文档自动生成 | `server-cn/src/main.ts` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 50 |
 
 ##### 🟡 PREP
 
