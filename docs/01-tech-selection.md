@@ -155,10 +155,10 @@ VS Code（后端 / 工具）
 
 ### LLM 适配层架构
 
-详见 `llm-adapter` ([gitee](https://github.com/readmigo-cn/llm-adapter)) 实现，4 层抽象：
+详见 `llm-adapter` ([github](https://github.com/readmigo-cn/llm-adapter)) 实现，4 层抽象：
 
 ```typescript
-// llm-adapter/src/types.ts ([gitee](https://github.com/readmigo-cn/llm-adapter/blob/main/src/types.ts))
+// llm-adapter/src/types.ts ([github](https://github.com/readmigo-cn/llm-adapter/blob/main/src/types.ts))
 export interface LLMProvider {
   chat(messages: Message[], options?: ChatOptions): Promise<ChatResponse>;
   embed(text: string): Promise<number[]>;

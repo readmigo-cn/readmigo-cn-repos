@@ -7,8 +7,8 @@
 ```text
 Harmony App (ArkTS / ArkUI)
   -> AGC Auth / Analytics / Crash / Remote Config / IAP
-  -> server-cn ([gitee](https://github.com/readmigo-cn/server-cn))
-      -> llm-adapter ([gitee](https://github.com/readmigo-cn/llm-adapter))
+  -> server-cn ([github](https://github.com/readmigo-cn/server-cn))
+      -> llm-adapter ([github](https://github.com/readmigo-cn/llm-adapter))
           -> DeepSeek
       -> GaussDB / Redis / OBS
 ```
@@ -21,8 +21,8 @@ Harmony App (ArkTS / ArkUI)
 
 ## 服务端
 
-- `server-cn` ([gitee](https://github.com/readmigo-cn/server-cn))：国内后端
-- `llm-adapter` ([gitee](https://github.com/readmigo-cn/llm-adapter))：模型抽象层
+- `server-cn` ([github](https://github.com/readmigo-cn/server-cn))：国内后端
+- `llm-adapter` ([github](https://github.com/readmigo-cn/llm-adapter))：模型抽象层
 - `DeepSeek`：主 LLM
 - `GaussDB`：主库
 - `DCS/Redis`：缓存

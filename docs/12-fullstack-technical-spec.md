@@ -80,7 +80,7 @@
 
 ### 当前落地位置
 
-- `server-cn` ([gitee](https://github.com/readmigo-cn/server-cn))
+- `server-cn` ([github](https://github.com/readmigo-cn/server-cn))
 
 ### 当前已落地骨架
 
@@ -128,7 +128,7 @@
 
 ### 当前落地位置
 
-- 当前仍在 `server-cn/.env.example` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/.env.example)) 里做资源占位
+- 当前仍在 `server-cn/.env.example` ([github](https://github.com/readmigo-cn/server-cn/blob/main/.env.example)) 里做资源占位
 
 ### 下一步
 
@@ -163,8 +163,8 @@
 
 ### 当前落地位置
 
-- `llm-adapter` ([gitee](https://github.com/readmigo-cn/llm-adapter))
-- `server-cn/src/modules/ai` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/src/modules/ai))
+- `llm-adapter` ([github](https://github.com/readmigo-cn/llm-adapter))
+- `server-cn/src/modules/ai` ([github](https://github.com/readmigo-cn/server-cn/blob/main/src/modules/ai))
 
 ### 下一步
 
@@ -224,7 +224,7 @@
 
 ### 当前落地位置
 
-- `server-cn/src/modules/auth` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/src/modules/auth))
+- `server-cn/src/modules/auth` ([github](https://github.com/readmigo-cn/server-cn/blob/main/src/modules/auth))
 - `harmony-app/entry/src/main/ets/pages/Login.ets`
 
 ### 下一步
@@ -357,8 +357,8 @@
 | 目录/仓库 | 角色 | 状态 |
 |------|------|------|
 | `harmony-app/` | 鸿蒙客户端 | 已起骨架 |
-| `server-cn` ([gitee](https://github.com/readmigo-cn/server-cn)) | 国内后端 | 已起骨架 |
-| `llm-adapter` ([gitee](https://github.com/readmigo-cn/llm-adapter)) | 模型抽象层 | 已起骨架 |
+| `server-cn` ([github](https://github.com/readmigo-cn/server-cn)) | 国内后端 | 已起骨架 |
+| `llm-adapter` ([github](https://github.com/readmigo-cn/llm-adapter)) | 模型抽象层 | 已起骨架 |
 | `native/` | 原生引擎（git submodule） | W23 已完成 |
 | `tools/ai-coding/` | AI coding 规则与模板 | 已起骨架 |
 | `docs/` | 方案、路线图、同步规则 | 已建立 |

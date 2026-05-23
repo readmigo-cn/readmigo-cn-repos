@@ -237,8 +237,8 @@ graph TD
 | W1-C1 | Gitee Actions CI 模板（PR / build / typecheck / lint） | `.gitee/workflows/ci.yml` | 80 |
 | W1-C2 | Gitee Actions 构建产物上传（HAP / Server image） | `.gitee/workflows/build.yml` | 100 |
 | W1-C3 | DevEco 项目骨架完善（hvigor / oh-package 修订） | `harmony-app/{build-profile,oh-package}.json5` | 30 |
-| W1-C4 | server-cn Dockerfile + docker-compose 完整化 | `server-cn/{Dockerfile,docker-compose.yml}` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 80 |
-| W1-C5 | 极狐 GitLab CE IaC（docker-compose / Helm） | `infra-cn/gitlab-ce/docker-compose.yml` ([gitee](https://github.com/readmigo-cn/infra-cn/blob/main/)) + README | 200 |
+| W1-C4 | server-cn Dockerfile + docker-compose 完整化 | `server-cn/{Dockerfile,docker-compose.yml}` ([github](https://github.com/readmigo-cn/server-cn/blob/main/)) | 80 |
+| W1-C5 | 极狐 GitLab CE IaC（docker-compose / Helm） | `infra-cn/gitlab-ce/docker-compose.yml` ([github](https://github.com/readmigo-cn/infra-cn/blob/main/)) + README | 200 |
 | W1-C6 | 测试框架接入（jest 给 server-cn / hypium 给 ArkTS） | 各项目 test config | 120 |
 
 ##### 🟡 PREP 任务（Claude 起草）
@@ -325,15 +325,15 @@ graph TD
 
 | ID | 任务（每个 module 完整化） | 文件 | LOC |
 |---|---|---|---|
-| W3-C1 | auth module（JWT / 短信 / 华为账号 ID） | `server-cn/src/modules/auth/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 500 |
-| W3-C2 | books module（CRUD / 搜索 / 推荐） | `server-cn/src/modules/books/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 600 |
-| W3-C3 | reading module（进度 / 章节 / 高亮） | `server-cn/src/modules/reading/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 500 |
-| W3-C4 | notes module（生词 / 闪卡 SRS） | `server-cn/src/modules/notes/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 500 |
-| W3-C5 | ai module（划词 / 翻译 / 解释 SSE） | `server-cn/src/modules/ai/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 600 |
-| W3-C6 | subscription module（Mock IAP） | `server-cn/src/modules/subscription/` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 400 |
+| W3-C1 | auth module（JWT / 短信 / 华为账号 ID） | `server-cn/src/modules/auth/` ([github](https://github.com/readmigo-cn/server-cn/blob/main/)) | 500 |
+| W3-C2 | books module（CRUD / 搜索 / 推荐） | `server-cn/src/modules/books/` ([github](https://github.com/readmigo-cn/server-cn/blob/main/)) | 600 |
+| W3-C3 | reading module（进度 / 章节 / 高亮） | `server-cn/src/modules/reading/` ([github](https://github.com/readmigo-cn/server-cn/blob/main/)) | 500 |
+| W3-C4 | notes module（生词 / 闪卡 SRS） | `server-cn/src/modules/notes/` ([github](https://github.com/readmigo-cn/server-cn/blob/main/)) | 500 |
+| W3-C5 | ai module（划词 / 翻译 / 解释 SSE） | `server-cn/src/modules/ai/` ([github](https://github.com/readmigo-cn/server-cn/blob/main/)) | 600 |
+| W3-C6 | subscription module（Mock IAP） | `server-cn/src/modules/subscription/` ([github](https://github.com/readmigo-cn/server-cn/blob/main/)) | 400 |
 | W3-C7 | bookshelf / sync / widget 三个模块 | 各 module 目录 | 600 |
-| W3-C8 | TypeORM → GaussDB 迁移脚本 | `server-cn/src/database/migrations/*` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 800 |
-| W3-C9 | OpenAPI / Swagger 文档自动生成 | `server-cn/src/main.ts` ([gitee](https://github.com/readmigo-cn/server-cn/blob/main/)) | 50 |
+| W3-C8 | TypeORM → GaussDB 迁移脚本 | `server-cn/src/database/migrations/*` ([github](https://github.com/readmigo-cn/server-cn/blob/main/)) | 800 |
+| W3-C9 | OpenAPI / Swagger 文档自动生成 | `server-cn/src/main.ts` ([github](https://github.com/readmigo-cn/server-cn/blob/main/)) | 50 |
 
 ##### 🟡 PREP
 
